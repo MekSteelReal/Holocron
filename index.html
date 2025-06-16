@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Holocron SWTOR: Guia Definitivo para o Poder</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -20,120 +20,6 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 1rem;
-        }
-        nav a {
-            transition: color 0.3s ease;
-        }
-        nav a:hover {
-            color: #ffe000; /* Yellow hover effect */
-        }
-        .section-title {
-            color: #ffe000; /* Holocron yellow */
-            text-shadow: 0 0 8px rgba(255, 224, 0, 0.6);
-            border-bottom: 2px solid #ffe000;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        .card {
-            background-color: #1a1a1a;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            border: 1px solid #333;
-            margin-bottom: 1.5rem;
-        }
-        .collapsible-header {
-            background-color: #2a2a2a;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            transition: background-color 0.3s ease;
-        }
-        .collapsible-header:hover {
-            background-color: #3a3a3a;
-        }
-        .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
-            padding: 0 1rem;
-        }
-        .collapsible-content.active {
-            max-height: 10000px; /* Large enough value to show all content */
-            padding: 1rem;
-        }
-        .collapsible-header .arrow {
-            transition: transform 0.3s ease;
-        }
-        .collapsible-header.active .arrow {
-            transform: rotate(90deg);
-        }
-        .btn-primary {
-            background-color: #ffe000;
-            color: #1a1a1a;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.1s ease;
-            box-shadow: 0 4px 10px rgba(255, 224, 0, 0.3);
-        }
-        .btn-primary:hover {
-            background-color: #ffcc00;
-            transform: translateY(-2px);
-        }
-        .input-field {
-            background-color: #2a2a2a;
-            border: 1px solid #444;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            color: #e0e0e0;
-            width: 100%;
-        }
-        .input-field::placeholder {
-            color: #999;
-        }
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            cursor: help;
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px 0;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%; /* Tooltip above the text */
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .tooltip .tooltiptext::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #333 transparent transparent transparent;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
         }
         /* Custom scrollbar for a futuristic look */
         ::-webkit-scrollbar {
@@ -152,56 +38,261 @@
             background: #ffcc00;
         }
 
+        /* Hero section specific styles */
+        .hero-section {
+            background-image: url('https://placehold.co/1200x400/1a1a1a/ffe000?text=STAR+WARS+THE+OLD+REPUBLIC'); /* Placeholder image */
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            padding: 6rem 1rem;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffe000; /* Holocron yellow */
+            text-shadow: 0 0 15px rgba(255, 224, 0, 0.8), 0 0 25px rgba(255, 224, 0, 0.6);
+            line-height: 1;
+        }
+        .hero-subtitle {
+            color: #ccc;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffe000; /* Holocron yellow */
+            text-shadow: 0 0 8px rgba(255, 224, 0, 0.6);
+            border-bottom: 2px solid #ffe000;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            font-size: 2.5rem; /* Increased font size */
+        }
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Card styling */
+        .card {
+            background-color: #1a1a1a;
+            border-radius: 0.75rem;
+            padding: 2rem; /* Increased padding */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6); /* More prominent shadow */
+            border: 1px solid #333;
+            margin-bottom: 2.5rem; /* Increased margin */
+        }
+
+        /* Collapsible elements */
+        .collapsible-header {
+            background-color: #2a2a2a;
+            padding: 1rem 1.5rem; /* Increased padding */
+            border-radius: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            font-weight: bold;
+            font-size: 1.125rem; /* Larger font */
+            border-left: 4px solid #ffe000; /* Accent border */
+        }
+        .collapsible-header:hover {
+            background-color: #3a3a3a;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(255, 224, 0, 0.3);
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out, padding 0.7s ease-in-out; /* Slower transition */
+            padding: 0 1.5rem; /* Consistent padding */
+            border-left: 4px solid #3a3a3a; /* Subtle border for content */
+            background-color: #1f1f1f;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+        .collapsible-content.active {
+            max-height: 10000px; /* Large enough value to show all content */
+            padding: 1.5rem;
+        }
+        .collapsible-header .arrow {
+            transition: transform 0.3s ease;
+        }
+        .collapsible-header.active .arrow {
+            transform: rotate(90deg);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: #ffe000;
+            color: #1a1a1a;
+            padding: 0.85rem 1.75rem; /* Larger padding */
+            border-radius: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255, 224, 0, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .btn-primary:hover {
+            background-color: #ffcc00;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(255, 224, 0, 0.5);
+        }
+
+        /* Input Fields */
+        .input-field {
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            color: #e0e0e0;
+            width: 100%;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .input-field:focus {
+            border-color: #ffe000;
+            box-shadow: 0 0 0 2px rgba(255, 224, 0, 0.3);
+            outline: none;
+        }
+        .input-field::placeholder {
+            color: #999;
+        }
+
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            border-bottom: 1px dotted #888; /* Subtle underline */
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px; /* Wider tooltip */
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 10px; /* More padding */
+            position: absolute;
+            z-index: 100; /* Higher z-index */
+            bottom: 125%; /* Tooltip above the text */
+            left: 50%;
+            margin-left: -125px; /* Half of width */
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(5px);
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
-            .flex-col-mobile {
+            .hero-title {
+                font-size: 3rem;
+            }
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            nav ul {
                 flex-direction: column;
+                space-x-0;
+            }
+            nav li {
+                margin-bottom: 0.5rem;
             }
             .grid-cols-2-md {
                 grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 1.5rem;
+            }
+            .collapsible-header {
+                font-size: 1rem;
+                padding: 0.75rem 1rem;
+            }
+            .collapsible-content {
+                padding: 1rem;
             }
         }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-900 to-black">
-    <header class="bg-gray-800 p-6 shadow-lg rounded-b-xl">
-        <div class="container flex flex-col items-center">
-            <h1 class="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-700 mb-4 text-center">
+    <!-- Fixed Navigation Bar -->
+    <nav class="sticky top-0 z-50 bg-gray-900 bg-opacity-95 shadow-lg py-4">
+        <div class="container flex justify-center">
+            <ul class="flex flex-wrap justify-center space-x-6 text-lg font-semibold">
+                <li><a href="#introducao" class="text-gray-300 hover:text-yellow-400 rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-800">Início</a></li>
+                <li><a href="#classes" class="text-gray-300 hover:text-yellow-400 rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-800">Classes</a></li>
+                <li><a href="#progresso" class="text-gray-300 hover:text-yellow-400 rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-800">Progresso</a></li>
+                <li><a href="#datacrons" class="text-gray-300 hover:text-yellow-400 rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-800">Datacrons</a></li>
+                <li><a href="#simulacao" class="text-gray-300 hover:text-yellow-400 rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-800">Simulação</a></li>
+                <li><a href="#guildas" class="text-gray-300 hover:text-yellow-400 rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-800">Guildas BR</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content container">
+            <h1 class="hero-title text-6xl md:text-7xl lg:text-8xl font-bold mb-4">
                 O Holocron de SWTOR
             </h1>
-            <p class="text-xl text-gray-300 text-center">
+            <p class="hero-subtitle text-xl md:text-2xl text-center max-w-2xl mx-auto">
                 Seu Guia Definitivo para Dominar Star Wars: The Old Republic
             </p>
-            <nav class="mt-6">
-                <ul class="flex flex-wrap justify-center space-x-6 text-lg font-semibold">
-                    <li><a href="#introducao" class="text-gray-300 hover:text-yellow-400 rounded-lg px-3 py-2">Início</a></li>
-                    <li><a href="#classes" class="text-gray-300 hover:text-yellow-400 rounded-lg px-3 py-2">Classes</a></li>
-                    <li><a href="#progresso" class="text-gray-300 hover:text-yellow-400 rounded-lg px-3 py-2">Progresso</a></li>
-                    <li><a href="#datacrons" class="text-gray-300 hover:text-yellow-400 rounded-lg px-3 py-2">Datacrons</a></li>
-                    <li><a href="#simulacao" class="text-gray-300 hover:text-yellow-400 rounded-lg px-3 py-2">Simulação</a></li>
-                    <li><a href="#guildas" class="text-gray-300 hover:text-yellow-400 rounded-lg px-3 py-2">Guildas BR</a></li>
-                </ul>
-            </nav>
         </div>
     </header>
 
     <main class="container py-8">
         <section id="introducao" class="card">
-            <h2 class="section-title text-4xl mb-6">Bem-vindo ao Holocron!</h2>
-            <p class="mb-4">
+            <h2 class="section-title">Bem-vindo ao Holocron!</h2>
+            <p class="mb-4 text-lg">
                 Este Holocron foi criado com um único propósito: transformar você em um dos jogadores mais formidáveis de Star Wars: The Old Republic. Aqui, você encontrará informações detalhadas, guias práticos e ferramentas interativas para otimizar seu personagem, dominar o combate e conquistar a galáxia.
             </p>
-            <p>
+            <p class="text-lg">
                 Prepare-se para desvendar os segredos do SWTOR e liberar todo o potencial do seu legado! Que a Força esteja com você!
             </p>
         </section>
 
         <section id="classes" class="card">
-            <h2 class="section-title text-4xl mb-6">Classes (Classes) e Papéis (Roles)</h2>
-            <p class="mb-4">Em SWTOR, cada facção (Império Sith e República Galáctica) possui classes espelhadas com habilidades e papéis similares.</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h2 class="section-title">Classes (Classes) e Papéis (Roles)</h2>
+            <p class="mb-6 text-lg">Em SWTOR, cada facção (Império Sith e República Galáctica) possui classes espelhadas com habilidades e papéis similares.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                    <h3 class="text-2xl font-bold text-yellow-300 mb-4">República Galáctica</h3>
+                    <h3 class="text-3xl font-bold text-yellow-300 mb-6 text-center">República Galáctica</h3>
                     <div class="space-y-4">
                         <div class="collapsible">
                             <div class="collapsible-header">
@@ -209,7 +300,7 @@
                                 <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
-                                <p><strong>Jedi Guardian (Guardião Jedi):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Usuário de sabre de luz pesado e armadura pesada. Excelente para combate corpo a corpo e proteção.</p>
+                                <p class="mb-2"><strong>Jedi Guardian (Guardião Jedi):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Usuário de sabre de luz pesado e armadura pesada. Excelente para combate corpo a corpo e proteção.</p>
                                 <p><strong>Jedi Sentinel (Sentinela Jedi):</strong> DPS (Dano Por Segundo). Utiliza dois sabres de luz. Focado em alto dano e agilidade.</p>
                             </div>
                         </div>
@@ -219,7 +310,7 @@
                                 <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
-                                <p><strong>Jedi Sage (Sábio Jedi):</strong> Healer (Curandeiro) ou DPS (Dano Por Segundo). Usuário da Força, focado em curas poderosas ou dano à distância.</p>
+                                <p class="mb-2"><strong>Jedi Sage (Sábio Jedi):</strong> Healer (Curandeiro) ou DPS (Dano Por Segundo). Usuário da Força, focado em curas poderosas ou dano à distância.</p>
                                 <p><strong>Jedi Shadow (Sombra Jedi):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Utiliza sabre de luz duplo. Pode ser tank evasivo ou DPS furtivo.</p>
                             </div>
                         </div>
@@ -229,7 +320,7 @@
                                 <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
-                                <p><strong>Vanguard (Vanguarda):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Usuário de rifle e armadura pesada. Combate à média distância.</p>
+                                <p class="mb-2"><strong>Vanguard (Vanguarda):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Usuário de rifle e armadura pesada. Combate à média distância.</p>
                                 <p><strong>Commando (Comando):</strong> Healer (Curandeiro) ou DPS (Dano Por Segundo). Utiliza canhão. Focado em curas em área ou dano explosivo.</p>
                             </div>
                         </div>
@@ -239,14 +330,14 @@
                                 <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
-                                <p><strong>Gunslinger (Pistoleiro):</strong> DPS (Dano Por Segundo). Utiliza duas pistolas. Focado em dano massivo à distância e cobertura.</p>
+                                <p class="mb-2"><strong>Gunslinger (Pistoleiro):</strong> DPS (Dano Por Segundo). Utiliza duas pistolas. Focado em dano massivo à distância e cobertura.</p>
                                 <p><strong>Scoundrel (Bandido):</strong> Healer (Curandeiro) ou DPS (Dano Por Segundo). Utiliza shotguns. Pode ser curandeiro furtivo ou DPS de curta distância com habilidades de furtividade.</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-2xl font-bold text-red-400 mb-4">Império Sith</h3>
+                    <h3 class="text-3xl font-bold text-red-400 mb-6 text-center">Império Sith</h3>
                     <div class="space-y-4">
                         <div class="collapsible">
                             <div class="collapsible-header">
@@ -254,7 +345,7 @@
                                 <span class="arrow text-red-400 text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
-                                <p><strong>Sith Juggernaut (Colosso Sith):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Espelho do Jedi Guardian. Usuário de sabre de luz pesado e armadura pesada.</p>
+                                <p class="mb-2"><strong>Sith Juggernaut (Colosso Sith):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Espelho do Jedi Guardian. Usuário de sabre de luz pesado e armadura pesada.</p>
                                 <p><strong>Sith Marauder (Saqueador Sith):</strong> DPS (Dano Por Segundo). Espelho do Jedi Sentinel. Utiliza dois sabres de luz.</p>
                             </div>
                         </div>
@@ -264,7 +355,7 @@
                                 <span class="arrow text-red-400 text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
-                                <p><strong>Sith Sorcerer (Feiticeiro Sith):</strong> Healer (Curandeiro) ou DPS (Dano Por Segundo). Espelho do Jedi Sage. Usuário da Força, focado em curas ou dano elétrico.</p>
+                                <p class="mb-2"><strong>Sith Sorcerer (Feiticeiro Sith):</strong> Healer (Curandeiro) ou DPS (Dano Por Segundo). Espelho do Jedi Sage. Usuário da Força, focado em curas ou dano elétrico.</p>
                                 <p><strong>Sith Assassin (Assassino Sith):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Espelho do Jedi Shadow. Utiliza sabre de luz duplo.</p>
                             </div>
                         </div>
@@ -274,7 +365,7 @@
                                 <span class="arrow text-red-400 text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
-                                <p><strong>Powertech (Tecnocrata):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Espelho do Vanguard. Usuário de rifle e armadura pesada.</p>
+                                <p class="mb-2"><strong>Powertech (Tecnocrata):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Espelho do Vanguard. Usuário de rifle e armadura pesada.</p>
                                 <p><strong>Mercenary (Mercenário):</strong> Healer (Curandeiro) ou DPS (Dano Por Segundo). Espelho do Commando. Utiliza dois blasters. Focado em curas poderosas ou dano explosivo.</p>
                             </div>
                         </div>
@@ -284,7 +375,7 @@
                                 <span class="arrow text-red-400 text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
-                                <p><strong>Sniper (Atirador):</strong> DPS (Dano Por Segundo). Espelho do Gunslinger. Utiliza rifle de precisão. Focado em dano massivo à distância e posicionamento.</p>
+                                <p class="mb-2"><strong>Sniper (Atirador):</strong> DPS (Dano Por Segundo). Espelho do Gunslinger. Utiliza rifle de precisão. Focado em dano massivo à distância e posicionamento.</p>
                                 <p><strong>Operative (Agente):</strong> Healer (Curandeiro) ou DPS (Dano Por Segundo). Espelho do Scoundrel. Utiliza facas e rifles de assalto. Pode ser curandeiro furtivo ou DPS com habilidades de furtividade.</p>
                             </div>
                         </div>
@@ -294,7 +385,7 @@
         </section>
 
         <section id="progresso" class="card">
-            <h2 class="section-title text-4xl mb-6">Guia para o Progresso Máximo</h2>
+            <h2 class="section-title">Guia para o Progresso Máximo</h2>
             <div class="space-y-6">
                 <div class="collapsible">
                     <div class="collapsible-header">
@@ -388,8 +479,8 @@
         </section>
 
         <section id="datacrons" class="card">
-            <h2 class="section-title text-4xl mb-6">Datacrons (Datacrons) e suas Localizações</h2>
-            <p class="mb-4">
+            <h2 class="section-title">Datacrons (Datacrons) e suas Localizações</h2>
+            <p class="mb-4 text-lg">
                 <span class="tooltip">Datacrons (Datacrons)<span class="tooltiptext">Artefatos que concedem bônus permanentes de estatísticas ao seu personagem.</span></span> são objetos espalhados pela galáxia que concedem bônus permanentes às suas estatísticas (Maestria, Vigor, Poder, Presença) ou aprimoramentos de Habilidades da Força/Cibertecnologia. Coletar todos eles é crucial para maximizar o poder do seu personagem. Muitos exigem um pouco de plataforma (parkour) ou exploração.
             </p>
             <div class="space-y-4">
@@ -399,12 +490,12 @@
                         <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
-                        <p><strong>Tython:</strong></p>
+                        <p class="mb-2"><strong>Tython:</strong></p>
                         <ul class="list-disc ml-6 space-y-1">
                             <li><strong>Presence +2:</strong> Temple Grounds (coordenadas aproximadas: 257, 100). Dentro de uma caverna escondida.</li>
                             <li><strong>Mastery +2:</strong> Flesh Raider Cave (coordenadas aproximadas: 18, 935). Dentro da caverna, requer um pouco de plataforma.</li>
                         </ul>
-                        <p><strong>Korriban:</strong></p>
+                        <p class="mt-4 mb-2"><strong>Korriban:</strong></p>
                         <ul class="list-disc ml-6 space-y-1">
                             <li><strong>Presence +2:</strong> Sith Academy (coordenadas aproximadas: 105, 30). Perto de uma estátua.</li>
                             <li><strong>Mastery +2:</strong> Tomb of Ajunta Pall (coordenadas aproximadas: 560, 480). Dentro da tumba, em uma sala lateral.</li>
@@ -418,7 +509,7 @@
                         <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
-                        <p><strong>Coruscant:</strong></p>
+                        <p class="mb-2"><strong>Coruscant:</strong></p>
                         <ul class="list-disc ml-6 space-y-1">
                             <li><strong>Endurance +2:</strong> Jedi Temple Ruins (coordenadas aproximadas: 2475, -95). No topo das ruínas.</li>
                             <li><strong>Mastery +2:</strong> Black Sun Territory (coordenadas aproximadas: -3600, 1000). Requer saltar por alguns canos.</li>
@@ -426,7 +517,7 @@
                             <li><strong>Presence +2:</strong> Coruscant Senate Tower (coordenadas aproximadas: -3700, 150). No topo de uma torre.</li>
                             <li><strong>Strength +2:</strong> Works Industrial Zone (coordenadas aproximadas: -200, 3100). Em cima de algumas caixas.</li>
                         </ul>
-                        <p><strong>Dromund Kaas:</strong></p>
+                        <p class="mt-4 mb-2"><strong>Dromund Kaas:</strong></p>
                         <ul class="list-disc ml-6 space-y-1">
                             <li><strong>Endurance +2:</strong> Kaas City (coordenadas aproximadas: 1050, 200). Em um telhado.</li>
                             <li><strong>Mastery +2:</strong> Dark Temple (coordenadas aproximadas: -100, 1700). Dentro da área, exige um pouco de exploração.</li>
@@ -494,7 +585,7 @@
                         <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
-                        <p><strong>Balmorra (República):</strong></p>
+                        <p class="mb-2"><strong>Balmorra (República):</strong></p>
                         <ul class="list-disc ml-6 space-y-1">
                             <li><strong>Endurance +4:</strong> Sundari Flatlands (coordenadas aproximadas: 1500, 150). Em uma colina.</li>
                             <li><strong>Mastery +4:</strong> Gorinth Canyon (coordenadas aproximadas: -700, 2000). Em uma área de cavernas.</li>
@@ -502,7 +593,7 @@
                             <li><strong>Willpower +4:</strong> Okara Droid Factory (coordenadas aproximadas: -1700, -200). Dentro da fábrica.</li>
                             <li><strong>Strength +4 (Legacy):</strong> Charger's Point (coordenadas aproximadas: 2500, 1000). Em uma plataforma elevada.</li>
                         </ul>
-                        <p><strong>Balmorra (Império):</strong></p>
+                        <p class="mt-4 mb-2"><strong>Balmorra (Império):</strong></p>
                         <ul class="list-disc ml-6 space-y-1">
                             <li><strong>Endurance +4:</strong> Lower Markaran Outpost (coordenadas aproximadas: -1800, 150). Em um penhasco.</li>
                             <li><strong>Mastery +4:</strong> Balmorran Arms Factory (coordenadas aproximadas: 200, 1200). Dentro da fábrica.</li>
@@ -513,18 +604,18 @@
                     </div>
                 </div>
                 <!-- Add more planets here following the same structure -->
-                <p class="mt-4">
+                <p class="mt-4 text-lg">
                     <strong>Dica:</strong> Procure por vídeos no YouTube ou guias visuais online (ex: Dulfy's SWTOR Datacron Guide - embora seja antigo, as localizações base são as mesmas) para uma ajuda visual na localização de cada Datacron. Use as coordenadas aproximadas fornecidas como ponto de partida.
                 </p>
             </div>
         </section>
 
         <section id="simulacao" class="card">
-            <h2 class="section-title text-4xl mb-6">Simulações e Recomendações de Progresso</h2>
-            <p class="mb-4">
+            <h2 class="section-title">Simulações e Recomendações de Progresso</h2>
+            <p class="mb-6 text-lg">
                 Preencha as informações do seu personagem abaixo para receber sugestões personalizadas sobre como otimizar seu desempenho no SWTOR. Esta simulação oferecerá dicas baseadas nas estatísticas fornecidas e nas melhores práticas para sua classe e nível.
             </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 <div>
                     <label for="charName" class="block text-gray-400 text-sm font-bold mb-2">Nome do Personagem:</label>
                     <input type="text" id="charName" class="input-field" placeholder="Ex: Darth Malgus">
@@ -576,7 +667,7 @@
             </div>
 
             <h3 class="text-2xl font-bold text-yellow-300 mb-4">Suas Estatísticas Atuais:</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                 <div>
                     <label for="statMastery" class="block text-gray-400 text-sm font-bold mb-2">Mastery:</label>
                     <input type="number" id="statMastery" class="input-field" value="0" min="0">
@@ -613,34 +704,34 @@
 
             <button onclick="runSimulation()" class="btn-primary w-full py-3 mb-6">Executar Simulação</button>
 
-            <div id="simulationResults" class="card p-4 mt-6 border border-gray-700 hidden">
+            <div id="simulationResults" class="card p-6 mt-8 border border-gray-700 hidden">
                 <h3 class="text-2xl font-bold text-yellow-300 mb-4">Resultados da Simulação:</h3>
-                <p id="simGreeting" class="mb-2"></p>
-                <div id="simLevelAdvice" class="mb-2"></div>
-                <div id="simCompanionAdvice" class="mb-2"></div>
-                <div id="simStatAdvice" class="mb-2"></div>
-                <div id="simGearAdvice" class="mb-2"></div>
-                <div id="simGeneralAdvice" class="mb-2"></div>
-                <div id="simGuildAdvice" class="mb-2"></div>
+                <p id="simGreeting" class="mb-2 text-lg"></p>
+                <div id="simLevelAdvice" class="mb-3 text-lg"></div>
+                <div id="simCompanionAdvice" class="mb-3 text-lg"></div>
+                <div id="simStatAdvice" class="mb-3 text-lg"></div>
+                <div id="simGearAdvice" class="mb-3 text-lg"></div>
+                <div id="simGeneralAdvice" class="mb-3 text-lg"></div>
+                <div id="simGuildAdvice" class="mb-3 text-lg"></div>
             </div>
         </section>
 
         <section id="guildas" class="card">
-            <h2 class="section-title text-4xl mb-6">Guildas Brasileiras (Brazilian Guilds)</h2>
-            <p class="mb-4">
+            <h2 class="section-title">Guildas Brasileiras (Brazilian Guilds)</h2>
+            <p class="mb-4 text-lg">
                 Jogar em grupo é uma das melhores formas de aproveitar SWTOR ao máximo, seja para conteúdo PvE (Operations, Flashpoints), PvP ou simplesmente para socializar. Ter uma comunidade de jogadores que falam a mesma língua torna a experiência muito mais rica.
             </p>
-            <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700">
+            <div class="bg-gray-800 p-8 rounded-lg shadow-md border border-gray-700">
                 <h3 class="text-3xl font-bold text-yellow-300 mb-4">Recomendação: Guilda Brazucas!</h3>
-                <p class="mb-4">
+                <p class="mb-4 text-lg">
                     A guilda <strong class="text-yellow-200">Brazucas</strong> é uma excelente opção para jogadores brasileiros no Star Wars: The Old Republic. Eles são conhecidos por serem uma comunidade ativa, amigável e acolhedora, ideais para novatos e veteranos.
                 </p>
-                <p class="mb-4">
+                <p class="mb-4 text-lg">
                     <strong>Como Encontrar:</strong>
                     A melhor forma de encontrá-los é procurando por membros no jogo (nos servidores Star Forge ou Satele Shan, que são os mais populosos para a comunidade ocidental) ou através de seus canais de comunicação (geralmente Discord).
                 </p>
-                <p class="mb-2"><strong>Dicas para Encontrar Guildas:</strong></p>
-                <ul class="list-disc ml-6 space-y-1">
+                <p class="mb-2 text-lg"><strong>Dicas para Encontrar Guildas:</strong></p>
+                <ul class="list-disc ml-6 space-y-1 text-lg">
                     <li>Use o chat geral na Fleet (Frota) ou em Coruscant/Dromund Kaas para perguntar por guildas brasileiras.</li>
                     <li>Visite fóruns e comunidades online de SWTOR em português (se existirem).</li>
                     <li>Muitas guildas recrutam no Galactic Trade Network (GTN) ou em canais de chat dedicados ao recrutamento.</li>
@@ -665,8 +756,29 @@
                 const content = collapsible.querySelector('.collapsible-content');
 
                 header.addEventListener('click', () => {
+                    // Close other open collapsibles in the same parent first
+                    const parentCollapsibles = header.closest('.space-y-4, .space-y-6, .space-y-8'); // Adjust parent selectors as needed
+                    if (parentCollapsibles) {
+                        parentCollapsibles.querySelectorAll('.collapsible-header.active').forEach(openHeader => {
+                            if (openHeader !== header) {
+                                openHeader.classList.remove('active');
+                                openHeader.nextElementSibling.classList.remove('active');
+                            }
+                        });
+                    }
+
                     header.classList.toggle('active');
                     content.classList.toggle('active');
+                });
+            });
+
+            // Smooth scroll for navigation links
+            document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
                 });
             });
         });
