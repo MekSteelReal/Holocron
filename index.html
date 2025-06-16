@@ -16,22 +16,22 @@
         /* Estilos base do corpo */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #fcfcfb; /* stone-50 - base muito claro */
-            color: #292524; /* stone-800 - texto principal */
+            background-color: #fcfcfb; /* Cor de fundo principal: Branco Sujo/Quase Branco (stone-50) */
+            color: #292524; /* Cor do texto principal: Cinza Escuro (stone-800) */
         }
         /* Estilos para títulos de seção */
         .section-title {
-            color: #44403c; /* stone-700 - títulos de seção */
+            color: #1e40af; /* Azul Escuro para títulos de seção */
         }
         /* Estilos para o botão primário */
         .btn-primary {
-            background-color: #1e40af; /* blue-800 - azul forte */
+            background-color: #1d4ed8; /* blue-700 - azul forte */
             color: white;
             transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
         .btn-primary:hover {
-            background-color: #1d4ed8; /* blue-700 - azul um pouco mais claro */
+            background-color: #2563eb; /* blue-600 - azul um pouco mais claro no hover */
             transform: translateY(-2px);
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
         }
@@ -57,7 +57,7 @@
             border-radius: 0.75rem; /* rounded-xl */
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08); /* shadow-lg custom */
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            border: 1px solid #e7e5e4; /* stone-200 */
+            border: 1px solid #e0f2fe; /* blue-100 */
         }
         .card:hover {
             transform: translateY(-5px);
@@ -91,9 +91,10 @@
             text-align: center;
             padding: 1rem;
             border-radius: 0.5rem;
-            background-color: #fbfbfa;
+            background-color: #e0f2fe; /* blue-50 */
             box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
             transition: all 0.3s ease-in-out;
+            border: 1px solid #bfdbfe; /* blue-200 */
         }
         .flowchart-step:hover {
             transform: scale(1.02);
@@ -106,7 +107,7 @@
             right: -2.5rem;
             top: 25%;
             font-size: 2.5rem;
-            color: #a8a29e;
+            color: #93c5fd; /* blue-300 */
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         /* Seta para conectar passos do fluxograma (mobile) */
@@ -224,11 +225,11 @@
 </head>
 <body class="antialiased">
     <!-- Cabeçalho da página com navegação -->
-    <header class="bg-white/90 backdrop-blur-lg shadow-md sticky top-0 z-50 border-b border-stone-200">
+    <header class="bg-white/90 backdrop-blur-lg shadow-md sticky top-0 z-50 border-b border-blue-100">
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-screen-xl">
             <div class="flex items-center justify-between h-20">
                 <div class="flex-shrink-0">
-                    <h1 class="text-2xl font-extrabold text-stone-800 tracking-tight flex items-center">
+                    <h1 class="text-2xl font-extrabold text-blue-800 tracking-tight flex items-center">
                         <i class="fas fa-hat-wizard text-amber-500 mr-2"></i> Holocron SWTOR
                     </h1>
                 </div>
@@ -249,7 +250,7 @@
                 <!-- Botão do menu mobile -->
                 <div class="md:hidden">
                     <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-700 focus:outline-none">
-                        <span class="text-stone-800 text-2xl"><i class="fas fa-bars"></i></span>
+                        <span class="text-blue-800 text-2xl"><i class="fas fa-bars"></i></span>
                     </button>
                 </div>
             </div>
@@ -319,7 +320,7 @@
                         </div>
                         <div class="card p-6">
                             <h3 class="text-2xl font-semibold text-stone-800 mb-4 flex items-center">
-                                <i class="fas fa-star-half-alt text-yellow-600 mr-3"></i> Sua Jornada e Escolhas
+                                <i class="fas fa-star-half-alt text-amber-500 mr-3"></i> Sua Jornada e Escolhas
                             </h3>
                             <p class="text-stone-600 leading-relaxed">
                                 O jogo oferece uma experiência de RPG imersiva, onde você pode seguir o caminho da **Luz** ou da **Escuridão**, tornando-se um defensor da paz ou um tirano impiedoso. Cada classe possui uma história individual completa e totalmente dublada, tornando sua jornada pessoal e única. A força em SWTOR não se limita apenas a estatísticas brutas; ela reside na compreensão profunda das mecânicas, na aplicação estratégica das habilidades e na capacidade de adaptação às dinâmicas do jogo.
@@ -348,7 +349,7 @@
                     </div>
                     
                     <!-- Seção de estilos de combate do Império -->
-                    <h3 class="text-2xl font-bold text-stone-800 mb-6 flex items-center justify-center lg:justify-start">
+                    <h3 class="text-2xl font-bold text-blue-800 mb-6 flex items-center justify-center lg:justify-start">
                         <span class="icon-faction icon-imperial mr-3"></span>Estilos de Combate do Império
                     </h3>
                     <div id="combat-style-grid-imperial" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
@@ -356,7 +357,7 @@
                     </div>
 
                     <!-- Seção de estilos de combate da República -->
-                    <h3 class="text-2xl font-bold text-stone-800 mb-6 flex items-center justify-center lg:justify-start">
+                    <h3 class="text-2xl font-bold text-blue-800 mb-6 flex items-center justify-center lg:justify-start">
                         <span class="icon-faction icon-republic mr-3"></span>Estilos de Combate da República
                     </h3>
                     <div id="combat-style-grid-republic" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -377,10 +378,10 @@
 
                     <div class="space-y-16">
                         <div class="card p-6 md:p-8">
-                            <h3 class="text-2xl font-semibold mb-2 text-stone-800">Tutorial: Otimização de Atributos (Stats) para DPS/Healer (Cura)</h3>
+                            <h3 class="text-2xl font-semibold mb-2 text-blue-800">Tutorial: Otimização de Atributos (Stats) para DPS/Healer (Cura)</h3>
                             <p class="mb-6 text-stone-600">Para maximizar seu dano (DPS) e eficácia de cura (Heal), atingir os "caps" (limites) de certos atributos é a prioridade. Este gráfico interativo mostra os alvos para **Accuracy (Precisão)** e **Alacrity (Alacridade)**, antes de investir todo o resto em **Critical (Crítico)**. Mastery (Maestria), Endurance (Vigor) e Power (Poder) vêm naturalmente com o Item Rating (NI) e não são prioridades de ajuste fino.</p>
-                            <div class="flex flex-col md:flex-row items-center gap-4 mb-6 p-4 bg-stone-50 rounded-lg border border-stone-200">
-                                <p class="text-stone-700 font-medium text-center md:text-left">Sua guilda "brazucas" tem o bônus "Zeal" (+5% Alacrity)? Isso muda drasticamente seu alvo de Alacrity. Ative ou desative o bônus para ver a diferença.</p>
+                            <div class="flex flex-col md:flex-row items-center gap-4 mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                <p class="text-blue-700 font-medium text-center md:text-left">Sua guilda "brazucas" tem o bônus "Zeal" (+5% Alacrity)? Isso muda drasticamente seu alvo de Alacrity. Ative ou desative o bônus para ver a diferença.</p>
                                 <button id="toggle-guild-perk" class="btn-primary px-5 py-2 rounded-md shadow-sm w-full md:w-auto">Sim, ativar bônus da Guilda</button>
                             </div>
                             <div class="chart-container">
@@ -396,59 +397,59 @@
                         </div>
 
                         <div class="card p-6 md:p-8">
-                            <h3 class="text-2xl font-semibold mb-2 text-stone-800">Tutorial: O Caminho do Equipamento (Gear Path) (até iLvl 344)</h3>
+                            <h3 class="text-2xl font-semibold mb-2 text-blue-800">Tutorial: O Caminho do Equipamento (Gear Path) (até iLvl 344)</h3>
                             <p class="mb-8 text-stone-600">Este fluxograma simplifica sua jornada, mostrando as principais fontes e a ordem de progressão. A estratégia é usar fontes mais fáceis (Conquest, Flashpoints) para obter um set base, e então farmar conteúdo de grupo (Operations) para o equipamento final, o Rakata 344. O **Item Rating (NI)** é a chave para desbloquear drops de níveis mais altos.</p>
                              <div class="flex flex-col lg:flex-row justify-around items-center lg:items-start gap-8 lg:gap-4">
                                 <div class="flowchart-step">
-                                    <div class="bg-blue-100 text-blue-800 rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold mb-2">1</div>
-                                    <h4 class="font-semibold text-lg">Conquest Set (NI 324+)</h4>
-                                    <p class="text-sm text-stone-500 max-w-xs">Use Conquest Commendations (Medalhas de Conquista) para seu set inicial (peitoral, calças, etc.) e Relics (Relíquias)/Earpiece (Brinco) NI 340. Disponível no Conquest Vendor (Vendedor de Conquista) na Fleet (Frota). Este é o ponto de partida rápido.</p>
+                                    <div class="bg-blue-500 text-white rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold mb-2">1</div>
+                                    <h4 class="font-semibold text-lg text-blue-800">Conquest Set (NI 324+)</h4>
+                                    <p class="text-sm text-stone-700 max-w-xs">Use Conquest Commendations (Medalhas de Conquista) para seu set inicial (peitoral, calças, etc.) e Relics (Relíquias)/Earpiece (Brinco) NI 340. Disponível no Conquest Vendor (Vendedor de Conquista) na Fleet (Frota). Este é o ponto de partida rápido.</p>
                                 </div>
                                 <div class="flowchart-step">
-                                    <div class="bg-blue-100 text-blue-800 rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold mb-2">2</div>
-                                    <h4 class="font-semibold text-lg">Flashpoints (Veteran/Master)</h4>
-                                    <p class="text-sm text-stone-500 max-w-xs">Farme FPs para obter drops azuis (Prototype) NI 340. Desconstrua-os para desbloquear **Mods** e **Enhancements (Aprimoramentos)** 340 com Hyde & Zeek na Fleet, permitindo comprá-los com créditos. Essencial para equipar a maioria dos seus slots.</p>
+                                    <div class="bg-blue-500 text-white rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold mb-2">2</div>
+                                    <h4 class="font-semibold text-lg text-blue-800">Flashpoints (Veteran/Master)</h4>
+                                    <p class="text-sm text-stone-700 max-w-xs">Farme FPs para obter drops azuis (Prototype) NI 340. Desconstrua-os para desbloquear **Mods** e **Enhancements (Aprimoramentos)** 340 com Hyde & Zeek na Fleet, permitindo comprá-los com créditos. Essencial para equipar a maioria dos seus slots.</p>
                                 </div>
                                 <div class="flowchart-step">
-                                    <div class="bg-blue-100 text-blue-800 rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold mb-2">3</div>
-                                    <h4 class="font-semibold text-lg">Operations (R-4 - NI 328+)</h4>
-                                    <p class="text-sm text-stone-500 max-w-xs">Faça Operations (Story/Veteran) para obter equipamento R-4 (NI 328+) e **OP-1 Catalysts (Catalisadores OP-1)**. Você pode "iscar" drops de slots específicos equipando uma peça de NI inferior nesse slot antes de matar o chefe.</p>
+                                    <div class="bg-blue-500 text-white rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold mb-2">3</div>
+                                    <h4 class="font-semibold text-lg text-blue-800">Operations (R-4 - NI 328+)</h4>
+                                    <p class="text-sm text-stone-700 max-w-xs">Faça Operations (Story/Veteran) para obter equipamento R-4 (NI 328+) e **OP-1 Catalysts (Catalisadores OP-1)**. Você pode "iscar" drops de slots específicos equipando uma peça de NI inferior nesse slot antes de matar o chefe.</p>
                                 </div>
                                 <div class="flowchart-step">
-                                    <div class="bg-amber-100 text-amber-800 rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold mb-2">4</div>
-                                    <h4 class="font-semibold text-lg">Rakata 344 Final (NI 342/344)</h4>
-                                    <p class="text-sm text-stone-500 max-w-xs">Use os OP-1 Catalysts para aprimorar seu equipamento R-4 para Rakata de nível 342 e depois 344 no Operations Upgrade Vendor (Vendedor de Melhorias de Operações) na Fleet. Este é o melhor equipamento PvE de fim de jogo.</p>
+                                    <div class="bg-amber-500 text-white rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold mb-2">4</div>
+                                    <h4 class="font-semibold text-lg text-amber-800">Rakata 344 Final (NI 342/344)</h4>
+                                    <p class="text-sm text-stone-700 max-w-xs">Use os OP-1 Catalysts para aprimorar seu equipamento R-4 para Rakata de nível 342 e depois 344 no Operations Upgrade Vendor (Vendedor de Melhorias de Operações) na Fleet. Este é o melhor equipamento PvE de fim de jogo.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="card p-6 md:p-8">
-                             <h3 class="text-2xl font-semibold mb-4 text-stone-800">Tutorial: Currencies (Moedas) de Equipamento e Onde Encontrá-las</h3>
+                             <h3 class="text-2xl font-semibold mb-4 text-blue-800">Tutorial: Currencies (Moedas) de Equipamento e Onde Encontrá-las</h3>
                             <p class="mb-6 text-stone-600">A progressão de equipamento gira em torno da coleta de moedas (Currencies) específicas de diferentes atividades. Entender para que cada uma serve e onde obtê-las é essencial para sua eficiência. Cada uma serve a um propósito vital na sua busca pelo equipamento supremo.</p>
                             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <div class="bg-stone-50 p-4 rounded-lg border">
+                                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
                                     <h4 class="font-bold text-lg text-blue-700">Tech Fragments <i class="fas fa-microchip ml-2"></i></h4>
-                                    <p class="text-sm text-stone-600">A moeda universal, obtida em quase todas as atividades de endgame (Conquests, Heroics, FPs, Ops, PvP). Usada para Legendary Implants (Implantes Lendários), Tacticals (Táticos) e materiais para os melhores Augments (Aumentos).</p>
+                                    <p class="text-sm text-stone-700">A moeda universal, obtida em quase todas as atividades de endgame (Conquests, Heroics, FPs, Ops, PvP). Usada para Legendary Implants (Implantes Lendários), Tacticals (Táticos) e materiais para os melhores Augments (Aumentos).</p>
                                 </div>
-                                <div class="bg-stone-50 p-4 rounded-lg border">
+                                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
                                     <h4 class="font-bold text-lg text-green-700">Conquest Commendations <i class="fas fa-medal ml-2"></i></h4>
-                                    <p class="text-sm text-stone-600">Obtidas completando seus objetivos semanais de Conquest. Usadas para comprar seu set inicial de equipamento (iLvl 324+) e Relics (Relíquias)/Earpiece 340. Podem ser trocadas por Tech Fragments no Conquest Vendor.</p>
+                                    <p class="text-sm text-stone-700">Obtidas completando seus objetivos semanais de Conquest. Usadas para comprar seu set inicial de equipamento (iLvl 324+) e Relics (Relíquias)/Earpiece 340. Podem ser trocadas por Tech Fragments no Conquest Vendor.</p>
                                 </div>
-                                <div class="bg-stone-50 p-4 rounded-lg border">
+                                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
                                     <h4 class="font-bold text-lg text-amber-700">OP-1 Catalysts <i class="fas fa-flask ml-2"></i></h4>
-                                    <p class="text-sm text-stone-600">A moeda mais importante para o equipamento final (Rakata), obtida principalmente em Operations bosses. Essenciais para o aprimoramento do seu equipamento R-4 para Rakata 344. Raramente, podem ser trocados por Tech Fragments.</p>
+                                    <p class="text-sm text-stone-700">A moeda mais importante para o equipamento final (Rakata), obtida principalmente em Operations bosses. Essenciais para o aprimoramento do seu equipamento R-4 para Rakata 344. Raramente, podem ser trocados por Tech Fragments.</p>
                                  </div>
-                                 <div class="bg-stone-50 p-4 rounded-lg border">
-                                    <h4 class="font-bold text-lg text-cyan-700">FP-1 Stabilizers <i class="fas fa-cogs ml-2"></i></h4>
-                                    <p class="text-sm text-stone-600">Ganhos em Flashpoints. Podem ser trocados por outras moedas ou usados para comprar equipamentos específicos de Flashpoints em vendedores dedicados.</p>
+                                 <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                    <h4 class="font-bold text-lg text-blue-700">FP-1 Stabilizers <i class="fas fa-cogs ml-2"></i></h4>
+                                    <p class="text-sm text-stone-700">Ganhos em Flashpoints. Podem ser trocados por outras moedas ou usados para comprar equipamentos específicos de Flashpoints em vendedores dedicados.</p>
                                  </div>
-                                 <div class="bg-stone-50 p-4 rounded-lg border">
+                                 <div class="bg-red-50 p-4 rounded-lg border border-red-200">
                                     <h4 class="font-bold text-lg text-red-700">WZ-1 Accelerants <i class="fas fa-fist-raised ml-2"></i></h4>
-                                    <p class="text-sm text-stone-600">Moeda exclusiva de PvP (Warzones) e Galactic Starfighter. Usada para comprar equipamento de PvP (limite de iLvl 328) e pode ser trocada por Tech Fragments. Não são usados para o equipamento PvE de fim de jogo.</p>
+                                    <p class="text-sm text-stone-700">Moeda exclusiva de PvP (Warzones) e Galactic Starfighter. Usada para comprar equipamento de PvP (limite de iLvl 328) e pode ser trocada por Tech Fragments. Não são usados para o equipamento PvE de fim de jogo.</p>
                                  </div>
-                                 <div class="bg-stone-50 p-4 rounded-lg border">
-                                    <h4 class="font-bold text-lg text-purple-700">Legendary Implants & Augments <i class="fas fa-gem ml-2"></i></h4>
-                                    <p class="text-sm text-stone-600"><strong>Legendary Implants</strong> são seus novos "set bonuses" (bônus de conjunto) pós-7.0, fornecendo efeitos poderosos; são adquiridos e aprimorados com Tech Fragments e Conquest Commendations. <strong>Augments</strong> são o "fine-tuning" (ajuste fino) final dos seus atributos, adicionando estatísticas extras a cada peça de equipamento e são cruciais para o endgame de alto nível; feitos via Crafting ou GTN.</p>
+                                 <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                                    <h4 class="font-bold text-lg text-purple-700">Implants & Augments <i class="fas fa-gem ml-2"></i></h4>
+                                    <p class="text-sm text-stone-700"><strong>Legendary Implants</strong> são seus novos "set bonuses" (bônus de conjunto) pós-7.0, fornecendo efeitos poderosos; são adquiridos e aprimorados com Tech Fragments e Conquest Commendations. <strong>Augments</strong> são o "fine-tuning" (ajuste fino) final dos seus atributos, adicionando estatísticas extras a cada peça de equipamento e são cruciais para o endgame de alto nível; feitos via Crafting ou GTN.</p>
                                  </div>
                             </div>
                         </div>
@@ -465,26 +466,26 @@
                     </div>
                     <div class="space-y-8">
                         <div class="card p-6 md:p-8">
-                            <h3 class="text-2xl font-semibold mb-4 text-stone-800 flex items-center">
+                            <h3 class="text-2xl font-semibold mb-4 text-blue-800 flex items-center">
                                 <i class="fas fa-hand-fist text-red-600 mr-3"></i> Fundamentos do Combate
                             </h3>
                             <p class="mb-6 text-stone-600">Para se destacar, você precisa entender os pilares do combate no SWTOR. Não se trata apenas de apertar botões, mas de tomar decisões inteligentes em tempo real e reagir às situações, otimizando cada ação.</p>
                             <div class="grid md:grid-cols-2 gap-6">
                                 <div>
-                                    <h4 class="font-bold text-lg mb-2 flex items-center"><i class="fas fa-sync-alt text-blue-500 mr-2"></i> Gerenciamento de Recursos</h4>
-                                    <p class="text-stone-600">Cada classe tem um recurso único (Force (Força), Energy (Energia), Heat (Calor), Rage (Fúria)) que precisa ser gerado e gasto eficientemente para nunca ficar sem poder de fogo. **Regra geral:** para usuários de tecnologia (Agents (Agentes)/Smugglers (Contrabandistas) e Bounty Hunters (Caçadores de Recompensas)/Troopers (Soldados)), manter a Energy acima de 60% ou o Heat abaixo de 40 é crucial para maximizar sua regeneração e dano. Usuários da Force (Força) precisam balancear habilidades de custo baixo e alto para manter o fluxo.</p>
+                                    <h4 class="font-bold text-lg mb-2 flex items-center"><i class="fas fa-sync-alt text-blue-600 mr-2"></i> Gerenciamento de Recursos</h4>
+                                    <p class="text-stone-700">Cada classe tem um recurso único (Force (Força), Energy (Energia), Heat (Calor), Rage (Fúria)) que precisa ser gerado e gasto eficientemente para nunca ficar sem poder de fogo. **Regra geral:** para usuários de tecnologia (Agents (Agentes)/Smugglers (Contrabandistas) e Bounty Hunters (Caçadores de Recompensas)/Troopers (Soldados)), manter a Energy acima de 60% ou o Heat abaixo de 40 é crucial para maximizar sua regeneração e dano. Usuários da Force (Força) precisam balancear habilidades de custo baixo e alto para manter o fluxo.</p>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-lg mb-2 flex items-center"><i class="fas fa-hand-sparkles text-green-500 mr-2"></i> Habilidades de Utilidade Essenciais</h4>
-                                    <p class="text-stone-600">Sua <strong class="text-red-600">Interrupt (Interrupção)</strong> é a habilidade mais importante: use-a para parar habilidades inimigas de serem conjuradas (geralmente indicadas por uma barra de conjuração no inimigo). Use <strong class="text-blue-600">Stuns (Atordoamentos)</strong> para controlar inimigos menores e <strong class="text-green-600">Cleanses (Limpezas)</strong> para remover efeitos negativos (debates) de você ou de aliados. Conheça suas habilidades de movimento (jumps (saltos), rolls (rolamentos), boosts (impulsos)) para se reposicionar e evitar dano ou mecânicas de área.</p>
+                                    <h4 class="font-bold text-lg mb-2 flex items-center"><i class="fas fa-hand-sparkles text-green-600 mr-2"></i> Habilidades de Utilidade Essenciais</h4>
+                                    <p class="text-stone-700">Sua <strong class="text-red-600">Interrupt (Interrupção)</strong> é a habilidade mais importante: use-a para parar habilidades inimigas de serem conjuradas (geralmente indicadas por uma barra de conjuração no inimigo). Use <strong class="text-blue-600">Stuns (Atordoamentos)</strong> para controlar inimigos menores e <strong class="text-green-600">Cleanses (Limpezas)</strong> para remover efeitos negativos (debates) de você ou de aliados. Conheça suas habilidades de movimento (jumps (saltos), rolls (rolamentos), boosts (impulsos)) para se reposicionar e evitar dano ou mecânicas de área.</p>
                                 </div>
                                  <div>
-                                    <h4 class="font-bold text-lg mb-2 flex items-center"><i class="fas fa-redo-alt text-yellow-500 mr-2"></i> Rotação vs. Prioridade</h4>
-                                    <p class="text-stone-600">Pratique sua sequência de ataques (Rotation) em um boneco de treino até virar memória muscular. Isso cria uma base. Em combates reais, adapte-se usando uma lista de Priorities (Prioridades): use sempre a habilidade de maior impacto que estiver disponível, mesmo que isso desvie da sua "Rotation" padrão. O mais importante é manter os DoTs (Damage over Time - Dano ao Longo do Tempo) e buffs ativos e gastar recursos de forma eficiente.</p>
+                                    <h4 class="font-bold text-lg mb-2 flex items-center"><i class="fas fa-redo-alt text-amber-500 mr-2"></i> Rotação vs. Prioridade</h4>
+                                    <p class="text-stone-700">Pratique sua sequência de ataques (Rotation) em um boneco de treino até virar memória muscular. Isso cria uma base. Em combates reais, adapte-se usando uma lista de Priorities (Prioridades): use sempre a habilidade de maior impacto que estiver disponível, mesmo que isso desvie da sua "Rotation" padrão. O mais importante é manter os DoTs (Damage over Time - Dano ao Longo do Tempo) e buffs ativos e gastar recursos de forma eficiente.</p>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-lg mb-2 flex items-center"><i class="fas fa-shield-alt text-purple-500 mr-2"></i> Uso de Defensivos (DCDs)</h4>
-                                    <p class="text-stone-600">Não use todos os seus DCDs (Defensive Cooldowns - habilidades defensivas de resfriamento) de uma vez! Roteie-os estrategicamente para ter sempre uma habilidade defensiva pronta para mitigar grandes ataques. Conhecer suas defesas e quando usá-las é a chave para a "boa resistência" que você procura, especialmente em conteúdo desafiador. Cada DCD tem um propósito (damage reduction (redução de dano), absorption (absorção), healing (cura), reflection (reflexão), invulnerability (invulnerabilidade)).</p>
+                                    <h4 class="font-bold text-lg mb-2 flex items-center"><i class="fas fa-shield-alt text-purple-600 mr-2"></i> Uso de Defensivos (DCDs)</h4>
+                                    <p class="text-stone-700">Não use todos os seus DCDs (Defensive Cooldowns - habilidades defensivas de resfriamento) de uma vez! Roteie-os estrategicamente para ter sempre uma habilidade defensiva pronta para mitigar grandes ataques. Conhecer suas defesas e quando usá-las é a chave para a "boa resistência" que você procura, especialmente em conteúdo desafiador. Cada DCD tem um propósito (damage reduction (redução de dano), absorption (absorção), healing (cura), reflection (reflexão), invulnerability (invulnerabilidade)).</p>
                                 </div>
                             </div>
                         </div>
@@ -501,29 +502,29 @@
                     </div>
                     <div class="grid lg:grid-cols-3 gap-8">
                         <div class="lg:col-span-2 card p-6 md:p-8">
-                            <h3 class="text-2xl font-semibold mb-4 text-stone-800 flex items-center">
-                                <i class="fas fa-map-marker-alt text-red-500 mr-3"></i> Guia de Localização de Datacrons
+                            <h3 class="text-2xl font-semibold mb-4 text-blue-800 flex items-center">
+                                <i class="fas fa-map-marker-alt text-red-600 mr-3"></i> Guia de Localização de Datacrons
                             </h3>
                             <p class="mb-4 text-stone-600">Selecione um planeta para ver os Datacrons disponíveis, seus bônus e uma breve dica de localização. Alguns são fáceis de encontrar, outros exigem puzzles de salto complexos e muita paciência! A maioria concede Mastery (Maestria) ou Endurance (Vigor), mas alguns dão Presence (Presença) ou Matrix Shards (Fragmentos de Matriz) para construir o Matrix Crystal (Cristal Matriz).</p>
                             <div class="mb-4">
-                                <select id="datacron-planet-filter" class="w-full p-2 border border-gray-300 rounded-md bg-white">
+                                <select id="datacron-planet-filter" class="w-full p-2 border border-blue-300 rounded-md bg-white focus:ring-blue-500 focus:border-blue-500">
                                     <option value="all">Todos os Planetas</option>
                                 </select>
                             </div>
                             <div id="datacron-list" class="space-y-4 max-h-96 overflow-y-auto pr-2">
                                 <!-- Datacrons serão populados aqui pelo JS -->
                             </div>
-                            <p class="mt-4 text-sm text-stone-500"><strong>Dica:</strong> Matrix Shards (Fragmentos de Matriz) (Amarelo, Verde, Laranja, Vermelho, Azul) são usados para construir o Matrix Crystal (Cristal Matriz), um item de Legado que se aprimora com mais fragmentos. O Matrix Crystal é uma relíquia poderosa para baixo nível.</p>
+                            <p class="mt-4 text-sm text-stone-700"><strong>Dica:</strong> Matrix Shards (Fragmentos de Matriz) (Amarelo, Verde, Laranja, Vermelho, Azul) são usados para construir o Matrix Crystal (Cristal Matriz), um item de Legado que se aprimora com mais fragmentos. O Matrix Crystal é uma relíquia poderosa para baixo nível.</p>
                         </div>
                         <div class="card p-6 md:p-8 flex flex-col justify-center items-center">
-                            <h3 class="text-2xl font-semibold mb-4 text-center text-stone-800 flex items-center justify-center">
-                                <i class="fas fa-chart-pie text-cyan-500 mr-3"></i> Total Legacy Reward
+                            <h3 class="text-2xl font-semibold mb-4 text-center text-blue-800 flex items-center justify-center">
+                                <i class="fas fa-chart-pie text-blue-600 mr-3"></i> Total Legacy Reward
                             </h3>
                             <p class="text-center text-stone-600 mb-4">Coletar todos os 130 datacrons concede um bônus cumulativo massivo e permanente a **todos** os personagens da sua conta. O investimento de tempo vale a pena para o poder do Legado (Legacy)!</p>
                             <div class="w-full h-64">
                                  <canvas id="datacron-summary-chart"></canvas>
                             </div>
-                            <p class="mt-4 text-sm text-center text-stone-500">Este bônus é especialmente poderoso para upar alternate characters (personagens alternativos) (Alts), tornando-os muito mais fortes desde o início, e oferece um impulso notável no endgame ao complementar seu equipamento (Gear).</p>
+                            <p class="mt-4 text-sm text-stone-700">Este bônus é especialmente poderoso para upar alternate characters (personagens alternativos) (Alts), tornando-os muito mais fortes desde o início, e oferece um impulso notável no endgame ao complementar seu equipamento (Gear).</p>
                         </div>
                     </div>
                 </section>
@@ -538,32 +539,32 @@
                     </div>
                     <div class="grid lg:grid-cols-2 gap-8">
                         <div class="card p-6 md:p-8">
-                            <h3 class="text-2xl font-semibold mb-4 text-stone-800 flex items-center">
+                            <h3 class="text-2xl font-semibold mb-4 text-blue-800 flex items-center">
                                 <i class="fas fa-users text-green-600 mr-3"></i> O Poder da Influência do Companheiro
                             </h3>
                             <p class="mb-4 text-stone-600">Aumentar a Influence (Influência) do seu Companion (Companheiro) é um dos maiores impulsos de poder para o jogo solo. Um Companion de alta Influence (Nível 50) é um exército de um só! Além de curar/causar dano em combate, eles se tornam mais rápidos e eficientes em suas **Crew Skills** (habilidades de profissão). Veja como a estatística de Presence (Presença), que aumenta a eficácia deles em combate, escala com a Influence.</p>
                             <label for="influence-slider" class="block font-medium text-stone-700 mb-2">Influence Level (Nível de Influência): <span id="influence-level" class="font-bold text-blue-700">1</span></label>
-                            <input id="influence-slider" type="range" min="1" max="50" value="1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
-                            <div class="mt-4 bg-stone-100 p-4 rounded-lg text-center">
-                                <p class="text-lg text-stone-600">Presence Bonus (Bônus de Presença):</p>
+                            <input id="influence-slider" type="range" min="1" max="50" value="1" class="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                            <div class="mt-4 bg-blue-50 p-4 rounded-lg text-center border border-blue-200">
+                                <p class="text-lg text-blue-700">Presence Bonus (Bônus de Presença):</p>
                                 <p id="presence-bonus" class="text-4xl font-bold text-amber-600">0</p>
                             </div>
-                            <p class="mt-4 text-sm text-stone-500"><strong>Dica Pro:</strong> Para conteúdo solo e missões mais difíceis, configure seu Companion como Healer (Curandeiro). No Nível 50 de Influence, ele o tornará praticamente imortal, permitindo que você se concentre apenas no damage (dano). Use Gifts (Presentes) que o Companion "Ama" para maximizar o ganho de Influence!</p>
+                            <p class="mt-4 text-sm text-stone-700"><strong>Dica Pro:</strong> Para conteúdo solo e missões mais difíceis, configure seu Companion como Healer (Curandeiro). No Nível 50 de Influence, ele o tornará praticamente imortal, permitindo que você se concentre apenas no damage (dano). Use Gifts (Presentes) que o Companion "Ama" para maximizar o ganho de Influence!</p>
                         </div>
                          <div class="card p-6 md:p-8">
-                            <h3 class="text-2xl font-semibold mb-4 text-stone-800 flex items-center">
-                                <i class="fas fa-unlock-alt text-purple-600 mr-3"></i> Desbloqueios de Legado Essenciais
+                            <h3 class="text-2xl font-semibold mb-4 text-blue-800 flex items-center">
+                                <i class="fas fa-unlock-alt text-green-600 mr-3"></i> Desbloqueios de Legado Essenciais
                             </h3>
                             <p class="mb-4 text-stone-600">Investir em seu Legacy (Legado) beneficia todos os seus Characters (Personagens), tornando-os mais fortes e eficientes. Priorize estes Unlocks (Desbloqueios) para maximizar sua Quality of Life (qualidade de vida) e Power (Poder) em todos os seus Alts (Personagens Alternativos) e para todo o Legacy:</p>
-                            <ul class="space-y-3 text-stone-600">
-                                <li class="flex items-start"><span class="mr-2 text-green-500 font-bold"><i class="fas fa-check-circle"></i></span><div><strong class="text-stone-700">Rocket Boost (Impulso Foguete):</strong> Essencial para se mover rapidamente em áreas internas onde Speeders (Veículos) não funcionam, economizando muito tempo.</div></li>
-                                <li class="flex items-start"><span class="mr-2 text-green-500 font-bold"><i class="fas fa-check-circle"></i></span><div><strong class="text-stone-700">Travel Cooldown Reductions (Reduções de Cooldown de Viagem):</strong> Menos tempo de espera para Quick Travel (Viagem Rápida), Fleet Pass (Retorno à Frota) e outros Teleports (Teletransportes) significa mais tempo jogando e menos tempo esperando.</div></li>
-                                <li class="flex items-start"><span class="mr-2 text-green-500 font-bold"><i class="fas fa-check-circle"></i></span><div><strong class="text-stone-700">Alignment Unlocks (Light V / Dark V) (Desbloqueios de Alinhamento):</strong> Alcançar estes Alignments (Alinhamentos) permite que seus Force Characters (Personagens da Força) (Jedi ou Sith) usem Combat Styles (Estilos de Combate) da facção oposta, abrindo novas e poderosas combinações.</div></li>
-                                 <li class="flex items-start"><span class="mr-2 text-green-500 font-bold"><i class="fas fa-check-circle"></i></span><div><strong class="text-stone-700">Companion Utilities (Utilidades de Companheiro):</strong> "Legacy of Altruism" (Legado de Altruísmo) (aumenta Influence Gain (Influência Ganhada) com Gifts (Presentes)) e "Legacy of Readiness" (Legado de Prontidão) (reduz Gift Time (Tempo de Presente)) tornam o processo de maximizar Companions muito mais rápido e barato.</div></li>
-                                 <li class="flex items-start"><span class="mr-2 text-green-500 font-bold"><i class="fas fa-check-circle"></i></span><div><strong class="text-stone-700">Legacy Cargo Hold Access (Acesso ao Cargueiro de Legado):</strong> Um shared Chest (Baú Compartilhado) entre todos os Characters (Personagens) da sua Account (Conta), perfeito para transferir Gear (Equipamentos), Crafting Materials (Materiais de Criação) e Credits (Créditos). Um dos primeiros Unlocks (Desbloqueios) a serem feitos!</div></li>
-                                 <li class="flex items-start"><span class="mr-2 text-green-500 font-bold"><i class="fas fa-check-circle"></i></span><div><strong class="text-stone-700">Speeder Unlocks (Desbloqueios de Speeder):</strong> Libere a capacidade de montar Speeders (Veículos) em Lower Levels (Níveis Mais Baixos) (Nível 10) para todos os seus Characters, acelerando muito a Exploration (Exploração).</div></li>
+                            <ul class="space-y-3 text-stone-700">
+                                <li class="flex items-start"><span class="mr-2 text-green-500 font-bold"><i class="fas fa-check-circle"></i></span><div><strong class="text-blue-700">Rocket Boost (Impulso Foguete):</strong> Essencial para se mover rapidamente em áreas internas onde Speeders (Veículos) não funcionam, economizando muito tempo.</div></li>
+                                <li class="flex items-start"><span class="mr-2 text-green-500 font-bold"><i class="fas fa-check-circle"></i></span><div><strong class="text-blue-700">Travel Cooldown Reductions (Reduções de Cooldown de Viagem):</strong> Menos tempo de espera para Quick Travel (Viagem Rápida), Fleet Pass (Retorno à Frota) e outros Teleports (Teletransportes) significa mais tempo jogando e menos tempo esperando.</div></li>
+                                <li class="flex items-start"><span class="mr-2 text-green-500 font-bold"><i class="fas fa-check-circle"></i></span><div><strong class="text-blue-700">Alignment Unlocks (Light V / Dark V) (Desbloqueios de Alinhamento):</strong> Alcançar estes Alignments (Alinhamentos) permite que seus Force Characters (Personagens da Força) (Jedi ou Sith) usem Combat Styles (Estilos de Combate) da facção oposta, abrindo novas e poderosas combinações.</div></li>
+                                 <li class="flex items-start"><span class="mr-2 text-green-500 font-bold"><i class="fas fa-check-circle"></i></span><div><strong class="text-blue-700">Companion Utilities (Utilidades de Companheiro):</strong> "Legacy of Altruism" (Legado de Altruísmo) (aumenta Influence Gain (Influência Ganhada) com Gifts (Presentes)) e "Legacy of Readiness" (Legado de Prontidão) (reduz Gift Time (Tempo de Presente)) tornam o processo de maximizar Companions muito mais rápido e barato.</div></li>
+                                 <li class="flex items-start"><span class="mr-2 text-green-500 font-bold"><i class="fas fa-check-circle"></i></span><div><strong class="text-blue-700">Legacy Cargo Hold Access (Acesso ao Cargueiro de Legado):</strong> Um shared Chest (Baú Compartilhado) entre todos os Characters (Personagens) da sua Account (Conta), perfeito para transferir Gear (Equipamentos), Crafting Materials (Materiais de Criação) e Credits (Créditos). Um dos primeiros Unlocks (Desbloqueios) a serem feitos!</div></li>
+                                 <li class="flex items-start"><span class="mr-2 text-green-500 font-bold"><i class="fas fa-check-circle"></i></span><div><strong class="text-blue-700">Speeder Unlocks (Desbloqueios de Speeder):</strong> Libere a capacidade de montar Speeders (Veículos) em Lower Levels (Níveis Mais Baixos) (Nível 10) para todos os seus Characters, acelerando muito a Exploration (Exploração).</div></li>
                             </ul>
-                            <p class="mt-6 text-stone-600">O Legacy é a verdadeira base de um Veteran Player (Jogador Veterano) de SWTOR. Ao investir nele, você simplifica e acelera a Progression (Progressão) de todos os seus Characters, tornando a Gaming Experience (Experiência de Jogo) muito mais Rewarding (Gratificante).</p>
+                            <p class="mt-6 text-stone-700">O Legacy é a verdadeira base de um Veteran Player (Jogador Veterano) de SWTOR. Ao investir nele, você simplifica e acelera a Progression (Progressão) de todos os seus Characters, tornando a Gaming Experience (Experiência de Jogo) muito mais Rewarding (Gratificante).</p>
                         </div>
                     </div>
                 </section>
@@ -577,17 +578,17 @@
                         <p class="mt-3 max-w-2xl mx-auto text-lg text-stone-600">A guilda Brazucas é um lar para jogadores de SWTOR que falam português, oferecendo suporte, camaradagem e bônus valiosos para otimizar sua jornada na galáxia.</p>
                     </div>
                     <div class="card p-6 md:p-8">
-                        <h3 class="text-2xl font-semibold mb-4 text-stone-800 flex items-center">
+                        <h3 class="text-2xl font-semibold mb-4 text-blue-800 flex items-center">
                             <i class="fas fa-users-cog text-blue-700 mr-3"></i> Informações da Guilda
                         </h3>
-                        <ul class="space-y-3 text-stone-600 mb-8">
+                        <ul class="space-y-3 text-stone-700 mb-8">
                             <li><strong>Guild Leader (Líder da Guilda):</strong> <span class="font-bold text-blue-700">Ramɓo</span> <i class="fas fa-crown text-amber-500 ml-1"></i></li>
                             <li><strong>XP Bonus (Bônus de XP):</strong> <span class="font-bold text-green-700">15%</span> <i class="fas fa-plus-circle text-green-500 ml-1"></i></li>
                             <li><strong>Reputation Bonus (Bônus de Reputação):</strong> <span class="font-bold text-green-700">15%</span> <i class="fas fa-star text-green-500 ml-1"></i></li>
                             <li><strong>Discord:</strong> <a href="https://discord.gg/WeDVyYyBxh" target="_blank" class="text-blue-700 hover:underline font-bold"><i class="fab fa-discord mr-2"></i>discord.gg/WeDVyYyBxh</a></li>
                         </ul>
-                        <h3 class="text-2xl font-semibold mt-8 mb-6 text-stone-800 flex items-center">
-                            <i class="fas fa-handshake text-yellow-600 mr-3"></i> BRAZUCA PERKS (Vantagens da BRAZUCAS)
+                        <h3 class="text-2xl font-semibold mt-8 mb-6 text-blue-800 flex items-center">
+                            <i class="fas fa-handshake text-amber-600 mr-3"></i> BRAZUCA PERKS (Vantagens da BRAZUCAS)
                         </h3>
                         <div class="grid md:grid-cols-2 gap-6">
                             <div class="guild-perk-item">
@@ -596,42 +597,42 @@
                                 <p><strong>Professional Training (Treinamento Profissional)</strong></p>
                                 <p><strong>Set Bonus (Bônus de Conjunto):</strong> Instant (Instantâneo)</p>
                                 <p><strong>Cooldown (Tempo de Recarga):</strong> 6h 00m 00s</p>
-                                <p>Aumenta a Taxa Crítica para todas as Crew Skills (Habilidades de Tripulação) em 5% por 1 hora.</p>
+                                <p class="text-stone-700">Aumenta a Taxa Crítica para todas as Crew Skills (Habilidades de Tripulação) em 5% por 1 hora.</p>
                             </div>
                             <div class="guild-perk-item">
                                 <h4>2. Starboard Command Room <i class="fas fa-ship ml-2"></i></h4>
                                 <p><strong>Duration (Duração):</strong> 18d 2h</p>
                                 <p><strong>Flashpoint Looter III (Saqueador de Flashpoint III)</strong></p>
                                 <p><strong>Set Bonus (Bônus de Conjunto):</strong> Passive (Passivo)</p>
-                                <p>Concede uma chance de dropar um Large Satchel of Crafting Materials (Grande Saco de Materiais de Criação) de chefes de Flashpoint (Ponto de Ignição) enquanto em um Grupo de Guilda.</p>
+                                <p class="text-stone-700">Concede uma chance de dropar um Large Satchel of Crafting Materials (Grande Saco de Materiais de Criação) de chefes de Flashpoint (Ponto de Ignição) enquanto em um Grupo de Guilda.</p>
                             </div>
                             <div class="guild-perk-item">
                                 <h4>3. Bridge <i class="fas fa-compass ml-2"></i></h4>
                                 <p><strong>Duration (Duração):</strong> 4d 2h</p>
                                 <p><strong>Critical Missions III (Missões Críticas III)</strong></p>
                                 <p><strong>Set Bonus (Bônus de Conjunto):</strong> Passive (Passivo)</p>
-                                <p>Aumenta a Taxa Crítica para todas as Mission Skills (Habilidades de Missão) em 3%.</p>
+                                <p class="text-stone-700">Aumenta a Taxa Crítica para todas as Mission Skills (Habilidades de Missão) em 3%.</p>
                             </div>
                             <div class="guild-perk-item">
                                 <h4>4. Engine Room <i class="fas fa-engine-force ml-2"></i></h4>
                                 <p><strong>Duration (Duração):</strong> 18d 2h</p>
                                 <p><strong>Operations Looter II (Saqueador de Operações II)</strong></p>
                                 <p><strong>Set Bonus (Bônus de Conjunto):</strong> Passive (Passivo)</p>
-                                <p>Concede uma chance de dropar um Medium Satchel of Crafting Materials (Saco Médio de Materiais de Criação) de chefes de Operations (Operações) enquanto em um Grupo de Guilda.</p>
+                                <p class="text-stone-700">Concede uma chance de dropar um Medium Satchel of Crafting Materials (Saco Médio de Materiais de Criação) de chefes de Operations (Operações) enquanto em um Grupo de Guilda.</p>
                             </div>
                             <div class="guild-perk-item">
                                 <h4>5. Docking Bay <i class="fas fa-warehouse ml-2"></i></h4>
                                 <p><strong>Duration (Duração):</strong> 18d 2h</p>
                                 <p><strong>Crafting Conquest 1 (Conquista de Criação 1)</strong></p>
                                 <p><strong>Set Bonus (Bônus de Conjunto):</strong> Passive (Passivo)</p>
-                                <p>Concede acesso ao Objetivo de Conquista baseado em Crafting (Criação) "Crafting: Rally - Part 1".</p>
+                                <p class="text-stone-700">Concede acesso ao Objetivo de Conquista baseado em Crafting (Criação) "Crafting: Rally - Part 1".</p>
                             </div>
                             <div class="guild-perk-item">
                                 <h4>6. Port Command Room <i class="fas fa-headset ml-2"></i></h4>
                                 <p><strong>Duration (Duração):</strong> 18d 2h</p>
                                 <p><strong>Operations Fortitude II (Fortitude de Operações II)</strong></p>
                                 <p><strong>Set Bonus (Bônus de Conjunto):</strong> Passive (Passivo)</p>
-                                <p>Aumenta Endurance (Vigor) em Operations (Operações) em 9%. Não se aplica em Master Mode (Modo Mestre).</p>
+                                <p class="text-stone-700">Aumenta Endurance (Vigor) em Operations (Operações) em 9%. Não se aplica em Master Mode (Modo Mestre).</p>
                             </div>
                         </div>
                     </div>
@@ -646,21 +647,21 @@
                         <p class="mt-3 max-w-2xl mx-auto text-lg text-stone-600">Insira as informações do seu personagem abaixo para obter simulações e dicas personalizadas para o seu progresso no SWTOR.</p>
                     </div>
                     <div class="card p-6 md:p-8">
-                        <h3 class="text-2xl font-semibold mb-6 text-stone-800 flex items-center">
+                        <h3 class="text-2xl font-semibold mb-6 text-blue-800 flex items-center">
                             <i class="fas fa-user-circle text-blue-600 mr-3"></i> Dados do Personagem
                         </h3>
                         <form id="simulation-form" class="space-y-6">
                             <div>
                                 <label for="char-name" class="block text-sm font-medium text-stone-700 mb-1">Nome do Personagem (Character Name):</label>
-                                <input type="text" id="char-name" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                <input type="text" id="char-name" class="block w-full p-2 border border-blue-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                             </div>
                             <div>
                                 <label for="char-guild" class="block text-sm font-medium text-stone-700 mb-1">Guilda (Guild):</label>
-                                <input type="text" id="char-guild" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                <input type="text" id="char-guild" class="block w-full p-2 border border-blue-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             </div>
                              <div>
                                 <label for="char-faction" class="block text-sm font-medium text-stone-700 mb-1">Facção (Faction):</label>
-                                <select id="char-faction" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                <select id="char-faction" class="block w-full p-2 border border-blue-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                                     <option value="">Selecione a Facção</option>
                                     <option value="Republica">República</option>
                                     <option value="Imperio">Império</option>
@@ -668,48 +669,48 @@
                             </div>
                              <div>
                                 <label for="char-class" class="block text-sm font-medium text-stone-700 mb-1">Classe (Class):</label>
-                                <input type="text" id="char-class" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: Jedi Knight (Cavaleiro Jedi)" required>
+                                <input type="text" id="char-class" class="block w-full p-2 border border-blue-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: Jedi Knight (Cavaleiro Jedi)" required>
                             </div>
                              <div>
                                 <label for="char-level" class="block text-sm font-medium text-stone-700 mb-1">Nível (Level):</label>
-                                <input type="number" id="char-level" min="1" max="80" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                <input type="number" id="char-level" min="1" max="80" class="block w-full p-2 border border-blue-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                             </div>
                              <div>
                                 <label for="char-mastery" class="block text-sm font-medium text-stone-700 mb-1">Mastery (Maestria):</label>
-                                <input type="number" id="char-mastery" min="0" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                <input type="number" id="char-mastery" min="0" class="block w-full p-2 border border-blue-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                             </div>
                              <div>
                                 <label for="char-endurance" class="block text-sm font-medium text-stone-700 mb-1">Endurance (Vigor):</label>
-                                <input type="number" id="char-endurance" min="0" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                <input type="number" id="char-endurance" min="0" class="block w-full p-2 border border-blue-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                             </div>
                              <div>
                                 <label for="char-power" class="block text-sm font-medium text-stone-700 mb-1">Power (Poder):</label>
-                                <input type="number" id="char-power" min="0" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                <input type="number" id="char-power" min="0" class="block w-full p-2 border border-blue-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                             </div>
                              <div>
                                 <label for="char-accuracy" class="block text-sm font-medium text-stone-700 mb-1">Accuracy (Precisão):</label>
-                                <input type="number" id="char-accuracy" min="0" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                <input type="number" id="char-accuracy" min="0" class="block w-full p-2 border border-blue-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                             </div>
                              <div>
                                 <label for="char-alacrity" class="block text-sm font-medium text-stone-700 mb-1">Alacrity (Alacridade):</label>
-                                <input type="number" id="char-alacrity" min="0" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                <input type="number" id="char-alacrity" min="0" class="block w-full p-2 border border-blue-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                             </div>
                              <div>
                                 <label for="char-critical" class="block text-sm font-medium text-stone-700 mb-1">Critical (Crítico):</label>
-                                <input type="number" id="char-critical" min="0" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                <input type="number" id="char-critical" min="0" class="block w-full p-2 border border-blue-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                             </div>
                             <div>
                                 <label for="companion-name" class="block text-sm font-medium text-stone-700 mb-1">Nome do Companheiro (Companion Name):</label>
-                                <input type="text" id="companion-name" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                <input type="text" id="companion-name" class="block w-full p-2 border border-blue-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             </div>
                             <div>
                                 <label for="companion-level" class="block text-sm font-medium text-stone-700 mb-1">Nível de Influência do Companheiro (Companion Influence Level):</label>
-                                <input type="number" id="companion-level" min="1" max="50" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="1">
+                                <input type="number" id="companion-level" min="1" max="50" class="block w-full p-2 border border-blue-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="1">
                             </div>
                             <button type="submit" class="btn-primary px-5 py-2 rounded-md shadow-sm w-full"><i class="fas fa-play-circle mr-2"></i>Gerar Simulações</button>
                         </form>
                         <div id="simulation-results" class="mt-8 space-y-6 hidden">
-                            <h3 class="text-2xl font-semibold text-stone-800 flex items-center">
+                            <h3 class="text-2xl font-semibold text-blue-800 flex items-center">
                                 <i class="fas fa-chart-line text-green-600 mr-3"></i> Resultados da Simulação
                             </h3>
                             <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
@@ -721,7 +722,7 @@
                                 <p id="sim-companion-tips" class="text-sm text-stone-700"></p>
                             </div>
                             <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                                <h4 class="font-bold text-lg text-yellow-800 flex items-center"><i class="fas fa-lightbulb mr-2"></i> Recomendações Gerais (General Recommendations):</h4>
+                                <h4 class="font-bold text-lg text-amber-800 flex items-center"><i class="fas fa-lightbulb mr-2"></i> Recomendações Gerais (General Recommendations):</h4>
                                 <p id="sim-general-tips" class="text-sm text-stone-700"></p>
                             </div>
                         </div>
@@ -744,8 +745,8 @@
     </div>
 
     <!-- Rodapé da página -->
-    <footer class="bg-stone-800 text-stone-300 mt-12">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center max-w-screen-xl">
+    <footer class="bg-blue-900 text-blue-200 mt-12 py-6">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-screen-xl">
             <p>&copy; 2024 Holocron SWTOR. Que a Força esteja com você. Sempre.</p>
         </div>
     </footer>
@@ -758,13 +759,27 @@
             // --- Lógica do Menu Mobile ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
+
+            function toggleMobileMenu() {
                 mobileMenu.classList.toggle('hidden');
-            });
+            }
+
+            // Mostra/Esconde o menu ao clicar no botão
+            mobileMenuButton.addEventListener('click', toggleMobileMenu);
+
+            // Esconde o menu ao clicar em uma opção
             document.querySelectorAll('#mobile-menu .nav-button-mobile').forEach(button => {
                 button.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden'); // Fecha o menu ao clicar em um item
+                    mobileMenu.classList.add('hidden'); // Adiciona a classe 'hidden' para esconder o menu
                 });
+            });
+
+            // Esconde o menu ao clicar fora dele
+            document.addEventListener('click', (e) => {
+                // Verifica se o clique não foi no botão do menu e não foi dentro do menu, e se o menu está visível
+                if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target) && !mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden'); // Adiciona a classe 'hidden' para esconder o menu
+                }
             });
 
             // --- Lógica do Modal ---
@@ -773,7 +788,7 @@
             const modalCloseButton = document.getElementById('modal-close-button');
 
             function openModal(title, content) {
-                modalContent.innerHTML = `<h3 class="text-2xl font-bold text-stone-800 mb-4">${title}</h3>${content}`;
+                modalContent.innerHTML = `<h3 class="text-2xl font-bold text-blue-800 mb-4">${title}</h3>${content}`;
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
             }
@@ -887,10 +902,10 @@
                         <div class="flex-grow">
                             <div class="flex items-center mb-3">
                                 <span class="icon-faction ${factionIconClass}" role="img" aria-label="${factionAltText}"></span>
-                                <h3 class="ml-3 text-xl font-semibold text-stone-800">${style.name}</h3>
+                                <h3 class="ml-3 text-xl font-semibold text-blue-800">${style.name}</h3>
                             </div>
-                            <p class="text-stone-600 mb-4">${style.description}</p>
-                            <p class="text-amber-700 bg-amber-100 p-3 rounded-lg font-semibold text-sm"><strong>Veredito:</strong> ${style.verdict}</p>
+                            <p class="text-stone-700 mb-4">${style.description}</p>
+                            <p class="text-amber-700 bg-amber-100 p-3 rounded-lg font-semibold text-sm border border-amber-200"><strong>Veredito:</strong> ${style.verdict}</p>
                         </div>
                         <div class="mt-4">
                             <button data-id="${style.id}" class="btn-primary w-full text-center py-2 rounded-md view-details-btn">Ver Detalhes</button>
@@ -935,7 +950,7 @@
                         const styleId = e.target.dataset.id;
                         const styleData = combatStylesData.find(s => s.id === styleId);
                         if (styleData) {
-                            openModal(`Tutorial: ${styleData.name}`, `<div class="text-stone-600">${styleData.tutorial}</div>`);
+                            openModal(`Tutorial: ${styleData.name}`, `<div class="text-stone-700">${styleData.tutorial}</div>`);
                         }
                     });
                 });
@@ -992,8 +1007,8 @@
                 datasets: [{
                     label: 'Attribute Points (Pontos de Atributo)',
                     data: [3500, 2054, 2694],
-                    backgroundColor: ['#f59e0b', '#3b82f6', '#10b981'],
-                    borderColor: ['#d97706', '#2563eb', '#059669'],
+                    backgroundColor: ['#fbbf24', '#3b82f6', '#10b981'], /* Amarelo, Azul, Verde */
+                    borderColor: ['#d97706', '#2563eb', '#059669'], /* Tons mais escuros das cores */
                     borderWidth: 1
                 }]
             };
@@ -1128,23 +1143,23 @@
                 const filteredDatacrons = datacronData.filter(d => filter === 'all' || d.planet === filter);
 
                 if (filteredDatacrons.length === 0) {
-                    datacronList.innerHTML = `<p class="text-stone-500 text-center py-4">Nenhum datacron encontrado para esta seleção. Tente outro planeta!</p>`;
+                    datacronList.innerHTML = `<p class="text-stone-700 text-center py-4">Nenhum datacron encontrado para esta seleção. Tente outro planeta!</p>`;
                     return;
                 }
 
                 filteredDatacrons.forEach(d => {
                     let difficultyColor = 'text-green-600';
-                    if (d.difficulty === 'Médio') difficultyColor = 'text-yellow-600';
+                    if (d.difficulty === 'Médio') difficultyColor = 'text-amber-600';
                     if (d.difficulty === 'Difícil') difficultyColor = 'text-orange-600';
                     if (d.difficulty === 'Muito Difícil') difficultyColor = 'text-red-600';
 
                     const item = document.createElement('div');
-                    item.className = 'p-3 bg-stone-50 rounded-lg border border-stone-200';
+                    item.className = 'p-3 bg-blue-50 rounded-lg border border-blue-200';
                     item.innerHTML = `
                         <div class="flex justify-between items-start">
                             <div>
-                                <h4 class="font-bold text-stone-700">${d.planet}</h4>
-                                <p class="text-sm text-stone-600">${d.location}</p>
+                                <h4 class="font-bold text-blue-700">${d.planet}</h4>
+                                <p class="text-sm text-stone-700">${d.location}</p>
                             </div>
                             <div class="text-right ml-4 flex-shrink-0">
                                 <p class="font-semibold text-blue-700">${d.stat}</p>
@@ -1175,13 +1190,13 @@
                             label: 'Total Attribute Bonuses (Bônus de Atributos Totais)',
                             data: [1443, 1193, 400, 10, 10], // Valores aproximados baseados em guias e adicionais para Crítico/Alacridade
                             backgroundColor: [
-                                'rgba(245, 158, 11, 0.7)', /* amber-500 */
-                                'rgba(22, 163, 74, 0.7)',  /* green-600 */
+                                'rgba(251, 191, 36, 0.7)', /* amber-400 */
+                                'rgba(34, 197, 94, 0.7)',  /* green-500 */
                                 'rgba(59, 130, 246, 0.7)',  /* blue-500 */
-                                'rgba(234, 88, 12, 0.7)', /* orange-600 for crit */
-                                'rgba(6, 182, 212, 0.7)'  /* cyan-600 for alacrity */
+                                'rgba(239, 68, 68, 0.7)', /* red-500 for crit */
+                                'rgba(6, 182, 212, 0.7)'  /* cyan-600 for alacrity - not a primary color but fits for an additional attribute */
                             ],
-                            borderColor: ['#f59e0b', '#16a34a', '#3b82f6', '#ea580c', '#06b6d4'],
+                            borderColor: ['#f59e0b', '#16a34a', '#2563eb', '#dc2626', '#06b6d4'],
                             borderWidth: 1
                         }]
                     },
@@ -1250,11 +1265,11 @@
 
                 // Dicas de Atributos
                 if (charAccuracy < 2694) {
-                    statsTips += `Sua Accuracy (Precisão) (${charAccuracy}) está abaixo do ideal para PvE de fim de jogo (alvo: 2694). Priorize-a para evitar misses. `;
+                    statsTips += `<span class="text-red-600">Sua Accuracy (Precisão) (${charAccuracy}) está abaixo do ideal para PvE de fim de jogo (alvo: 2694). Priorize-a para evitar misses.</span> `;
                 } else if (charAccuracy > 2694) {
-                    statsTips += `Sua Accuracy (Precisão) (${charAccuracy}) está acima do ideal para PvE de fim de jogo (alvo: 2694). Você pode realocar pontos extras para Critical. `;
+                    statsTips += `<span class="text-yellow-600">Sua Accuracy (Precisão) (${charAccuracy}) está acima do ideal para PvE de fim de jogo (alvo: 2694). Você pode realocar pontos extras para Critical.</span> `;
                 } else {
-                    statsTips += `Sua Accuracy (Precisão) está no alvo ideal para PvE de fim de jogo! `;
+                    statsTips += `<span class="text-green-600">Sua Accuracy (Precisão) está no alvo ideal para PvE de fim de jogo!</span> `;
                 }
 
                 let recommendedAlacrity = 2054; // Padrão para GCD de 1.4s
@@ -1267,26 +1282,26 @@
                 }
 
                 if (charAlacrity < recommendedAlacrity) {
-                    statsTips += `Sua Alacrity (Alacridade) (${charAlacrity}) está abaixo do recomendado. Aumente para ter um Global Cooldown (GCD) mais rápido. `;
+                    statsTips += `<span class="text-red-600">Sua Alacrity (Alacridade) (${charAlacrity}) está abaixo do recomendado. Aumente para ter um Global Cooldown (GCD) mais rápido.</span> `;
                 } else if (charAlacrity > recommendedAlacrity + 200) { // Permite uma pequena margem
-                    statsTips += `Sua Alacrity (Alacridade) (${charAlacrity}) está um pouco acima do necessário. Considere realocar alguns pontos para Critical (Crítico). `;
+                    statsTips += `<span class="text-yellow-600">Sua Alacrity (Alacridade) (${charAlacrity}) está um pouco acima do necessário. Considere realocar alguns pontos para Critical (Crítico).</span> `;
                 } else {
-                    statsTips += `Sua Alacrity (Alacridade) está bem otimizada. `;
+                    statsTips += `<span class="text-green-600">Sua Alacrity (Alacridade) está bem otimizada.</span> `;
                 }
 
                 statsTips += `Invista todo o restante dos pontos em Critical (Crítico) para maximizar seu dano!`;
 
                 // Dicas de Companheiro
                 if (companionName && companionLevel < 50) {
-                    companionTips += `Seu companheiro '${companionName}' está no nível de influência ${companionLevel}. Ele pode ficar muito mais forte! Aumente a influência para o nível 50 usando presentes que ele/ela 'ama'. Isso aumentará o Presence Bonus (Bônus de Presença) e a eficiência em Crew Skills (Habilidades de Tripulação).`;
+                    companionTips += `<span class="text-yellow-700">Seu companheiro '${companionName}' está no nível de influência ${companionLevel}. Ele pode ficar muito mais forte! Aumente a influência para o nível 50 usando presentes que ele/ela 'ama'. Isso aumentará o Presence Bonus (Bônus de Presença) e a eficiência em Crew Skills (Habilidades de Tripulação).</span>`;
                 } else if (companionName && companionLevel === 50) {
-                    companionTips += `Parabéns! Seu companheiro '${companionName}' está no nível máximo de influência (50), fornecendo um bônus de Presence (Presença) e eficiência máxima em Crew Skills (Habilidades de Tripulação).`;
+                    companionTips += `<span class="text-green-700">Parabéns! Seu companheiro '${companionName}' está no nível máximo de influência (50), fornecendo um bônus de Presence (Presença) e eficiência máxima em Crew Skills (Habilidades de Tripulação).</span>`;
                 } else {
-                    companionTips += `Considere usar um companheiro! Eles são um grande multiplicador de poder para conteúdo solo. Configure-o como Healer (Curandeiro) para maior sobrevivência.`;
+                    companionTips += `<span class="text-blue-700">Considere usar um companheiro! Eles são um grande multiplicador de poder para conteúdo solo. Configure-o como Healer (Curandeiro) para maior sobrevivência.</span>`;
                 }
 
                 // Dicas Gerais
-                generalTips += `Com base no seu nível (${charLevel}), foque em:<br>`;
+                generalTips += `Com base no seu nível (<span class="font-bold">${charLevel}</span>), foque em:<br>`;
                 if (charLevel < 80) {
                     generalTips += `- Completar sua História de Classe (Class Story) e as histórias planetárias para XP e Unlocks (Desbloqueios).<br>`;
                     generalTips += `- Começar a coletar Datacrons em planetas de baixo nível para bônus permanentes de stats.<br>`;
@@ -1297,7 +1312,7 @@
                     generalTips += `- Continuar farmando Tech Fragments (Fragmentos de Tecnologia) e OP-1 Catalysts (Catalisadores OP-1) para upgrades.<br>`;
                     generalTips += `- Praticar suas rotações em bonecos de treino para maximizar seu DPS/Heal.<br>`;
                 }
-                generalTips += `Sua facção é ${charFaction} e sua classe é ${charClass}. Explore as opções de Estilo de Combate (Combat Style) para encontrar a que melhor se adapta ao seu estilo de jogo.`;
+                generalTips += `Sua facção é <span class="font-bold">${charFaction}</span> e sua classe é <span class="font-bold">${charClass}</span>. Explore as opções de Estilo de Combate (Combat Style) para encontrar a que melhor se adapta ao seu estilo de jogo.`;
 
                 simStatsTips.innerHTML = statsTips;
                 simCompanionTips.innerHTML = companionTips;
