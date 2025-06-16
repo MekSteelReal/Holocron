@@ -7,44 +7,60 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        /* CSS Custom Properties (Variables) */
+        :root {
+            --primary-color: #FFD700; /* Gold/Holocron Yellow - Brighter */
+            --secondary-color: #0F0F0F; /* Very Dark Grey/Black - Main background */
+            --tertiary-color: #1A1A1A; /* Dark Grey - Card backgrounds, collapsible headers */
+            --text-color: #FFFFFF; /* Pure White - Main text */
+            --input-bg-color: #2A2A2A; /* Slightly lighter dark grey for inputs */
+            --accent-republic-blue: #007BFF; /* Bright Blue - Republic elements, links */
+            --accent-sith-red: #DC143C; /* Crimson Red - Sith elements */
+            --accent-green: #32CD32; /* Lime Green - Positive feedback, specific highlights */
+            --accent-orange: #FFA500; /* Orange - Warnings, moderate feedback */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0d0d0d; /* Dark background for Holocron feel */
-            color: #e0e0e0; /* Light text */
+            background-color: var(--secondary-color);
+            color: var(--text-color);
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
+            overflow-x: hidden; /* Prevent horizontal scroll from subtle animations */
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #000000 100%); /* Subtle gradient for body */
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 1rem;
         }
+
         /* Custom scrollbar for a futuristic look */
         ::-webkit-scrollbar {
             width: 10px;
         }
         ::-webkit-scrollbar-track {
-            background: #2a2a2a;
+            background: var(--tertiary-color);
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb {
-            background: #ffe000;
+            background: var(--primary-color);
             border-radius: 10px;
-            border: 2px solid #2a2a2a;
+            border: 2px solid var(--tertiary-color);
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #ffcc00;
+            background: #FFC400;
         }
 
         /* Hero section specific styles */
         .hero-section {
-            background-image: url('https://placehold.co/1200x400/1a1a1a/ffe000?text=STAR+WARS+THE+OLD+REPUBLIC'); /* Placeholder image */
+            background-image: url('https://placehold.co/1200x400/0d0d0d/FFD700?text=A+Galáxia+Espera'); /* More thematic placeholder */
             background-size: cover;
             background-position: center;
             position: relative;
             padding: 6rem 1rem;
+            animation: fadeInBackground 2s ease-out; /* Subtle fade in for background */
         }
         .hero-overlay {
             position: absolute;
@@ -61,75 +77,178 @@
         }
         .hero-title {
             font-family: 'Orbitron', sans-serif;
-            color: #ffe000; /* Holocron yellow */
-            text-shadow: 0 0 15px rgba(255, 224, 0, 0.8), 0 0 25px rgba(255, 224, 0, 0.6);
+            color: var(--primary-color);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 25px rgba(255, 215, 0, 0.6);
             line-height: 1;
+            animation: glowPulse 2s infinite alternate; /* Pulsing glow animation */
         }
         .hero-subtitle {
-            color: #ccc;
+            color: var(--text-color);
             text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            animation: fadeInText 2.5s ease-out;
+        }
+
+        /* Keyframe Animations */
+        @keyframes glowPulse {
+            0% { text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 25px rgba(255, 215, 0, 0.6); }
+            100% { text-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 30px rgba(255, 215, 0, 0.8); }
+        }
+        @keyframes fadeInBackground {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header and Mobile Menu Toggle */
+        .header-container {
+            background: rgba(13, 13, 13, 0.95); /* Slightly transparent for effect */
+            backdrop-filter: blur(5px); /* Frosted glass effect */
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Subtle bottom border */
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .hamburger-icon {
+            display: flex; /* Always visible to toggle menu */
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            cursor: pointer;
+            z-index: 60; /* Above menu overlay */
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .hamburger-icon span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        .hamburger-icon.open span:nth-child(1) {
+            transform: translateY(11px) rotate(45deg);
+        }
+        .hamburger-icon.open span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger-icon.open span:nth-child(3) {
+            transform: translateY(-11px) rotate(-45deg);
+        }
+
+        .mobile-menu-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95); /* Darker, more opaque */
+            z-index: 55; /* Below hamburger */
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .mobile-menu-overlay.open {
+            display: flex;
+            opacity: 1;
+        }
+        .mobile-menu-overlay ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        .mobile-menu-overlay ul li {
+            margin: 1.5rem 0;
+        }
+        .mobile-menu-overlay ul li a {
+            font-size: 2rem;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem; /* Added padding for touch targets */
+            border-radius: 0.5rem;
+        }
+        .mobile-menu-overlay ul li a:hover {
+            color: var(--primary-color);
+            background-color: rgba(255, 215, 0, 0.1);
         }
 
         /* Section Titles */
         .section-title {
             font-family: 'Orbitron', sans-serif;
-            color: #ffe000; /* Holocron yellow */
-            text-shadow: 0 0 8px rgba(255, 224, 0, 0.6);
-            border-bottom: 2px solid #ffe000;
-            padding-bottom: 0.5rem;
-            margin-bottom: 2.5rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.75rem; /* Increased padding */
+            margin-bottom: 3.5rem; /* More breathing room */
             text-align: center;
-            font-size: 2.5rem; /* Increased font size */
+            font-size: 2.8rem; /* Slightly larger font size */
         }
         @media (max-width: 768px) {
             .section-title {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
         }
 
         /* Card styling */
         .card {
-            background-color: #1a1a1a;
-            border-radius: 0.75rem;
-            padding: 2rem; /* Increased padding */
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6); /* More prominent shadow */
-            border: 1px solid #333;
-            margin-bottom: 2.5rem; /* Increased margin */
+            background-color: var(--tertiary-color); /* Updated to tertiary color */
+            border-radius: 1rem; /* More rounded */
+            padding: 2.5rem; /* Increased padding */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8); /* Stronger shadow */
+            border: 1px solid #444; /* Darker border */
+            margin-bottom: 3rem; /* Increased margin */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px); /* Lift effect on hover */
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.9);
         }
 
         /* Collapsible elements */
         .collapsible-header {
-            background-color: #2a2a2a;
-            padding: 1rem 1.5rem; /* Increased padding */
-            border-radius: 0.5rem;
+            background-color: var(--secondary-color); /* Updated to secondary color */
+            padding: 1.2rem 1.8rem; /* Increased padding */
+            border-radius: 0.75rem; /* More rounded */
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.5rem;
-            transition: background-color 0.3s ease, transform 0.1s ease;
+            margin-bottom: 0.6rem;
+            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
             font-weight: bold;
-            font-size: 1.125rem; /* Larger font */
-            border-left: 4px solid #ffe000; /* Accent border */
+            font-size: 1.2rem; /* Larger font */
+            border-left: 5px solid var(--primary-color); /* Thicker accent border */
         }
         .collapsible-header:hover {
-            background-color: #3a3a3a;
-            transform: translateY(-2px);
-            box-shadow: 0 2px 8px rgba(255, 224, 0, 0.3);
+            background-color: #333;
+            transform: translateY(-3px);
+            box-shadow: 0 3px 10px rgba(255, 215, 0, 0.4);
         }
         .collapsible-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.7s ease-in-out, padding 0.7s ease-in-out; /* Slower transition */
-            padding: 0 1.5rem; /* Consistent padding */
-            border-left: 4px solid #3a3a3a; /* Subtle border for content */
-            background-color: #1f1f1f;
-            border-bottom-left-radius: 0.5rem;
-            border-bottom-right-radius: 0.5rem;
+            transition: max-height 0.8s ease-in-out, padding 0.8s ease-in-out; /* Even slower transition */
+            padding: 0 1.8rem; /* Consistent padding */
+            border-left: 5px solid var(--tertiary-color); /* Subtle border for content */
+            background-color: #222; /* Slightly different background */
+            border-bottom-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+            padding-top: 0; /* Reset initial padding */
         }
         .collapsible-content.active {
             max-height: 10000px; /* Large enough value to show all content */
-            padding: 1.5rem;
+            padding: 1.8rem;
+            padding-top: 1rem; /* Add top padding when active */
         }
         .collapsible-header .arrow {
             transition: transform 0.3s ease;
@@ -140,39 +259,58 @@
 
         /* Buttons */
         .btn-primary {
-            background-color: #ffe000;
-            color: #1a1a1a;
-            padding: 0.85rem 1.75rem; /* Larger padding */
-            border-radius: 0.5rem;
+            background-color: var(--primary-color);
+            color: var(--secondary-color); /* Text color contrast */
+            padding: 1rem 2rem; /* Even larger padding */
+            border-radius: 0.75rem; /* More rounded */
             font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 12px rgba(255, 224, 0, 0.4);
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, letter-spacing 0.2s ease;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em; /* Slightly more spaced letters */
+            font-size: 1.1rem;
         }
         .btn-primary:hover {
-            background-color: #ffcc00;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(255, 224, 0, 0.5);
+            background-color: #FFC400; /* Slightly darker yellow on hover */
+            transform: translateY(-4px) scale(1.02); /* More pronounced lift and slight scale */
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+            letter-spacing: 0.1em;
+        }
+        .btn-secondary { /* For Reset Simulation button */
+            background-color: var(--tertiary-color);
+            color: var(--text-color);
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 1.1rem;
+        }
+        .btn-secondary:hover {
+            background-color: #333;
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
         }
 
         /* Input Fields */
         .input-field {
-            background-color: #2a2a2a;
-            border: 1px solid #444;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            color: #e0e0e0;
+            background-color: var(--input-bg-color); /* New input background color */
+            border: 1px solid #555;
+            padding: 0.85rem; /* More padding */
+            border-radius: 0.6rem;
+            color: var(--text-color);
             width: 100%;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         .input-field:focus {
-            border-color: #ffe000;
-            box-shadow: 0 0 0 2px rgba(255, 224, 0, 0.3);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.4);
             outline: none;
         }
         .input-field::placeholder {
-            color: #999;
+            color: #AAAAAA;
         }
 
         /* Tooltip styles */
@@ -180,26 +318,28 @@
             position: relative;
             display: inline-block;
             cursor: help;
-            border-bottom: 1px dotted #888; /* Subtle underline */
+            border-bottom: 1px dashed var(--primary-color); /* More visible underline */
+            color: var(--primary-color); /* Highlight tooltip trigger */
         }
         .tooltip .tooltiptext {
             visibility: hidden;
-            width: 250px; /* Wider tooltip */
-            background-color: #333;
-            color: #fff;
+            width: 300px; /* Even wider tooltip */
+            background-color: var(--tertiary-color); /* Darker background */
+            color: var(--text-color);
             text-align: center;
-            border-radius: 6px;
-            padding: 8px 10px; /* More padding */
+            border-radius: 8px; /* More rounded */
+            padding: 10px 15px; /* More padding */
             position: absolute;
-            z-index: 100; /* Higher z-index */
-            bottom: 125%; /* Tooltip above the text */
+            z-index: 1000; /* Highest z-index */
+            bottom: 135%; /* Tooltip further above the text */
             left: 50%;
-            margin-left: -125px; /* Half of width */
+            margin-left: -150px; /* Half of width */
             opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
-            transform: translateY(5px);
-            font-size: 0.9rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: opacity 0.4s, transform 0.4s;
+            transform: translateY(10px);
+            font-size: 0.95rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.7);
+            border: 1px solid #555; /* Subtle border */
         }
         .tooltip:hover .tooltiptext {
             visibility: visible;
@@ -211,60 +351,80 @@
             position: absolute;
             top: 100%;
             left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
+            margin-left: -8px; /* Larger arrow base */
+            border-width: 8px;
             border-style: solid;
-            border-color: #333 transparent transparent transparent;
+            border-color: var(--tertiary-color) transparent transparent transparent;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 3rem;
-            }
-            .hero-subtitle {
-                font-size: 1rem;
-            }
-            nav ul {
-                flex-direction: column;
-                space-x-0;
-            }
-            nav li {
-                margin-bottom: 0.5rem;
-            }
-            .grid-cols-2-md {
-                grid-template-columns: 1fr;
-            }
-            .card {
-                padding: 1.5rem;
-            }
-            .collapsible-header {
-                font-size: 1rem;
-                padding: 0.75rem 1rem;
-            }
-            .collapsible-content {
-                padding: 1rem;
-            }
+        /* Page specific display */
+        .content-page {
+            display: none; /* Hidden by default */
+            animation: fadeInPage 0.5s ease-out; /* Fade in when page becomes active */
+        }
+        .content-page.active-page {
+            display: block; /* Show active page */
+        }
+        /* Specific hero section display logic for intro page */
+        #introducao.active-page {
+            display: block;
+        }
+        #introducao:not(.active-page) {
+            display: none;
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom text colors for faction/feedback */
+        .republic-text {
+            color: var(--accent-republic-blue);
+        }
+        .sith-text {
+            color: var(--accent-sith-red);
+        }
+        .positive-feedback {
+            color: var(--accent-green);
+        }
+        .warning-feedback {
+            color: var(--accent-orange);
+        }
+        .critical-feedback {
+            color: var(--accent-sith-red);
         }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-900 to-black">
-    <!-- Fixed Navigation Bar -->
-    <nav class="sticky top-0 z-50 bg-gray-900 bg-opacity-95 shadow-lg py-4">
-        <div class="container flex justify-center">
-            <ul class="flex flex-wrap justify-center space-x-6 text-lg font-semibold">
-                <li><a href="#introducao" class="text-gray-300 hover:text-yellow-400 rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-800">Início</a></li>
-                <li><a href="#classes" class="text-gray-300 hover:text-yellow-400 rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-800">Classes</a></li>
-                <li><a href="#progresso" class="text-gray-300 hover:text-yellow-400 rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-800">Progresso</a></li>
-                <li><a href="#datacrons" class="text-gray-300 hover:text-yellow-400 rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-800">Datacrons</a></li>
-                <li><a href="#simulacao" class="text-gray-300 hover:text-yellow-400 rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-800">Simulação</a></li>
-                <li><a href="#guildas" class="text-gray-300 hover:text-yellow-400 rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-800">Guildas BR</a></li>
-            </ul>
+    <!-- Header with mobile menu toggle -->
+    <header class="header-container py-4 relative">
+        <div class="container flex justify-between items-center">
+            <h1 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-700 z-60">
+                Holocron SWTOR
+            </h1>
+            <!-- Hamburger Icon for Mobile (and now desktop) -->
+            <div class="hamburger-icon" id="hamburgerIcon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <!-- Mobile Menu Overlay (now universal menu) -->
+            <nav class="mobile-menu-overlay" id="mobileMenuOverlay">
+                <ul>
+                    <li><a href="#" class="nav-link" data-page-id="introducao">Início</a></li>
+                    <li><a href="#" class="nav-link" data-page-id="classes">Classes</a></li>
+                    <li><a href="#" class="nav-link" data-page-id="progresso">Progresso</a></li>
+                    <li><a href="#" class="nav-link" data-page-id="datacrons">Datacrons</a></li>
+                    <li><a href="#" class="nav-link" data-page-id="simulacao">Simulação</a></li>
+                    <li><a href="#" class="nav-link" data-page-id="guildas">Guilda Brasileira</a></li>
+                </ul>
+            </nav>
         </div>
-    </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <header class="hero-section">
+    <!-- Hero Section (only for "Início" page) -->
+    <section class="hero-section content-page" id="introducao">
         <div class="hero-overlay"></div>
         <div class="hero-content container">
             <h1 class="hero-title text-6xl md:text-7xl lg:text-8xl font-bold mb-4">
@@ -274,30 +434,43 @@
                 Seu Guia Definitivo para Dominar Star Wars: The Old Republic
             </p>
         </div>
-    </header>
+    </section>
 
     <main class="container py-8">
-        <section id="introducao" class="card">
+        <!-- Introduction Page Content (separate from Hero section but part of the 'Início' conceptual page) -->
+        <section id="introducao-content" class="card content-page">
             <h2 class="section-title">Bem-vindo ao Holocron!</h2>
             <p class="mb-4 text-lg">
                 Este Holocron foi criado com um único propósito: transformar você em um dos jogadores mais formidáveis de Star Wars: The Old Republic. Aqui, você encontrará informações detalhadas, guias práticos e ferramentas interativas para otimizar seu personagem, dominar o combate e conquistar a galáxia.
             </p>
-            <p class="text-lg">
+            <p class="text-lg mb-6">
                 Prepare-se para desvendar os segredos do SWTOR e liberar todo o potencial do seu legado! Que a Força esteja com você!
             </p>
+
+            <!-- User Character Information -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 text-lg">
+                <h3 class="text-2xl font-bold text-yellow-300 mb-4">Informações do criador:</h3>
+                <p class="mb-2"><strong>Nome do Personagem:</strong> Inrique</p>
+                <p class="mb-2"><strong>Legado:</strong> Bezzar'kin</p>
+                <p class="mb-2"><strong>Facção:</strong> República</p>
+                <p class="mb-0"><strong>Guilda:</strong> Brazucas</p>
+            </div>
+            <!-- End User Character Information -->
+
         </section>
 
-        <section id="classes" class="card">
+        <!-- Classes Page -->
+        <section id="classes-content" class="card content-page">
             <h2 class="section-title">Classes (Classes) e Papéis (Roles)</h2>
             <p class="mb-6 text-lg">Em SWTOR, cada facção (Império Sith e República Galáctica) possui classes espelhadas com habilidades e papéis similares.</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                    <h3 class="text-3xl font-bold text-yellow-300 mb-6 text-center">República Galáctica</h3>
+                    <h3 class="text-3xl font-bold republic-text mb-6 text-center">República Galáctica</h3>
                     <div class="space-y-4">
                         <div class="collapsible">
                             <div class="collapsible-header">
                                 <h4 class="font-semibold text-lg">Jedi Knight (Cavaleiro Jedi)</h4>
-                                <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                                <span class="arrow republic-text text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
                                 <p class="mb-2"><strong>Jedi Guardian (Guardião Jedi):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Usuário de sabre de luz pesado e armadura pesada. Excelente para combate corpo a corpo e proteção.</p>
@@ -307,7 +480,7 @@
                         <div class="collapsible">
                             <div class="collapsible-header">
                                 <h4 class="font-semibold text-lg">Jedi Consular (Consular Jedi)</h4>
-                                <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                                <span class="arrow republic-text text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
                                 <p class="mb-2"><strong>Jedi Sage (Sábio Jedi):</strong> Healer (Curandeiro) ou DPS (Dano Por Segundo). Usuário da Força, focado em curas poderosas ou dano à distância.</p>
@@ -317,7 +490,7 @@
                         <div class="collapsible">
                             <div class="collapsible-header">
                                 <h4 class="font-semibold text-lg">Trooper (Soldado)</h4>
-                                <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                                <span class="arrow republic-text text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
                                 <p class="mb-2"><strong>Vanguard (Vanguarda):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Usuário de rifle e armadura pesada. Combate à média distância.</p>
@@ -327,7 +500,7 @@
                         <div class="collapsible">
                             <div class="collapsible-header">
                                 <h4 class="font-semibold text-lg">Smuggler (Contrabandista)</h4>
-                                <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                                <span class="arrow republic-text text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
                                 <p class="mb-2"><strong>Gunslinger (Pistoleiro):</strong> DPS (Dano Por Segundo). Utiliza duas pistolas. Focado em dano massivo à distância e cobertura.</p>
@@ -337,42 +510,42 @@
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-3xl font-bold text-red-400 mb-6 text-center">Império Sith</h3>
+                    <h3 class="text-3xl font-bold sith-text mb-6 text-center">Império Sith</h3>
                     <div class="space-y-4">
                         <div class="collapsible">
                             <div class="collapsible-header">
                                 <h4 class="font-semibold text-lg">Sith Warrior (Guerreiro Sith)</h4>
-                                <span class="arrow text-red-400 text-2xl">&#9654;</span>
+                                <span class="arrow sith-text text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
-                                <p class="mb-2"><strong>Sith Juggernaut (Colosso Sith):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Espelho do Jedi Guardian. Usuário de sabre de luz pesado e armadura pesada.</p>
+                                <p class="mb-2"><strong>Sith Juggernaut (Colosso Sith):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Espelho do Jedi Guardian. Usuário de sabre de luz pesado e armadura pesada. Excelente para combate corpo a corpo e proteção.</p>
                                 <p><strong>Sith Marauder (Saqueador Sith):</strong> DPS (Dano Por Segundo). Espelho do Jedi Sentinel. Utiliza dois sabres de luz.</p>
                             </div>
                         </div>
                         <div class="collapsible">
                             <div class="collapsible-header">
                                 <h4 class="font-semibold text-lg">Sith Inquisitor (Inquisidor Sith)</h4>
-                                <span class="arrow text-red-400 text-2xl">&#9654;</span>
+                                <span class="arrow sith-text text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
                                 <p class="mb-2"><strong>Sith Sorcerer (Feiticeiro Sith):</strong> Healer (Curandeiro) ou DPS (Dano Por Segundo). Espelho do Jedi Sage. Usuário da Força, focado em curas ou dano elétrico.</p>
-                                <p><strong>Sith Assassin (Assassino Sith):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Espelho do Jedi Shadow. Utiliza sabre de luz duplo.</p>
+                                <p><strong>Sith Assassin (Assassino Sith):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Espelho do Jedi Shadow. Utiliza sabre de luz duplo. Pode ser tank evasivo ou DPS furtivo.</p>
                             </div>
                         </div>
                         <div class="collapsible">
                             <div class="collapsible-header">
                                 <h4 class="font-semibold text-lg">Bounty Hunter (Caçador de Recompensas)</h4>
-                                <span class="arrow text-red-400 text-2xl">&#9654;</span>
+                                <span class="arrow sith-text text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
-                                <p class="mb-2"><strong>Powertech (Tecnocrata):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Espelho do Vanguard. Usuário de rifle e armadura pesada.</p>
+                                <p class="mb-2"><strong>Powertech (Tecnocrata):</strong> Tank (Tanque) ou DPS (Dano Por Segundo). Espelho do Vanguard. Usuário de rifle e armadura pesada. Combate à média distância.</p>
                                 <p><strong>Mercenary (Mercenário):</strong> Healer (Curandeiro) ou DPS (Dano Por Segundo). Espelho do Commando. Utiliza dois blasters. Focado em curas poderosas ou dano explosivo.</p>
                             </div>
                         </div>
                         <div class="collapsible">
                             <div class="collapsible-header">
                                 <h4 class="font-semibold text-lg">Agent (Agente)</h4>
-                                <span class="arrow text-red-400 text-2xl">&#9654;</span>
+                                <span class="arrow sith-text text-2xl">&#9654;</span>
                             </div>
                             <div class="collapsible-content">
                                 <p class="mb-2"><strong>Sniper (Atirador):</strong> DPS (Dano Por Segundo). Espelho do Gunslinger. Utiliza rifle de precisão. Focado em dano massivo à distância e posicionamento.</p>
@@ -384,13 +557,14 @@
             </div>
         </section>
 
-        <section id="progresso" class="card">
+        <!-- Progresso Page -->
+        <section id="progresso-content" class="card content-page">
             <h2 class="section-title">Guia para o Progresso Máximo</h2>
             <div class="space-y-6">
                 <div class="collapsible">
                     <div class="collapsible-header">
                         <h3 class="font-semibold text-xl">1. Nivelamento (Leveling) Eficiente</h3>
-                        <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                        <span class="arrow primary-text text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
                         <p class="mb-2"><strong>História da Classe e Expansões:</strong> Concentre-se nas missões da história da sua classe e nas missões principais das expansões. Elas oferecem a maior quantidade de experiência e são cruciais para a narrativa.</p>
@@ -403,7 +577,7 @@
                 <div class="collapsible">
                     <div class="collapsible-header">
                         <h3 class="font-semibold text-xl">2. Equipamento (Gear) e Estatísticas (Stats)</h3>
-                        <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                        <span class="arrow primary-text text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
                         <p class="mb-2">No SWTOR moderno, o equipamento é mais simplificado, mas entender suas partes é crucial:</p>
@@ -421,7 +595,7 @@
                             <li><strong>Power (Poder):</strong> Aumenta o dano e cura diretamente.</li>
                             <li><strong>Critical Rating (Classificação Crítica):</strong> Aumenta a chance e o bônus de dano/cura crítico.</li>
                             <li><strong>Alacrity (Alacridade):</strong> Reduz o tempo de ativação e o cooldown das habilidades. Essencial para DPS e Healers. O objetivo é atingir certos "breakpoints" (limiares) para rotações suaves.</li>
-                            <li><strong>Accuracy (Precisão):</strong> Para DPS, aumenta a chance de acertar ataques. Você precisa de 110% de Accuracy para PVE de endgame contra chefes (Operation Bosses). Para PVP, 100% é suficiente.</li>
+                            <li><strong>Accuracy (Precisão):</strong> Para DPS, aumenta a chance de acertar ataques. Você precisa de 110% de Accuracy para PvE de endgame contra chefes (Operation Bosses). Para PvP, 100% é suficiente.</li>
                             <li><strong>Defense (Defesa), Shield (Escudo), Absorb (Absorção):</strong> Estatísticas de Tank. Defense aumenta a chance de esquivar/parar ataques. Shield aumenta a chance de bloquear ataques de blaster/força. Absorb reduz o dano bloqueado pelo escudo.</li>
                         </ul>
                         <p class="mt-4"><strong>Priorização:</strong> Consulte guias de classes específicas (ex: "SWTOR [Sua Classe] PvE/PvP Guide 7.0+") para as estatísticas ideais para sua Advanced Class (Classe Avançada) e papel (Role).</p>
@@ -431,7 +605,7 @@
                 <div class="collapsible">
                     <div class="collapsible-header">
                         <h3 class="font-semibold text-xl">3. Companheiros (Companions)</h3>
-                        <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                        <span class="arrow primary-text text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
                         <p class="mb-2">Seus <span class="tooltip">Companheiros (Companions)<span class="tooltiptext">Personagens NPC que lutam ao seu lado.</span></span> são aliados poderosos que podem Tank, Healer ou DPS. O nível de <span class="tooltip">Influência (Influence)<span class="tooltiptext">Medida da relação com o companion, aumenta stats e eficiência.</span></span> deles (até Rank 50) afeta diretamente suas estatísticas e eficiência em combate e crafting.</p>
@@ -449,7 +623,7 @@
                 <div class="collapsible">
                     <div class="collapsible-header">
                         <h3 class="font-semibold text-xl">4. Habilidades (Skills) e Árvores de Talentos (Ability Trees)</h3>
-                        <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                        <span class="arrow primary-text text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
                         <p class="mb-2">Cada <span class="tooltip">Classe (Class)<span class="tooltiptext">Profissão inicial do seu personagem (ex: Jedi Knight).</span></span> tem três <span class="tooltip">Disciplinas (Disciplines)<span class="tooltiptext">Especializações da sua Advanced Class.</span></span> (antigas árvores de talentos) que determinam seu estilo de jogo. Escolha a que melhor se adapta ao papel que você quer desempenhar (Tank, Healer, DPS).</p>
@@ -461,7 +635,7 @@
                 <div class="collapsible">
                     <div class="collapsible-header">
                         <h3 class="font-semibold text-xl">5. Economia (Currency) e Comércio (Trade)</h3>
-                        <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                        <span class="arrow primary-text text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
                         <p class="mb-2">Entender as <span class="tooltip">Moedas (Currency)<span class="tooltiptext">Diferentes tipos de dinheiro ou pontos no jogo.</span></span> e como usá-las é vital para seu progresso:</p>
@@ -478,7 +652,8 @@
             </div>
         </section>
 
-        <section id="datacrons" class="card">
+        <!-- Datacrons Page -->
+        <section id="datacrons-content" class="card content-page">
             <h2 class="section-title">Datacrons (Datacrons) e suas Localizações</h2>
             <p class="mb-4 text-lg">
                 <span class="tooltip">Datacrons (Datacrons)<span class="tooltiptext">Artefatos que concedem bônus permanentes de estatísticas ao seu personagem.</span></span> são objetos espalhados pela galáxia que concedem bônus permanentes às suas estatísticas (Maestria, Vigor, Poder, Presença) ou aprimoramentos de Habilidades da Força/Cibertecnologia. Coletar todos eles é crucial para maximizar o poder do seu personagem. Muitos exigem um pouco de plataforma (parkour) ou exploração.
@@ -487,7 +662,7 @@
                 <div class="collapsible">
                     <div class="collapsible-header">
                         <h3 class="font-semibold text-xl">Tython (República) / Korriban (Império)</h3>
-                        <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                        <span class="arrow primary-text text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
                         <p class="mb-2"><strong>Tython:</strong></p>
@@ -506,7 +681,7 @@
                 <div class="collapsible">
                     <div class="collapsible-header">
                         <h3 class="font-semibold text-xl">Coruscant (República) / Dromund Kaas (Império)</h3>
-                        <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                        <span class="arrow primary-text text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
                         <p class="mb-2"><strong>Coruscant:</strong></p>
@@ -531,14 +706,14 @@
                 <div class="collapsible">
                     <div class="collapsible-header">
                         <h3 class="font-semibold text-xl">Nar Shaddaa</h3>
-                        <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                        <span class="arrow primary-text text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
                         <p class="mb-2">Nar Shaddaa tem 5 Datacrons. Prepare-se para saltos e exploração vertical.</p>
                         <ul class="list-disc ml-6 space-y-1">
                             <li><strong>Mastery +3:</strong> Upper Industrial Sector (coordenadas aproximadas: 1900, 2300). Em um túnel de ventilação.</li>
                             <li><strong>Endurance +3:</strong> Network Access (coordenadas aproximadas: 3400, -3200). Em uma plataforma elevada.</li>
-                            <li><strong>Willpower +3:</strong> High Security Sector (coordenadas aproximadas: -3700, -1700). Requer entrar em uma área restrita.</li>
+                            <li><strong>Willpower +3:1</strong> High Security Sector (coordenadas aproximadas: -3700, -1700). Requer entrar em uma área restrita.</li>
                             <li><strong>Presence +3:</strong> Promenade (coordenadas aproximadas: 2400, 2800). No topo de uma marquise.</li>
                             <li><strong>Aim +3 (Legacy, ou seja, para todas as chars):</strong> Upper Promenade (coordenadas aproximadas: 1900, 3100). Ponto de salto complexo.</li>
                         </ul>
@@ -548,7 +723,7 @@
                 <div class="collapsible">
                     <div class="collapsible-header">
                         <h3 class="font-semibold text-xl">Tatooine</h3>
-                        <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                        <span class="arrow primary-text text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
                         <p class="mb-2">Tatooine tem 5 Datacrons.</p>
@@ -565,7 +740,7 @@
                 <div class="collapsible">
                     <div class="collapsible-header">
                         <h3 class="font-semibold text-xl">Alderaan</h3>
-                        <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                        <span class="arrow primary-text text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
                         <p class="mb-2">Alderaan tem 5 Datacrons.</p>
@@ -582,7 +757,7 @@
                 <div class="collapsible">
                     <div class="collapsible-header">
                         <h3 class="font-semibold text-xl">Balmorra (República) / Balmorra (Império)</h3>
-                        <span class="arrow text-yellow-300 text-2xl">&#9654;</span>
+                        <span class="arrow primary-text text-2xl">&#9654;</span>
                     </div>
                     <div class="collapsible-content">
                         <p class="mb-2"><strong>Balmorra (República):</strong></p>
@@ -610,7 +785,8 @@
             </div>
         </section>
 
-        <section id="simulacao" class="card">
+        <!-- Simulation Page -->
+        <section id="simulacao-content" class="card content-page">
             <h2 class="section-title">Simulações e Recomendações de Progresso</h2>
             <p class="mb-6 text-lg">
                 Preencha as informações do seu personagem abaixo para receber sugestões personalizadas sobre como otimizar seu desempenho no SWTOR. Esta simulação oferecerá dicas baseadas nas estatísticas fornecidas e nas melhores práticas para sua classe e nível.
@@ -703,6 +879,7 @@
             </div>
 
             <button onclick="runSimulation()" class="btn-primary w-full py-3 mb-6">Executar Simulação</button>
+            <button onclick="resetSimulation()" class="btn-secondary w-full py-3 mb-6">Redefinir Simulação</button>
 
             <div id="simulationResults" class="card p-6 mt-8 border border-gray-700 hidden">
                 <h3 class="text-2xl font-bold text-yellow-300 mb-4">Resultados da Simulação:</h3>
@@ -716,25 +893,57 @@
             </div>
         </section>
 
-        <section id="guildas" class="card">
-            <h2 class="section-title">Guildas Brasileiras (Brazilian Guilds)</h2>
+        <!-- Guilda Brasileira Page -->
+        <section id="guildas-content" class="card content-page">
+            <h2 class="section-title">Guilda Brasileira (Brazilian Guild)</h2>
             <p class="mb-4 text-lg">
                 Jogar em grupo é uma das melhores formas de aproveitar SWTOR ao máximo, seja para conteúdo PvE (Operations, Flashpoints), PvP ou simplesmente para socializar. Ter uma comunidade de jogadores que falam a mesma língua torna a experiência muito mais rica.
             </p>
             <div class="bg-gray-800 p-8 rounded-lg shadow-md border border-gray-700">
                 <h3 class="text-3xl font-bold text-yellow-300 mb-4">Recomendação: Guilda Brazucas!</h3>
-                <p class="mb-4 text-lg">
-                    A guilda <strong class="text-yellow-200">Brazucas</strong> é uma excelente opção para jogadores brasileiros no Star Wars: The Old Republic. Eles são conhecidos por serem uma comunidade ativa, amigável e acolhedora, ideais para novatos e veteranos.
-                </p>
-                <p class="mb-4 text-lg">
-                    <strong>Como Encontrar:</strong>
-                    A melhor forma de encontrá-los é procurando por membros no jogo (nos servidores Star Forge ou Satele Shan, que são os mais populosos para a comunidade ocidental) ou através de seus canais de comunicação (geralmente Discord).
-                </p>
-                <p class="mb-2 text-lg"><strong>Dicas para Encontrar Guildas:</strong></p>
-                <ul class="list-disc ml-6 space-y-1 text-lg">
-                    <li>Use o chat geral na Fleet (Frota) ou em Coruscant/Dromund Kaas para perguntar por guildas brasileiras.</li>
-                    <li>Visite fóruns e comunidades online de SWTOR em português (se existirem).</li>
-                    <li>Muitas guildas recrutam no Galactic Trade Network (GTN) ou em canais de chat dedicados ao recrutamento.</li>
+                <p class="mb-2"><strong>Guild Leader:</strong> Ramɓo</p>
+                <p class="mb-2"><strong>XP Bonus:</strong> 15%</p>
+                <p class="mb-2"><strong>Reputation Bonus:</strong> 15%</p>
+                <p class="mb-4"><strong>Discord:</strong> <a href="https://discord.gg/WeDVyYyBxh" target="_blank" class="republic-text hover:text-blue-300">discord.gg/WeDVyYyBxh</a></p>
+
+                <h4 class="text-2xl font-bold text-yellow-300 mb-4">Brazucas Perks:</h4>
+                <ul class="list-disc ml-6 space-y-3">
+                    <li>
+                        <p class="font-semibold">1. Forward Command Room</p>
+                        <p class="ml-4 text-gray-400">Duration: 3d 17h</p>
+                        <p class="ml-4"><strong>Professional Training Set Bonus:</strong> Instant, Cooldown: 6h 00m 00s</p>
+                        <p class="ml-4">Increases Critical rate for all Crew skills by 5% for 1 hour.</p>
+                    </li>
+                    <li>
+                        <p class="font-semibold">2. Starboard Command Room</p>
+                        <p class="ml-4 text-gray-400">Duration: 18d 2h</p>
+                        <p class="ml-4"><strong>Flashpoint Looter III Set Bonus:</strong> Passive</p>
+                        <p class="ml-4">Grants a chance to drop a Large Satchel of Crafting Materials from Flashpoint bosses while in a Guild Group.</p>
+                    </li>
+                    <li>
+                        <p class="font-semibold">3. Bridge</p>
+                        <p class="ml-4 text-gray-400">Duration: 4d 2h</p>
+                        <p class="ml-4"><strong>Critical Missions III Set Bonus:</strong> Passive</p>
+                        <p class="ml-4">Increases Critical rate for all Mission Skills by 3%.</p>
+                    </li>
+                    <li>
+                        <p class="font-semibold">4. Engine Room</p>
+                        <p class="ml-4 text-gray-400">Duration: 18d 2h</p>
+                        <p class="ml-4"><strong>Operations Looter II Set Bonus:</strong> Passive</p>
+                        <p class="ml-4">Grants a chance to drop a Medium Satchel of Crafting Materials from Operations bosses while in a Guild Group.</p>
+                    </li>
+                    <li>
+                        <p class="font-semibold">5. Docking Bay</p>
+                        <p class="ml-4 text-gray-400">Duration: 18d 2h</p>
+                        <p class="ml-4"><strong>Crafting Conquest 1 Set Bonus:</strong> Passive</p>
+                        <p class="ml-4">Grants access to the crafting based Conquest Objective "Crafting: Rally - Part 1".</p>
+                    </li>
+                    <li>
+                        <p class="font-semibold">6. Port Command Room</p>
+                        <p class="ml-4 text-gray-400">Duration: 18d 2h</p>
+                        <p class="ml-4"><strong>Operations Fortitude II Set Bonus:</strong> Passive</p>
+                        <p class="ml-4">Increases Endurance when in Operations by 9%. Does not apply in Master Mode.</p>
+                    </li>
                 </ul>
                 <p class="mt-4 text-sm text-gray-400">
                     *A disponibilidade e atividade de guildas podem variar ao longo do tempo.
@@ -749,40 +958,106 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const collapsibles = document.querySelectorAll('.collapsible');
+            const hamburgerIcon = document.getElementById('hamburgerIcon');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentPages = document.querySelectorAll('.content-page');
 
+            // Map nav-link data-page-id to content section ID
+            const pageMapping = {
+                'introducao': 'introducao', // Special case for hero + intro content
+                'classes': 'classes-content',
+                'progresso': 'progresso-content',
+                'datacrons': 'datacrons-content',
+                'simulacao': 'simulacao-content',
+                'guildas': 'guildas-content'
+            };
+
+            function showPage(pageId) {
+                // Hide all content pages
+                contentPages.forEach(page => {
+                    page.classList.remove('active-page');
+                });
+
+                // Show the requested page(s)
+                if (pageId === 'introducao') {
+                    document.getElementById('introducao').classList.add('active-page'); // Hero section
+                    document.getElementById('introducao-content').classList.add('active-page'); // Intro content
+                } else {
+                    document.getElementById(pageMapping[pageId]).classList.add('active-page');
+                    // Ensure hero section is hidden if not on intro page
+                    document.getElementById('introducao').classList.remove('active-page');
+                }
+
+                // Update active class for nav links inside the overlay
+                navLinks.forEach(link => {
+                    if (link.dataset.pageId === pageId) {
+                        link.classList.add('text-yellow-400', 'font-bold');
+                        link.classList.remove('text-white'); // Assuming default text-white for non-active nav links
+                    } else {
+                        link.classList.remove('text-yellow-400', 'font-bold');
+                        link.classList.add('text-white');
+                    }
+                });
+
+                // Close mobile menu if open
+                if (mobileMenuOverlay.classList.contains('open')) {
+                    hamburgerIcon.classList.remove('open');
+                    mobileMenuOverlay.classList.remove('open');
+                }
+
+                // Scroll to top of the new page content if not hero
+                if (pageId !== 'introducao') {
+                    const targetElement = document.getElementById(pageMapping[pageId]);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                } else {
+                     // For 'Início', scroll to the very top of the body
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+
+            // Set initial active page to 'introducao'
+            showPage('introducao');
+
+            // Event listeners for navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(link.dataset.pageId);
+                });
+            });
+
+            // Toggle mobile menu
+            hamburgerIcon.addEventListener('click', () => {
+                hamburgerIcon.classList.toggle('open');
+                mobileMenuOverlay.classList.toggle('open');
+            });
+
+            // Collapsible sections logic (remains the same)
+            const collapsibles = document.querySelectorAll('.collapsible');
             collapsibles.forEach(collapsible => {
                 const header = collapsible.querySelector('.collapsible-header');
                 const content = collapsible.querySelector('.collapsible-content');
 
                 header.addEventListener('click', () => {
-                    // Close other open collapsibles in the same parent first
-                    const parentCollapsibles = header.closest('.space-y-4, .space-y-6, .space-y-8'); // Adjust parent selectors as needed
-                    if (parentCollapsibles) {
-                        parentCollapsibles.querySelectorAll('.collapsible-header.active').forEach(openHeader => {
+                    const parentScope = header.closest('.space-y-4, .space-y-6, .space-y-8');
+                    if (parentScope) {
+                        parentScope.querySelectorAll('.collapsible-header.active').forEach(openHeader => {
                             if (openHeader !== header) {
                                 openHeader.classList.remove('active');
                                 openHeader.nextElementSibling.classList.remove('active');
                             }
                         });
                     }
-
                     header.classList.toggle('active');
                     content.classList.toggle('active');
                 });
             });
-
-            // Smooth scroll for navigation links
-            document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
         });
 
+        // Simulation functions (remain the same)
         function runSimulation() {
             const charName = document.getElementById('charName').value || 'Jogador';
             const charGuild = document.getElementById('charGuild').value;
@@ -808,94 +1083,128 @@
 
             let levelAdvice = '';
             if (charLevel < 80) {
-                levelAdvice = `<p class="text-orange-300"><strong>Progresso de Nível:</strong> Você ainda não está no nível máximo (80). Foque em completar as histórias de classe e expansões, Flashpoints e objetivos de Conquest para ganhar XP rapidamente!</p>`;
+                levelAdvice = `<p class="warning-feedback"><strong>Progresso de Nível:</strong> Você ainda não está no nível máximo (80). Foque em completar as histórias de classe e expansões, Flashpoints e objetivos de Conquest para ganhar XP rapidamente!</p>`;
             } else {
-                levelAdvice = `<p class="text-green-300"><strong>Parabéns!</strong> Você está no nível máximo (80). Seu foco agora deve ser otimizar seu equipamento e dominar suas rotações de habilidades.</p>`;
+                levelAdvice = `<p class="positive-feedback"><strong>Parabéns!</strong> Você está no nível máximo (80). Seu foco agora deve ser otimizar seu equipamento e dominar suas rotações de habilidades.</p>`;
             }
             document.getElementById('simLevelAdvice').innerHTML = levelAdvice;
 
             let companionAdvice = '';
             if (compLevel < 50) {
-                companionAdvice = `<p class="text-orange-300"><strong>Otimização de Companions:</strong> Seu companion principal (${charCompanion || 'um companheiro'}) está com nível de influência ${compLevel}/50. Considere usar presentes (gifts) ou completar missões de companion para aumentar a influência dele. Companions de nível 50 são extremamente poderosos!</p>`;
+                companionAdvice = `<p class="warning-feedback"><strong>Otimização de Companions:</strong> Seu companion principal (${charCompanion || 'um companheiro'}) está com nível de influência ${compLevel}/50. Considere usar presentes (gifts) ou completar missões de companion para aumentar a influência dele. Companions de nível 50 são extremamente poderosos!</p>`;
             } else {
-                companionAdvice = `<p class="text-green-300"><strong>Companions Otimizados:</strong> Seu companion principal (${charCompanion || 'um companheiro'}) está no nível máximo de influência (50). Excelente! Eles serão um grande auxílio.</p>`;
+                companionAdvice = `<p class="positive-feedback"><strong>Companions Otimizados:</strong> Seu companion principal (${charCompanion || 'um companheiro'}) está no nível máximo de influência (50). Excelente! Eles serão um grande auxílio.</p>`;
             }
             document.getElementById('simCompanionAdvice').innerHTML = companionAdvice;
 
             let statAdvice = '<p><strong>Recomendações de Estatísticas (Nível 80):</strong></p>';
             let role = '';
-            if (charClass.includes('Guardian') || charClass.includes('Juggernaut') || charClass.includes('Vanguard') || charClass.includes('Powertech') || charClass.includes('Shadow') || charClass.includes('Assassin')) {
-                // Potential Tanks or Melee DPS
-                if (statDefense > 0 || statShield > 0 || statAbsorb > 0) { // Check if tank stats are present
+            // Determine role based on class
+            if (['Jedi Guardian', 'Sith Juggernaut', 'Vanguard', 'Powertech'].includes(charClass)) {
+                if (statDefense > 0 || statShield > 0 || statAbsorb > 0) {
+                    role = 'Tank';
+                } else {
+                    role = 'Melee/Hybrid DPS';
+                }
+            } else if (['Jedi Shadow', 'Sith Assassin'].includes(charClass)) {
+                if (statDefense > 0 || statShield > 0 || statAbsorb > 0) {
                     role = 'Tank';
                 } else {
                     role = 'Melee DPS';
                 }
-            } else if (charClass.includes('Sentinel') || charClass.includes('Marauder') || charClass.includes('Gunslinger') || charClass.includes('Sniper') || charClass.includes('Scoundrel') || charClass.includes('Operative')) {
-                // Pure DPS or Hybrid DPS/Healer
-                role = charClass.includes('Scoundrel') || charClass.includes('Operative') ? 'Hybrid DPS/Healer' : 'Ranged/Melee DPS';
-            } else if (charClass.includes('Sage') || charClass.includes('Sorcerer') || charClass.includes('Commando') || charClass.includes('Mercenary')) {
-                // Healer or Ranged DPS
-                role = (charClass.includes('Sage') || charClass.includes('Sorcerer') || charClass.includes('Commando') || charClass.includes('Mercenary')) ? 'Healer/Ranged DPS' : 'Ranged DPS';
+            }
+            else if (['Jedi Sentinel', 'Sith Marauder', 'Gunslinger', 'Sniper'].includes(charClass)) {
+                role = 'DPS';
+            } else if (['Jedi Sage', 'Sith Sorcerer', 'Commando', 'Mercenary'].includes(charClass)) {
+                role = 'Healer/Ranged DPS';
+            } else if (['Scoundrel', 'Operative'].includes(charClass)) {
+                role = 'Hybrid Healer/DPS';
             }
 
 
             if (charLevel === 80) {
                 if (role === 'Tank') {
                     statAdvice += '<ul class="list-disc ml-6 space-y-1">';
-                    if (statDefense < 3000 || statShield < 3000 || statAbsorb < 3000) { // Rough estimates, actual values vary by build
-                        statAdvice += `<li class="text-orange-300">Se você pretende ser um Tank, verifique se suas estatísticas de <strong>Defesa, Escudo e Absorção</strong> estão equilibradas e em torno de 3000-3500 cada (com Mastery e Endurance como base).</li>`;
+                    const idealDefense = 3200;
+                    const idealShield = 3200;
+                    const idealAbsorb = 3200;
+
+                    if (statDefense < idealDefense) {
+                        statAdvice += `<li class="warning-feedback">Sua <strong>Defesa</strong> (${statDefense}) pode ser aprimorada. Busque em torno de ${idealDefense} de Rating para uma melhor chance de esquiva/parada.</li>`;
                     } else {
-                        statAdvice += `<li class="text-green-300">Suas estatísticas de Tank parecem boas! Continue buscando o equilíbrio entre Defesa, Escudo e Absorção, além de Mastery e Endurance.</li>`;
+                        statAdvice += `<li class="positive-feedback">Sua Defesa (${statDefense}) está excelente para um Tank!</li>`;
                     }
-                    statAdvice += `<li class="text-yellow-300">Para Tanks, a <span class="tooltip">Precisão (Accuracy)<span class="tooltiptext">Chance de acertar ataques.</span></span> não é prioridade além do base.</li>`;
-                    statAdvice += `<li class="text-yellow-300">A <span class="tooltip">Alacridade (Alacrity)<span class="tooltiptext">Velocidade de conjuração e cooldowns.</span></span> para Tanks geralmente foca em atingir um breakpoint de 1.2s GCD (Global Cooldown) para rotação fluida.</li>`;
+                    if (statShield < idealShield) {
+                        statAdvice += `<li class="warning-feedback">Sua <strong>Classificação de Escudo</strong> (${statShield}) pode ser aprimorada. Almeje cerca de ${idealShield} de Rating para aumentar sua chance de bloquear ataques.</li>`;
+                    } else {
+                        statAdvice += `<li class="positive-feedback">Sua Classificação de Escudo (${statShield}) está ótima!</li>`;
+                    }
+                    if (statAbsorb < idealAbsorb) {
+                        statAdvice += `<li class="warning-feedback">Sua <strong>Classificação de Absorção</strong> (${statAbsorb}) pode ser aprimorada. Após Shield, invista em Absorb para reduzir o dano quando você bloqueia.</li>`;
+                    } else {
+                        statAdvice += `<li class="positive-feedback">Sua Classificação de Absorção (${statAbsorb}) está boa!</li>`;
+                    }
+
+                    if (statAlacrity > 0 && statAlacrity < 2054) {
+                        statAdvice += `<li class="warning-feedback">Para Tanks, a <strong>Alacridade</strong> geralmente não é sua prioridade principal. Se for usá-la, mirar em 2054 (para 1.4s GCD sem bônus de guilda) é o ideal. Atualmente você tem ${statAlacrity}.</li>`;
+                    } else if (statAlacrity >= 2054) {
+                         statAdvice += `<li class="positive-feedback">Sua Alacridade (${statAlacrity}) está no breakpoint de 1.4s GCD, o que é bom para a fluidez da rotação do Tank.</li>`;
+                    }
+                    statAdvice += `<li class="text-white">Para Tanks, a <span class="tooltip">Precisão (Accuracy)<span class="tooltiptext">Chance de acertar ataques.</span></span> não é prioridade além do base.</li>`;
                     statAdvice += '</ul>';
+
                 } else if (role.includes('DPS')) {
                     statAdvice += '<ul class="list-disc ml-6 space-y-1">';
+                    const idealAccuracyRating = 2694;
+                    const idealAlacrityRating = 3200;
+
                     if (statAccuracy < 110) {
-                        statAdvice += `<li class="text-red-300">Para PvE de endgame (Operations), sua <span class="tooltip">Precisão (Accuracy)<span class="tooltiptext">Chance de acertar ataques.</span></span> deve ser de <strong>110%</strong> para garantir que todos os seus ataques atinjam os chefes. Aumente seu Rating de Precisão!</li>`;
+                        statAdvice += `<li class="critical-feedback">Para PvE de endgame (Operations), sua <span class="tooltip">Precisão (Accuracy)<span class="tooltiptext">Chance de acertar ataques.</span></span> deve ser de <strong>110%</strong> (aproximadamente ${idealAccuracyRating} de Rating) para garantir que todos os seus ataques atinjam os chefes. Atualmente você tem ${statAccuracy}%. Aumente seu Rating de Precisão!</li>`;
                     } else {
-                        statAdvice += `<li class="text-green-300">Sua Precisão (Accuracy) está excelente para PvE de endgame!</li>`;
+                        statAdvice += `<li class="positive-feedback">Sua Precisão (Accuracy) está excelente para PvE de endgame!</li>`;
                     }
-                    if (statAlacrity < 3200) { // Roughly 1.3s GCD breakpoint
-                        statAdvice += `<li class="text-orange-300">Sua <span class="tooltip">Alacridade (Alacrity)<span class="tooltiptext">Velocidade de conjuração e cooldowns.</span></span> parece um pouco baixa. Tente atingir cerca de <strong>3200-3300 de Alacrity Rating</strong> para o breakpoint de 1.3s de Global Cooldown (GCD), o que otimiza sua rotação de habilidades.</li>`;
+
+                    if (statAlacrity < idealAlacrityRating) {
+                        statAdvice += `<li class="warning-feedback">Sua <span class="tooltip">Alacridade (Alacrity)<span class="tooltiptext">Velocidade de conjuração e cooldowns.</span></span> parece um pouco baixa (${statAlacrity}). Tente atingir cerca de <strong>${idealAlacrityRating} de Alacrity Rating</strong> para o breakpoint de 1.3s de Global Cooldown (GCD), o que otimiza sua rotação de habilidades.</li>`;
                     } else {
-                        statAdvice += `<li class="text-green-300">Sua Alacridade (Alacrity) está em um bom nível para otimizar sua rotação!</li>`;
+                        statAdvice += `<li class="positive-feedback">Sua Alacridade (Alacrity) (${statAlacrity}) está em um bom nível para otimizar sua rotação!</li>`;
                     }
-                    if (statCritical < 3000) { // Basic critical start
-                         statAdvice += `<li class="text-orange-300">Sua <span class="tooltip">Classificação Crítica (Critical Rating)<span class="tooltiptext">Chance de crítico e dano/cura extra.</span></span> pode ser aprimorada. Após atingir os breakpoints de Precisão e Alacridade, foque em maximizar seu Critical Rating.</li>`;
+                    if (statCritical < 3000) {
+                         statAdvice += `<li class="warning-feedback">Sua <span class="tooltip">Classificação Crítica (Critical Rating)<span class="tooltiptext">Chance de crítico e dano/cura extra.</span></span> (${statCritical}) pode ser aprimorada. Após atingir os breakpoints de Precisão e Alacridade, foque em maximizar seu Critical Rating para o resto de suas estatísticas terciárias.</li>`;
                     } else {
-                        statAdvice += `<li class="text-green-300">Sua Classificação Crítica (Critical Rating) está em um bom caminho!</li>`;
+                        statAdvice += `<li class="positive-feedback">Sua Classificação Crítica (Critical Rating) (${statCritical}) está em um bom caminho!</li>`;
                     }
-                    statAdvice += `<li class="text-yellow-300">Sempre priorize <span class="tooltip">Maestria (Mastery)<span class="tooltiptext">Atributo primário que aumenta dano, cura e crítico.</span></span> e <span class="tooltip">Poder (Power)<span class="tooltiptext">Aumenta dano e cura diretamente.</span></span> para maximizar seu dano.</li>`;
+                    statAdvice += `<li class="text-white">Sempre priorize <span class="tooltip">Maestria (Mastery)<span class="tooltiptext">Atributo primário que aumenta dano, cura e crítico.</span></span> e <span class="tooltip">Poder (Power)<span class="tooltiptext">Aumenta dano e cura diretamente.</span></span> para maximizar seu dano.</li>`;
                     statAdvice += '</ul>';
+
                 } else if (role.includes('Healer')) {
                     statAdvice += '<ul class="list-disc ml-6 space-y-1">';
-                    if (statAlacrity < 3200) { // Roughly 1.3s GCD breakpoint for healers
-                        statAdvice += `<li class="text-orange-300">Sua <span class="tooltip">Alacridade (Alacrity)<span class="tooltiptext">Velocidade de conjuração e cooldowns.</span></span> parece um pouco baixa para um Healer. Tente atingir cerca de <strong>3200-3300 de Alacrity Rating</strong> para o breakpoint de 1.3s de Global Cooldown (GCD), essencial para curas rápidas e eficientes.</li>`;
+                    const idealHealerAlacrity = 3200;
+
+                    if (statAlacrity < idealHealerAlacrity) {
+                        statAdvice += `<li class="warning-feedback">Sua <span class="tooltip">Alacridade (Alacrity)<span class="tooltiptext">Velocidade de conjuração e cooldowns.</span></span> parece um pouco baixa (${statAlacrity}) para um Healer. Tente atingir cerca de <strong>${idealHealerAlacrity} de Alacrity Rating</strong> para o breakpoint de 1.3s de Global Cooldown (GCD), essencial para curas rápidas e eficientes.</li>`;
                     } else {
-                        statAdvice += `<li class="text-green-300">Sua Alacridade (Alacrity) está em um bom nível para curas eficientes!</li>`;
+                        statAdvice += `<li class="positive-feedback">Sua Alacridade (Alacrity) (${statAlacrity}) está em um bom nível para curas eficientes!</li>`;
                     }
-                    if (statCritical < 3000) { // Basic critical start for healers
-                        statAdvice += `<li class="text-orange-300">Sua <span class="tooltip">Classificação Crítica (Critical Rating)<span class="tooltiptext">Chance de crítico e dano/cura extra.</span></span> pode ser aprimorada. Após atingir os breakpoints de Alacridade, foque em maximizar seu Critical Rating para curas mais potentes.</li>`;
+                    if (statCritical < 3000) {
+                        statAdvice += `<li class="warning-feedback">Sua <span class="tooltip">Classificação Crítica (Critical Rating)<span class="tooltiptext">Chance de crítico e dano/cura extra.</span></span> (${statCritical}) pode ser aprimorada. Após atingir os breakpoints de Alacridade, foque em maximizar seu Critical Rating para curas mais potentes.</li>`;
                     } else {
-                        statAdvice += `<li class="text-green-300">Sua Classificação Crítica (Critical Rating) está em um bom caminho para Healers!</li>`;
+                        statAdvice += `<li class="positive-feedback">Sua Classificação Crítica (Critical Rating) (${statCritical}) está em um bom caminho para Healers!</li>`;
                     }
-                    statAdvice += `<li class="text-yellow-300">Priorize <span class="tooltip">Maestria (Mastery)<span class="tooltiptext">Atributo primário que aumenta dano, cura e crítico.</span></span> e <span class="tooltip">Poder (Power)<span class="tooltiptext">Aumenta dano e cura diretamente.</span></span> para maximizar a eficácia de suas curas.</li>`;
-                    statAdvice += `<li class="text-yellow-300">A <span class="tooltip">Precisão (Accuracy)<span class="tooltiptext">Chance de acertar ataques.</span></span> não é relevante para Healers.</li>`;
+                    statAdvice += `<li class="text-white">Priorize <span class="tooltip">Maestria (Mastery)<span class="tooltiptext">Atributo primário que aumenta dano, cura e crítico.</span></span> e <span class="tooltip">Poder (Power)<span class="tooltiptext">Aumenta dano e cura diretamente.</span></span> para maximizar a eficácia de suas curas.</li>`;
+                    statAdvice += `<li class="text-white">A <span class="tooltip">Precisão (Accuracy)<span class="tooltiptext">Chance de acertar ataques.</span></span> não é relevante para Healers.</li>`;
                     statAdvice += '</ul>';
                 }
             } else {
-                statAdvice += `<p>Ao subir de nível, foque em equipamentos com <strong>Mastery (Maestria)</strong> e <strong>Endurance (Vigor)</strong>. As outras estatísticas se tornarão mais importantes no nível máximo.</p>`;
+                statAdvice += `<p class="text-white">Ao subir de nível, foque em equipamentos com <strong>Mastery (Maestria)</strong> e <strong>Endurance (Vigor)</strong>. As outras estatísticas se tornarão mais importantes no nível máximo.</p>`;
             }
             document.getElementById('simStatAdvice').innerHTML = statAdvice;
 
             let gearAdvice = '<p><strong>Recomendações de Equipamento:</strong></p>';
             if (charLevel < 80) {
-                gearAdvice += `<p class="mb-2">Ao subir de nível, substitua seu equipamento por itens com <strong>Item Rating (Classificação do Item)</strong> mais alto que você encontrar em missões, Flashpoints e drops de inimigos. Não se preocupe muito com otimização de estatísticas antes do nível máximo.</p>`;
+                gearAdvice += `<p class="text-white mb-2">Ao subir de nível, substitua seu equipamento por itens com <strong>Item Rating (Classificação do Item)</strong> mais alto que você encontrar em missões, Flashpoints e drops de inimigos. Não se preocupe muito com otimização de estatísticas antes do nível máximo.</p>`;
             } else {
-                gearAdvice += `<p class="mb-2">No nível máximo, foque em:</p>`;
+                gearAdvice += `<p class="text-white mb-2">No nível máximo, foque em:</p>`;
                 gearAdvice += '<ul class="list-disc ml-6 space-y-1">';
                 gearAdvice += `<li>Adquirir o melhor <strong>Item Rating</strong> possível através de <span class="tooltip">Tech Fragments (Fragmentos Tecnológicos)<span class="tooltiptext">Moeda de endgame para comprar equipamento.</span></span> de Ops (Operations), PvP ou Galactic Seasons.</li>`;
                 gearAdvice += `<li>Obter seus <strong><span class="tooltip">Implantes Lendários (Legendary Implants)<span class="tooltiptext">Itens de endgame que fornecem bônus de conjunto.</span></span></strong>, pois eles concedem os <span class="tooltip">Bônus de Conjunto (Set Bonuses)<span class="tooltiptext">Bônus adicionais de habilidades ao equipar conjuntos específicos.</span></span> essenciais para sua classe.</li>`;
@@ -916,13 +1225,34 @@
 
             let guildAdvice = '';
             if (!charGuild || charGuild.toLowerCase() !== 'brazucas') {
-                guildAdvice = `<p class="text-blue-300"><strong>Dica de Guilda:</strong> Se você ainda não está em uma guilda brasileira, considere procurar pela guilda <strong>Brazucas</strong>! Eles são uma ótima comunidade para jogar e receber ajuda em português. Converse com outros jogadores na Fleet para encontrá-los!</p>`;
+                guildAdvice = `<p class="republic-text"><strong>Dica de Guilda:</strong> Se você ainda não está em uma guilda brasileira, considere procurar pela guilda <strong>Brazucas</strong>! Eles são uma ótima comunidade para jogar e receber ajuda em português. Converse com outros jogadores na Fleet para encontrá-los!</p>`;
             } else {
-                guildAdvice = `<p class="text-green-300"><strong>Guilda:</strong> Que bom que você já está na ${charGuild}! Uma boa guilda é essencial para o progresso e diversão no SWTOR!</p>`;
+                guildAdvice = `<p class="positive-feedback"><strong>Guilda:</strong> Que bom que você já está na ${charGuild}! Uma boa guilda é essencial para o progresso e diversão no SWTOR!</p>`;
             }
             document.getElementById('simGuildAdvice').innerHTML = guildAdvice;
 
             resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetSimulation() {
+            document.getElementById('charName').value = '';
+            document.getElementById('charGuild').value = '';
+            document.getElementById('charFaction').value = 'Republica';
+            document.getElementById('charClass').value = 'Jedi Guardian';
+            document.getElementById('charLevel').value = '80';
+            document.getElementById('charCompanion').value = '';
+            document.getElementById('compLevel').value = '50';
+
+            document.getElementById('statMastery').value = '0';
+            document.getElementById('statPower').value = '0';
+            document.getElementById('statCritical').value = '0';
+            document.getElementById('statAlacrity').value = '0';
+            document.getElementById('statAccuracy').value = '100';
+            document.getElementById('statDefense').value = '0';
+            document.getElementById('statShield').value = '0';
+            document.getElementById('statAbsorb').value = '0';
+
+            document.getElementById('simulationResults').classList.add('hidden');
         }
     </script>
 </body>
