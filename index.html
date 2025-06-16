@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holocron SWTOR: Guia Definitivo do Herói</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: The SPA is now structured as a multi-page application, with each main section (Inicio, Estilos, Equipamentos, Combate, Datacrons, Legado) treated as a distinct "page" (div) that is shown or hidden via JavaScript. This provides clear content separation. The navigation links in the header now trigger page transitions instead of simple scrolls. Chart.js instances are lazily initialized when their respective pages are first displayed to optimize loading performance. More detailed tutorials and information have been integrated into each page, leveraging modals for deep dives without cluttering the main view. This design enhances user understanding and ease of navigation by presenting information in a segmented, progressive manner. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Detailed Combat Style rotations/principles. Goal: Teach practical application. Viz/Method: Modal pop-ups for each recommended style. Interaction: A "Ver Detalhes" button on each card opens a modal with rotation principles and key defensive cooldowns. Justification: Provides deep information on-demand without overwhelming the main view.
+        - Report Info: Gearing currencies and progression path. Goal: Demystify a complex system. Viz/Method: Enhanced HTML/CSS flowchart and new info cards for each currency. Interaction: None required; clarity is achieved through visual organization. Justification: Breaks down the gearing process into clear, manageable steps and explains the "why" behind farming specific currencies.
+        - Report Info: Datacron locations and stat benefits. Goal: Encourage exploration and long-term investment. Viz/Method: An interactive Datacron database and a summary Chart.js donut chart. Interaction: A dropdown filters datacrons by planet, dynamically showing locations and stats. The donut chart visually represents the total stat gain. Justification: Turns a static list from the report into an engaging exploration tool, highlighting the significant legacy-wide benefits.
+        - All choices confirm NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+            color: #292524; /* stone-800 */
+        }
+        .section-title {
+            color: #44403c; /* stone-700 */
+        }
+        .btn-primary {
+            background-color: #1e40af; /* blue-800 */
+            color: white;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8; /* blue-700 */
+        }
+        .btn-secondary {
+            background-color: #e5e7eb; /* gray-200 */
+            color: #374151; /* gray-700 */
+            transition: background-color 0.3s;
+        }
+        .btn-secondary.active {
+            background-color: #dbeafe; /* blue-100 */
+            color: #1e40af; /* blue-800 */
+            font-weight: 600;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #e7e5e4; /* stone-200 */
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .flowchart-step {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .flowchart-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -2.5rem;
+            top: 25%;
+            font-size: 2rem;
+            color: #a8a29e; /* stone-400 */
+        }
+        @media (max-width: 1023px) {
+            .flowchart-step:not(:last-child)::after {
+                content: '↓';
+                right: 50%;
+                transform: translateX(50%);
+                top: 100%;
+                margin-top: 0.5rem;
+            }
+        }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .page-content {
+            display: none; /* Hidden by default */
+        }
+        .page-content.active {
+            display: block; /* Shown when active */
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-stone-800">Holocron SWTOR</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <button data-page="inicio" class="nav-button text-gray-600 hover:text-blue-700 px-3 py-2 rounded-md text-sm font-medium active">Início</button>
+                        <button data-page="estilos" class="nav-button text-gray-600 hover:text-blue-700 px-3 py-2 rounded-md text-sm font-medium">Estilos</button>
+                        <button data-page="equipamentos" class="nav-button text-gray-600 hover:text-blue-700 px-3 py-2 rounded-md text-sm font-medium">Equipamentos</button>
+                        <button data-page="combate" class="nav-button text-gray-600 hover:text-blue-700 px-3 py-2 rounded-md text-sm font-medium">Maestria</button>
+                        <button data-page="datacrons" class="nav-button text-gray-600 hover:text-blue-700 px-3 py-2 rounded-md text-sm font-medium">Datacrons</button>
+                        <button data-page="legado" class="nav-button text-gray-600 hover:text-blue-700 px-3 py-2 rounded-md text-sm font-medium">Legado</button>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:bg-gray-700 focus:outline-none">
+                        <span class="text-white text-xl">☰</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <button data-page="inicio" class="nav-button text-gray-600 hover:text-blue-700 block px-3 py-2 rounded-md text-base font-medium active">Início</button>
+                <button data-page="estilos" class="nav-button text-gray-600 hover:text-blue-700 block px-3 py-2 rounded-md text-base font-medium">Estilos</button>
+                <button data-page="equipamentos" class="nav-button text-gray-600 hover:text-blue-700 block px-3 py-2 rounded-md text-base font-medium">Equipamentos</button>
+                <button data-page="combate" class="nav-button text-gray-600 hover:text-blue-700 block px-3 py-2 rounded-md text-base font-medium">Maestria</button>
+                <button data-page="datacrons" class="nav-button text-gray-600 hover:text-blue-700 block px-3 py-2 rounded-md text-base font-medium">Datacrons</button>
+                <button data-page="legado" class="nav-button text-gray-600 hover:text-blue-700 block px-3 py-2 rounded-md text-base font-medium">Legado</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div id="app-content">
+            <div id="page-inicio" class="page-content active">
+                <section class="text-center mb-16">
+                    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl section-title">Forjando a <span class="text-blue-700">SUA</span> lenda</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-stone-600">Bem-vindo, herói da guilda <span class="font-semibold text-amber-600">brazucas</span>. Este holocron interativo foi aprimorado com tutoriais aprofundados para guiá-lo em cada passo da sua jornada. Do domínio do seu Estilo de Combate à caça aos Datacrons, seu caminho para o poder supremo está detalhado aqui.</p>
+                    <p class="mt-6 max-w-2xl mx-auto text-base text-stone-700">Utilize o menu de navegação acima para explorar as diferentes seções deste Holocron. Cada "página" contém informações cruciais para transformar seu personagem no mais poderoso da galáxia!</p>
+                </section>
+            </div>
+
+            <div id="page-estilos" class="page-content">
+                <section class="mb-20">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold tracking-tight section-title">O Arsenal do Herói: Escolha e Domine Seu Estilo de Combate</h2>
+                        <p class="mt-3 max-w-2xl mx-auto text-lg text-stone-600">Sua escolha de Estilo de Combate define sua identidade e papel na batalha. Aqui, você explorará as opções mais poderosas e versáteis para DPS, com guias detalhados sobre suas rotações e habilidades defensivas essenciais. Lembre-se, a partir da atualização 7.0, você pode escolher qualquer Estilo de Combate independente da sua História de Origem!</p>
+                        <div id="combat-style-filters" class="mt-6 flex justify-center space-x-2 flex-wrap gap-2">
+                            <button data-filter="all" class="btn-secondary active px-4 py-2 rounded-md text-sm font-medium">Todos</button>
+                            <button data-filter="melee" class="btn-secondary px-4 py-2 rounded-md text-sm font-medium">Corpo a Corpo</button>
+                            <button data-filter="ranged" class="btn-secondary px-4 py-2 rounded-md text-sm font-medium">À Distância</button>
+                            <button data-filter="stealth" class="btn-secondary px-4 py-2 rounded-md text-sm font-medium">Furtivo</button>
+                        </div>
+                    </div>
+                    <div id="combat-style-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    </div>
+                    <p class="mt-8 text-stone-600 max-w-2xl mx-auto text-center">**Dica Importante:** Assinantes podem escolher um segundo Estilo de Combate após completar o Capítulo 3 da história de origem (ou imediatamente no nível 1 se já tiverem feito isso em outro personagem do legado)! Isso permite alternar entre duas especializações completas fora de combate, como um DPS e um Tanque, oferecendo enorme versatilidade.</p>
+                </section>
+            </div>
+
+            <div id="page-equipamentos" class="page-content">
+                <section class="mb-20">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold tracking-tight section-title">A Forja do Poder: Equipamentos e Otimização Avançada</h2>
+                        <p class="mt-3 max-w-2xl mx-auto text-lg text-stone-600">O equipamento é a base do seu poder. Esta seção detalha como otimizar seus atributos, o caminho eficiente para o nível de item 344 (o máximo atual) e as moedas que você precisará acumular. Entender este sistema é crucial para maximizar seu desempenho em qualquer conteúdo.</p>
+                    </div>
+                    
+                    <div class="space-y-16">
+                        <div class="card p-6 md:p-8">
+                            <h3 class="text-2xl font-semibold mb-2 text-stone-800">Tutorial: Otimização de Atributos para DPS/Cura</h3>
+                            <p class="mb-6 text-stone-600">Para maximizar seu dano (DPS) e eficácia de cura, atingir os "caps" (limites) de certos atributos é a prioridade. Este gráfico interativo mostra os alvos para **Accuracy (Precisão)** e **Alacrity (Alacridade)**, antes de investir todo o resto em **Critical (Crítico)**. Mastery (Maestria), Endurance (Vigor) e Power (Poder) vêm naturalmente com o Item Rating (NI) e não são prioridades de ajuste fino.</p>
+                            <div class="flex flex-col md:flex-row items-center gap-4 mb-6 p-4 bg-stone-50 rounded-lg border border-stone-200">
+                                <p class="text-stone-700 font-medium text-center md:text-left">Sua guilda "brazucas" tem o bônus "Zeal" (+5% Alacrity)? Isso muda drasticamente seu alvo de Alacrity. Ative ou desative o bônus para ver a diferença.</p>
+                                <button id="toggle-guild-perk" class="btn-primary px-5 py-2 rounded-md shadow-sm w-full md:w-auto">Sim, ativar bônus da Guilda</button>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="stats-chart"></canvas>
+                            </div>
+                            <ul class="list-disc list-inside space-y-2 text-stone-600 mt-6">
+                                <li><strong>Accuracy (Precisão):</strong> Mantenha <strong>110%</strong> para PvE de fim de jogo. Isso requer aproximadamente 2694 de classificação. Para PvP, 105% é geralmente suficiente.</li>
+                                <li><strong>Alacrity (Alacridade):</strong> Mire em um Global Cooldown (TRG) de 1.4 segundos. Isso geralmente significa cerca de 2054 de classificação de Alacrity. Se sua guilda tiver o bônus "Zeal", você só precisará de ~560 de Alacrity para o mesmo TRG.</li>
+                                <li><strong>Critical (Crítico):</strong> Depois que Accuracy e Alacrity atingirem seus limites, invista todos os pontos restantes em Critical.</li>
+                                <li><strong>Mastery (Maestria) & Power (Poder):</strong> Estes vêm com o Item Rating (NI). Sempre priorize o Item Rating (NI) mais alto para maximizar essas estatísticas.</li>
+                                <li><strong>Endurance (Resistência):</strong> Aumenta a saúde. Para DPS/Cura, é uma estatística secundária; não sacrifique dano por resistência extra a menos que seja para um propósito específico de sobrevivência.</li>
+                            </ul>
+                        </div>
+
+                        <div class="card p-6 md:p-8">
+                            <h3 class="text-2xl font-semibold mb-2 text-stone-800">Tutorial: O Caminho do Equipamento (até iLvl 344)</h3>
+                            <p class="mb-8 text-stone-600">Este fluxograma simplifica sua jornada, mostrando as principais fontes e a ordem de progressão. A estratégia é usar fontes mais fáceis (Conquest, Flashpoints) para obter um set base, e então farmar conteúdo de grupo (Operations) para o equipamento final, o Rakata 344. O **Item Rating (NI)** é a chave para desbloquear drops de níveis mais altos.</p>
+                             <div class="flex flex-col lg:flex-row justify-around items-center lg:items-start gap-8 lg:gap-4">
+                                <div class="flowchart-step">
+                                    <div class="bg-blue-100 text-blue-800 rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold mb-2">1</div>
+                                    <h4 class="font-semibold text-lg">Conquest Set (NI 324+)</h4>
+                                    <p class="text-sm text-stone-500 max-w-xs">Use Conquest Commendations (Medalhas de Conquista) para seu set inicial (peitoral, calças, etc.) e Relics (Relíquias)/Earpiece (Brinco) NI 340. Disponível no Conquest Vendor (Vendedor de Conquista) na Fleet (Frota). Este é o ponto de partida rápido.</p>
+                                </div>
+                                <div class="flowchart-step">
+                                    <div class="bg-blue-100 text-blue-800 rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold mb-2">2</div>
+                                    <h4 class="font-semibold text-lg">Flashpoints (Veteran/Master)</h4>
+                                    <p class="text-sm text-stone-500 max-w-xs">Farme FPs para obter drops azuis (Prototype) NI 340. Desconstrua-os para desbloquear **Mods** e **Enhancements (Aprimoramentos)** 340 com Hyde & Zeek na Fleet, permitindo comprá-los com créditos. Essencial para equipar a maioria dos seus slots.</p>
+                                </div>
+                                <div class="flowchart-step">
+                                    <div class="bg-blue-100 text-blue-800 rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold mb-2">3</div>
+                                    <h4 class="font-semibold text-lg">Operations (R-4 - NI 328+)</h4>
+                                    <p class="text-sm text-stone-500 max-w-xs">Faça Operations (Story/Veteran) para obter equipamento R-4 (NI 328+) e **OP-1 Catalysts (Catalisadores OP-1)**. Você pode "iscar" drops de slots específicos equipando uma peça de NI inferior nesse slot antes de matar o chefe.</p>
+                                </div>
+                                <div class="flowchart-step">
+                                    <div class="bg-amber-100 text-amber-800 rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold mb-2">4</div>
+                                    <h4 class="font-semibold text-lg">Rakata 344 Final (NI 342/344)</h4>
+                                    <p class="text-sm text-stone-500 max-w-xs">Use os OP-1 Catalysts para aprimorar seu equipamento R-4 para Rakata de nível 342 e depois 344 no Operations Upgrade Vendor (Vendedor de Melhorias de Operações) na Fleet. Este é o melhor equipamento PvE de fim de jogo.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-6 md:p-8">
+                             <h3 class="text-2xl font-semibold mb-4 text-stone-800">Tutorial: Currencies (Moedas) de Equipamento e Onde Encontrá-las</h3>
+                            <p class="mb-6 text-stone-600">A progressão de equipamento gira em torno da coleta de moedas específicas de diferentes atividades. Entender para que cada uma serve e onde obtê-las é essencial para sua eficiência. Cada uma serve a um propósito vital na sua busca pelo equipamento supremo.</p>
+                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div class="bg-stone-50 p-4 rounded-lg border">
+                                    <h4 class="font-bold text-lg text-blue-700">Tech Fragments (Fragmentos de Tecnologia)</h4>
+                                    <p class="text-sm text-stone-600">A moeda universal, obtida em quase todas as atividades de endgame (Conquests, Heroics, FPs, Ops, PvP). Usada para Legendary Implants (Implantes Lendários), Tacticals (Táticos) e materiais para os melhores Augments (Aumentos).</p>
+                                </div>
+                                <div class="bg-stone-50 p-4 rounded-lg border">
+                                    <h4 class="font-bold text-lg text-green-700">Conquest Commendations (Medalhas de Conquista)</h4>
+                                    <p class="text-sm text-stone-600">Obtidas completando seus objetivos semanais de Conquest. Usadas para comprar seu set inicial de equipamento (iLvl 324+) e Relics/Earpiece 340. Podem ser trocadas por Tech Fragments no Conquest Vendor.</p>
+                                </div>
+                                <div class="bg-stone-50 p-4 rounded-lg border">
+                                    <h4 class="font-bold text-lg text-amber-700">OP-1 Catalysts (Catalisadores OP-1)</h4>
+                                    <p class="text-sm text-stone-600">A moeda mais importante para o equipamento final (Rakata), obtida principalmente em Operations bosses. Essenciais para o aprimoramento do seu equipamento R-4 para Rakata 344. Raramente, podem ser trocados por Tech Fragments.</p>
+                                </div>
+                                 <div class="bg-stone-50 p-4 rounded-lg border">
+                                    <h4 class="font-bold text-lg text-cyan-700">FP-1 Stabilizers (Estabilizadores FP-1)</h4>
+                                    <p class="text-sm text-stone-600">Ganhos em Flashpoints. Podem ser trocados por outras moedas ou usados para comprar equipamentos específicos de Flashpoints em vendedores dedicados.</p>
+                                </div>
+                                 <div class="bg-stone-50 p-4 rounded-lg border">
+                                    <h4 class="font-bold text-lg text-red-700">WZ-1 Accelerants (Aceleradores WZ-1)</h4>
+                                    <p class="text-sm text-stone-600">Moeda exclusiva de PvP (Warzones) e Galactic Starfighter. Usada para comprar equipamento de PvP (limite de iLvl 328) e pode ser trocada por Tech Fragments. Não são usados para o equipamento PvE de fim de jogo.</p>
+                                </div>
+                                 <div class="bg-stone-50 p-4 rounded-lg border">
+                                    <h4 class="font-bold text-lg text-purple-700">Legendary Implants (Implantes Lendários) & Augments (Aumentos)</h4>
+                                    <p class="text-sm text-stone-600"><strong>Legendary Implants</strong> são seus novos "set bonuses" (bônus de conjunto) pós-7.0, fornecendo efeitos poderosos; são adquiridos e aprimorados com Tech Fragments e Conquest Commendations. <strong>Augments</strong> são o "fine-tuning" (ajuste fino) final dos seus atributos, adicionando estatísticas extras a cada peça de equipamento e são cruciais para o endgame de alto nível; feitos via Crafting ou GTN.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="page-combate" class="page-content">
+                <section class="mb-20">
+                     <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold tracking-tight section-title">Maestria em Combate: Fundamentos e Estratégias Avançadas</h2>
+                        <p class="mt-3 max-w-2xl mx-auto text-lg text-stone-600">Equipamento é apenas metade da batalha. Dominar as mecânicas do seu personagem é o que realmente define um jogador de elite. Habilidade é 90% do seu dano. Pratique constantemente e adapte-se a cada situação!</p>
+                    </div>
+                    <div class="space-y-8">
+                        <div class="card p-6 md:p-8">
+                            <h3 class="text-2xl font-semibold mb-4 text-stone-800">Tutorial: Fundamentos do Combate</h3>
+                            <p class="mb-6 text-stone-600">Para se destacar, você precisa entender os pilares do combate no SWTOR. Não se trata apenas de apertar botões, mas de tomar decisões inteligentes em tempo real e reagir às situações, otimizando cada ação.</p>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">Resource Management (Gerenciamento de Recursos)</h4>
+                                    <p class="text-stone-600">Cada classe tem um recurso único (Force (Força), Energy (Energia), Heat (Calor), Rage (Fúria)) que precisa ser gerado e gasto eficientemente para nunca ficar sem poder de fogo. **Regra geral:** para usuários de tecnologia (Agents (Agentes)/Smugglers (Contrabandistas) e Bounty Hunters (Caçadores de Recompensas)/Troopers (Soldados)), manter a Energy acima de 60% ou o Heat abaixo de 40 é crucial para maximizar sua regeneração e dano. Usuários da Force precisam balancear habilidades de custo baixo e alto para manter o fluxo.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">Essential Utility Abilities (Habilidades de Utilidade Essenciais)</h4>
+                                    <p class="text-stone-600">Sua <strong class="text-red-600">Interrupt (Interrupção)</strong> é a habilidade mais importante: use-a para parar habilidades inimigas de serem conjuradas (geralmente indicadas por uma barra de conjuração no inimigo). Use <strong class="text-blue-600">Stuns (Atordoamentos)</strong> para controlar inimigos menores e <strong class="text-green-600">Cleanses (Limpezas)</strong> para remover efeitos negativos (debates) de você ou de aliados. Conheça suas habilidades de movimento (jumps (saltos), rolls (rolamentos), boosts (impulsos)) para se reposicionar e evitar dano ou mecânicas de área.</p>
+                                </div>
+                                 <div>
+                                    <h4 class="font-bold text-lg mb-2">Rotation vs. Priority (Rotação vs. Prioridade): The Art of DPS</h4>
+                                    <p class="text-stone-600">Pratique sua sequência de ataques (rotation) em um boneco de treino até virar memória muscular. Isso cria uma base. Em combates reais, adapte-se usando uma lista de priorities (prioridades): use sempre a habilidade de maior impacto que estiver disponível, mesmo que isso desvie da sua "rotation" padrão. O mais importante é manter os DoTs (Damage over Time - Dano ao Longo do Tempo) e buffs ativos e gastar recursos de forma eficiente.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">Defensive Cooldowns (DCDs) Usage (Uso de Defensivos)</h4>
+                                    <p class="text-stone-600">Não use todos os seus DCDs (Defensive Cooldowns - habilidades defensivas de resfriamento) de uma vez! Roteie-os estrategicamente para ter sempre uma habilidade defensiva pronta para mitigar grandes ataques. Conhecer suas defesas e quando usá-las é a chave para a "boa resistência" que você procura, especialmente em conteúdo desafiador. Cada DCD tem um propósito (damage reduction (redução de dano), absorption (absorção), healing (cura), reflection (reflexão), invulnerability (invulnerabilidade)).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <div id="page-datacrons" class="page-content">
+                <section class="mb-20">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold tracking-tight section-title">A Caça aos Datacrons: Poder Permanente para o Legado</h2>
+                        <p class="mt-3 max-w-2xl mx-auto text-lg text-stone-600">Espalhados pela galáxia, os Datacrons são artefatos ocultos que concedem bônus permanentes de atributos a TODOS os seus personagens no Legado. Coletá-los é um investimento de longo prazo no poder da sua conta, tornando até mesmo seus personagens alternativos mais fortes desde o início e fornecendo um impulso notável no endgame.</p>
+                    </div>
+                    <div class="grid lg:grid-cols-3 gap-8">
+                        <div class="lg:col-span-2 card p-6 md:p-8">
+                            <h3 class="text-2xl font-semibold mb-4 text-stone-800">Guia de Localização de Datacrons</h3>
+                            <p class="mb-4 text-stone-600">Selecione um planeta para ver os Datacrons disponíveis, seus bônus e uma breve dica de localização. Alguns são fáceis de encontrar, outros exigem puzzles de salto complexos e muita paciência! A maioria concede Mastery (Maestria) ou Endurance (Vigor), mas alguns dão Presence (Presença) ou Matrix Shards (Fragmentos de Matriz) para construir o Matrix Crystal (Cristal Matriz).</p>
+                            <div class="mb-4">
+                                <select id="datacron-planet-filter" class="w-full p-2 border border-gray-300 rounded-md bg-white">
+                                    <option value="all">Todos os Planetas</option>
+                                </select>
+                            </div>
+                            <div id="datacron-list" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                                <!-- Datacrons will be populated here by JS -->
+                            </div>
+                            <p class="mt-4 text-sm text-stone-500"><strong>Dica:</strong> Matrix Shards (Fragmentos de Matriz) (Amarelo, Verde, Laranja, Vermelho, Azul) são usados para construir o Matrix Crystal, um item de Legado que se aprimora com mais fragmentos. O Matrix Crystal é uma relíquia poderosa para baixo nível.</p>
+                        </div>
+                        <div class="card p-6 md:p-8 flex flex-col justify-center items-center">
+                            <h3 class="text-2xl font-semibold mb-4 text-center text-stone-800">Total Legacy Reward (Recompensa Total do Legado)</h3>
+                            <p class="text-center text-stone-600 mb-4">Coletar todos os 130 datacrons concede um bônus cumulativo massivo e permanente a **todos** os personagens da sua conta. O investimento de tempo vale a pena para o poder do Legado!</p>
+                            <div class="w-full h-64">
+                                 <canvas id="datacron-summary-chart"></canvas>
+                            </div>
+                            <p class="mt-4 text-sm text-center text-stone-500">Este bônus é especialmente poderoso para upar alternate characters (personagens alternativos) (alts), tornando-os muito mais fortes desde o início, e oferece um impulso notável no endgame ao complementar seu equipamento.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="page-legado" class="page-content">
+                <section class="mb-16">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold tracking-tight section-title">Aliados e Legado: Multiplicadores de Poder para a Conta Toda</h2>
+                        <p class="mt-3 max-w-2xl mx-auto text-lg text-stone-600">Sua força não vem apenas de você. Seus companheiros e os desbloqueios de Legado em toda a conta são multiplicadores de poder que não podem ser ignorados e beneficiam todos os seus personagens, tornando a jornada mais suave e eficiente para todo o seu elenco.</p>
+                    </div>
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <div class="card p-6 md:p-8">
+                            <h3 class="text-2xl font-semibold mb-4 text-stone-800">Tutorial: The Power of Companion Influence (O Poder da Influência do Companheiro)</h3>
+                            <p class="mb-4 text-stone-600">Aumentar a Influence (Influência) do seu companion (companheiro) é um dos maiores impulsos de poder para o jogo solo. Um companion de alta Influence (Nível 50) é um exército de um só! Além de curar/causar dano em combate, eles se tornam mais rápidos e eficientes em suas **Crew Skills** (habilidades de profissão). Veja como a estatística de Presence (Presença), que aumenta a eficácia deles em combate, escala com a Influence.</p>
+                            <label for="influence-slider" class="block font-medium text-stone-700 mb-2">Influence Level (Nível de Influência): <span id="influence-level" class="font-bold text-blue-700">1</span></label>
+                            <input id="influence-slider" type="range" min="1" max="50" value="1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="mt-4 bg-stone-100 p-4 rounded-lg text-center">
+                                <p class="text-lg text-stone-600">Presence Bonus (Bônus de Presença):</p>
+                                <p id="presence-bonus" class="text-4xl font-bold text-amber-600">0</p>
+                            </div>
+                            <p class="mt-4 text-sm text-stone-500"><strong>Dica Pro:</strong> Para conteúdo solo e missões mais difíceis, configure seu companion como Healer (Curandeiro). No Nível 50 de Influence, ele o tornará praticamente imortal, permitindo que você se concentre apenas no damage (dano). Use gifts (presentes) que o companion "Ama" para maximizar o ganho de Influence!</p>
+                        </div>
+                         <div class="card p-6 md:p-8">
+                            <h3 class="text-2xl font-semibold mb-4 text-stone-800">Tutorial: Essential Legacy Unlocks (Desbloqueios de Legado Essenciais)</h3>
+                            <p class="mb-4 text-stone-600">Investir em seu Legacy (Legado) beneficia todos os seus characters (personagens), tornando-os mais fortes e eficientes. Priorize estes unlocks (desbloqueios) para maximizar sua Quality of Life (qualidade de vida) e power (poder) em todos os seus alts (personagens alternativos) e para todo o Legacy:</p>
+                            <ul class="space-y-3 text-stone-600">
+                                <li class="flex items-start"><span class="mr-2 text-green-500 font-bold">✓</span><div><strong class="text-stone-700">Rocket Boost (Impulso Foguete):</strong> Essencial para se mover rapidamente em áreas internas onde speeders não funcionam, economizando muito tempo.</div></li>
+                                <li class="flex items-start"><span class="mr-2 text-green-500 font-bold">✓</span><div><strong class="text-stone-700">Travel Cooldown Reductions (Reduções de Cooldown de Viagem):</strong> Menos tempo de espera para Quick Travel (Viagem Rápida), Fleet Pass (Retorno à Frota) e outros teleports (teletransportes) significa mais tempo jogando e menos tempo esperando.</div></li>
+                                <li class="flex items-start"><span class="mr-2 text-green-500 font-bold">✓</span><div><strong class="text-stone-700">Alignment Unlocks (Light V / Dark V) (Desbloqueios de Alinhamento):</strong> Alcançar estes alignments (alinhamentos) permite que seus Force characters (personagens da Força) (Jedi ou Sith) usem Combat Styles (Estilos de Combate) da facção oposta, abrindo novas e poderosas combinações.</div></li>
+                                 <li class="flex items-start"><span class="mr-2 text-green-500 font-bold">✓</span><div><strong class="text-stone-700">Companion Utilities (Utilidades de Companheiro):</strong> "Legacy of Altruism" (Legado de Altruísmo) (aumenta influence gain (influência ganha) com gifts) e "Legacy of Readiness" (Legado de Prontidão) (reduz gift time) tornam o processo de maximizar companions muito mais rápido e barato.</div></li>
+                                 <li class="flex items-start"><span class="mr-2 text-green-500 font-bold">✓</span><div><strong class="text-stone-700">Legacy Cargo Hold Access (Acesso ao Cargueiro de Legado):</strong> Um shared chest (baú compartilhado) entre todos os characters da sua account (conta), perfeito para transferir gear (equipamentos), crafting materials (materiais de criação) e credits (créditos). Um dos primeiros unlocks a serem feitos!</div></li>
+                                 <li class="flex items-start"><span class="mr-2 text-green-500 font-bold">✓</span><div><strong class="text-stone-700">Speeder Unlocks (Desbloqueios de Speeder):</strong> Libere a capacidade de montar speeders em lower levels (níveis mais baixos) (Nível 10) para todos os seus characters, acelerando muito a exploration (exploração).</div></li>
+                            </ul>
+                            <p class="mt-6 text-stone-600">O Legacy é a verdadeira base de um veteran player (jogador veterano) de SWTOR. Ao investir nele, você simplifica e acelera a progression (progressão) de todos os seus characters, tornando a gaming experience (experiência de jogo) muito mais rewarding (gratificante).</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <div id="style-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div id="modal-content" class="p-6">
+                 <!-- Content injected by JS -->
+            </div>
+            <div class="bg-gray-50 px-6 py-3 text-right">
+                <button id="modal-close-button" class="btn-secondary px-4 py-2 rounded-md">Fechar</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="bg-stone-800 text-stone-300">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
+            <p>Que a Força esteja com você. Sempre.</p>
+        </div>
+    </footer>
+
+    <script>
+        let statsChartInstance = null; // Para controlar a instância do gráfico de stats
+        let datacronChartInstance = null; // Para controlar a instância do gráfico de datacrons
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Mobile Menu ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            document.querySelectorAll('#mobile-menu .nav-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden'); // Fecha o menu ao clicar em um item
+                });
+            });
+
+            // --- Modal Logic ---
+            const modal = document.getElementById('style-modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalCloseButton = document.getElementById('modal-close-button');
+
+            function openModal(title, content) {
+                modalContent.innerHTML = `<h3 class="text-2xl font-bold text-stone-800 mb-4">${title}</h3>${content}`;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+
+            function closeModal() {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                modalContent.innerHTML = '';
+            }
+            modalCloseButton.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if(e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // --- Page Navigation Logic ---
+            const pages = document.querySelectorAll('.page-content');
+            const navButtons = document.querySelectorAll('.nav-button');
+
+            function showPage(pageId) {
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById('page-' + pageId).classList.add('active');
+
+                navButtons.forEach(button => {
+                    if (button.dataset.page === pageId) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+
+                // Initialize charts when their page is shown for the first time
+                if (pageId === 'equipamentos' && statsChartInstance === null) {
+                    initStatsChart();
+                }
+                if (pageId === 'datacrons' && datacronChartInstance === null) {
+                    initDatacronChart();
+                }
+            }
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    showPage(button.dataset.page);
+                });
+            });
+
+            // --- Combat Styles Data & Logic ---
+            const combatStylesData = [
+                { id: 'juggernaut', name: 'Juggernaut (Vengeance)', faction: 'Império', type: 'melee', description: 'Usa armadura pesada, tem dano sólido e excelentes defensivos. Ótima auto-cura e resistência.', verdict: 'Melhor aposta para um DPS corpo a corpo ultra-resistente.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">Foco em aplicar efeitos de sangramento (<strong>Impale, Shatter</strong>) e usar habilidades que se beneficiam deles (<strong>Force Scream, Vengeful Slam</strong>). Gerencie bem sua Fúria, usando habilidades geradoras de recurso para alimentar seus ataques mais poderosos.</p><h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Saber Ward:</strong> Aumenta sua defesa corpo a corpo e à distância em 50% e absorve 75% do dano da Força/Tecnologia. Essencial para grandes ataques.</li><li><strong>Endure Pain:</strong> Aumenta sua vida máxima em 30% por 10s e remove efeitos de debuffs de movimento. Usado para sobreviver a picos de dano.</li><li><strong>Enraged Defense:</strong> Cura você em 1% da sua vida máxima a cada 0.5s ao ser atacado por 10s. Uma ótima auto-cura passiva.</li><li><strong>Saber Reflect:</strong> Reflete 100% de dano direto da Força/Tecnologia de volta ao atacante por 5s. Não use contra ataques corpo a corpo.</li></ul>` },
+                { id: 'guardian', name: 'Guardian (Vigilance)', faction: 'República', type: 'melee', description: 'O espelho do Juggernaut. Armadura pesada, ótimo dano e sobrevivência. Uma fortaleza ambulante que protege e destrói.', verdict: 'A escolha da República para um DPS corpo a corpo indestrutível.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">Foco em aplicar efeitos de sangramento (<strong>Blade Barrage, Force Sweep</strong>) e usar habilidades que se beneficiam deles (<strong>Force Scream, Vigilant Thrust</strong>). Gerencie bem seu Foco, usando habilidades geradoras de recurso para alimentar seus ataques mais poderosos.</p<h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Saber Ward:</strong> Aumenta sua defesa corpo a corpo e à distância em 50% e absorve 75% do dano da Força/Tecnologia. Essencial para grandes ataques.</li><li><strong>Endure Pain:</strong> Aumenta sua vida máxima em 30% por 10s e remove efeitos de debuffs de movimento. Usado para sobreviver a picos de dano.</li><li><strong>Warding Call:</strong> Cura você em 1% da sua vida máxima a cada 0.5s ao ser atacado por 10s. Uma ótima auto-cura passiva.</li><li><strong>Defensive Bladework:</strong> Reflete 100% de dano direto da Força/Tecnologia de volta ao atacante por 5s. Não use contra ataques corpo a corpo.</li></ul>` },
+                { id: 'marauder', name: 'Marauder (Annihilation)', faction: 'Império', type: 'melee', description: 'Dano massivo através de DoTs (dano ao longo do tempo) que também curam você. Bons defensivos e mobilidade.', verdict: 'Para quem quer aniquilar inimigos e se curar no processo.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">Mantenha os DoTs (<strong>Deadly Saber, Force Melt</strong>) sempre ativos nos alvos. Construa cargas de Fúria para usar <strong>Berserk/Zen</strong>, que aumenta seu dano e concede bônus. Use <strong>Smash</strong> para espalhar seus DoTs em múltiplos alvos para dano em área.</p><h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Cloak of Pain:</strong> Reduz o dano recebido em 20% e se renova ao ser atacado, uma ótima defesa passiva.</li><li><strong>Force Camouflage:</strong> Concede furtividade temporária, reduz a ameaça e o dano recebido em 50% por 4s. Ótimo para reposicionamento ou fuga.</li><li><strong>Undying Rage:</strong> Reduz todo o dano recebido em 99% por 5s. Use para sobreviver a mecânicas mortais ou para absorver dano enquanto seu curador se recupera.</li><li><strong>Saber Ward:</strong> Aumenta sua defesa e absorve dano de Força/Tecnologia.</li></ul>` },
+                { id: 'sentinel', name: 'Sentinel (Watchman)', faction: 'República', type: 'melee', description: 'O espelho do Marauder. Usa DoTs para causar dano e se curar, combinando ofensiva implacável com auto-suficiência.', verdict: 'Um duelista focado que queima os inimigos lentamente.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">Mantenha os DoTs (<strong>Force Melt, Cauterize</strong>) sempre ativos nos alvos. Construa cargas de Centramento para usar <strong>Zen/Berserk</strong>, que aumenta seu dano e concede bônus. Use <strong>Force Sweep</strong> para espalhar seus DoTs em múltiplos alvos para dano em área.</p><h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Rebuke:</strong> Reduz o dano recebido em 20% e se renova ao ser atacado, uma ótima defesa passiva.</li><li><strong>Force Camouflage:</strong> Concede furtividade temporária, reduz a ameaça e o dano recebido em 50% por 4s. Ótimo para reposicionamento ou fuga.</li><li><strong>Valiant Spirit:</strong> Reduz todo o dano recebido em 99% por 5s. Use para sobreviver a mecânicas mortais ou para absorver dano enquanto seu curador se recupera.</li><li><strong>Saber Ward:</strong> Aumenta sua defesa e absorve dano de Força/Tecnologia.</li></ul>` },
+                { id: 'sorcerer', name: 'Sorcerer (Madness)', faction: 'Império', type: 'ranged', description: 'DPS à distância com DoTs poderosos, excelente auto-cura e uma das melhores defesas do jogo (Force Barrier).', verdict: 'O canhão de vidro que se recusa a quebrar.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">Foco em dano baseado em DoT. Mantenha <strong>Creeping Terror, Affliction</strong> e <strong>Death Field</strong> ativos nos alvos. Espalhe seus DoTs por múltiplos inimigos com <strong>Force Storm</strong> para maximizar a eficácia em AoE. Gerencie sua Força cuidadosamente para não esgotá-la, usando habilidades de custo baixo para regenerar.</p><h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Force Barrier:</strong> Torna você imune a todo o dano por 8 segundos, mas o impede de se mover ou usar habilidades. Perfeito para ignorar mecânicas de chefe ou se recuperar.</li><li><strong>Cloud Mind:</strong> Reduz o dano recebido em 25% por 15s. Um defensivo geral para redução de dano constante.</li><li><strong>Unnatural Preservation:</strong> Uma auto-cura instantânea que restaura uma grande quantidade de vida. Use para sustentar sua vida durante o combate.</li><li><strong>Static Barrier:</strong> Um escudo que absorve dano, ideal para proteger a si mesmo ou a um aliado contra dano iminente.</li></ul>` },
+                { id: 'sage', name: 'Sage (Balance)', faction: 'República', type: 'ranged', description: 'O espelho do Sorcerer. Usa a Força para aplicar DoTs e se curar. Possui uma incrível capacidade de sobrevivência para um usuário de armadura leve.', verdict: 'Um mestre do equilíbrio entre ataque e defesa à distância.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">Foco em dano baseado em DoT. Mantenha <strong>Weaken Mind, Affliction</strong> e <strong>Force in Balance</strong> ativos nos alvos. Espalhe seus DoTs por múltiplos inimigos com <strong>Force Storm</strong> para maximizar a eficácia em AoE. Gerencie sua Força cuidadosamente para não esgotá-la, usando habilidades de custo baixo para regenerar.</p><h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Force Barrier:</strong> Torna você imune a todo o dano por 8 segundos, mas o impede de se mover ou usar habilidades. Perfeito para ignorar mecânicas de chefe ou se recuperar.</li><li><strong>Mental Alacrity:</strong> Aumenta a alacridade e reduz o dano recebido em 25% por 15s. Um defensivo geral para redução de dano constante.</li><li><strong>Rejuvenate:</strong> Uma auto-cura instantânea que restaura uma grande quantidade de vida. Use para sustentar sua vida durante o combate.</li><li><strong>Force Mend:</strong> Um escudo que absorve dano, ideal para proteger a si mesmo ou a um aliado contra dano iminente.</li></ul>` },
+                { id: 'powertech', name: 'Powertech (Pyrotech)', faction: 'Império', type: 'melee', description: 'Um lança-chamas ambulante com dano explosivo massivo, bom AoE e muita resistência com armadura pesada.', verdict: 'A melhor escolha para quem quer ver o mundo queimar com dano explosivo.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">Dano explosivo e forte AoE. Abra com <strong>Scorch</strong> (se disponível) ou <strong>Incendiary Missile</strong>, seguido de <strong>Flaming Fist</strong> para garantir acertos críticos em seus ataques mais fortes, como <strong>Rail Shot</strong>. Gerencie o Calor para não superaquecer, usando <strong>Vent Heat</strong> quando necessário para resfriar.</p><h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Energy Shield:</strong> Reduz o dano recebido em 25% por 10s. Ótimo para mitigar dano previsível.</li><li><strong>Kolto Overload:</strong> Cura você rapidamente quando sua vida está baixa (abaixo de 35%). Uma habilidade de pânico excelente.</li><li><strong>Power Yield:</strong> Aumenta sua armadura em 30% por 10s. Útil contra ataques físicos.</li><li><strong>Sonic Rebounder:</strong> Reflete projéteis de volta aos atacantes por 5s. Uma utilidade poderosa para certos encontros.</li></ul>` },
+                { id: 'vanguard', name: 'Vanguard (Plasmatech)', faction: 'República', type: 'melee', description: 'O espelho do Powertech. Utiliza tecnologia de plasma para derreter inimigos. Dano explosivo, AoE forte e muito resistente.', verdict: 'O soldado de elite que traz o calor da batalha.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">Dano explosivo e forte AoE. Abra com <strong>Stockstrike</strong> (se disponível) ou <strong>Plasma Grenade</strong>, seguido de <strong>Flamespout</strong> para garantir acertos críticos em seus ataques mais fortes, como <strong>High Impact Bolt</strong>. Gerencie seu Células de Energia para não esgotá-las, usando <strong>Recharge Cells</strong> quando necessário para regenerar.</p><h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Reactive Shield:</strong> Reduz o dano recebido em 25% por 10s. Ótimo para mitigar dano previsível.</li><li><strong>Adrenaline Rush:</strong> Cura você rapidamente quando sua vida está baixa (abaixo de 35%). Uma habilidade de pânico excelente.</li><li><strong>Power Armor:</strong> Aumenta sua armadura em 30% por 10s. Útil contra ataques físicos.</li><li><strong>Static Barrier:</strong> Imobiliza inimigos e reflete dano. Uma utilidade poderosa para certos encontros.</li></ul>` },
+                { id: 'operative', name: 'Operative (Lethality)', faction: 'Império', type: 'stealth', description: 'Mestre da furtividade e dos venenos (DoTs). Alta mobilidade e auto-curas excelentes, quase imortal se jogado bem.', verdict: 'Perfeito para quem gosta de ataques surpresa e sobrevivência baseada em agilidade.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">Mantenha seus DoTs (<strong>Corrosive Dart, Corrosive Grenade</strong>) ativos. Gere e gaste Vantagem Tática (Tactical Advantage) com ataques fortes como <strong>Corrosive Assault</strong>. Evite gerar Vantagem Tática em excesso para não desperdiçar recursos.</p><h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Evasion (Rolamento):</strong> Redução de dano massiva e mobilidade. Você desliza para frente, evitando todos os ataques por 1.5s. A chave da sua sobrevivência e reposicionamento.</li><li><strong>Shield Probe:</strong> Cria um escudo que absorve dano por 10s. Use em conjunto com Evasion para máxima proteção.</li><li><strong>Stim Boost:</strong> Auto-cura instantânea e um aumento de dano temporário. Use ofensiva e defensivamente.</li><li><strong>Cloaking Screen:</strong> Concede furtividade e remove ameaça, permitindo que você escape do combate ou reinicie um encontro.</li></ul>` },
+                { id: 'scoundrel', name: 'Scoundrel (Ruffian)', faction: 'República', type: 'stealth', description: 'O espelho do Operative. Usa ataques sujos e DoTs para minar os oponentes. A furtividade e os rolamentos evasivos garantem sua sobrevivência.', verdict: 'O malandro que sempre tem um truque na manga para vencer e sobreviver.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">Mantenha seus DoTs (<strong>Vital Shot, Lacerating Blast</strong>) ativos. Gere e gaste Upper Hand (Vantagem Superior) com ataques fortes como <strong>Blaster Volley</strong>. Evite gerar Upper Hand em excesso para não desperdiçar recursos.</p<h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Dodge (Esquiva):</strong> Redução de dano massiva e mobilidade. Você desliza para frente, evitando todos os ataques por 1.5s. A chave da sua sobrevivência e reposicionamento.</li><li><strong>Defense Screen:</strong> Cria um escudo que absorve dano por 10s. Use em conjunto com Dodge para máxima proteção.</li><li><strong>Pugnacity:</strong> Auto-cura instantânea e um aumento de dano temporário. Use ofensiva e defensivamente.</li><li><strong>Sneak:</strong> Concede furtividade e remove ameaça, permitindo que você escape do combate ou reinicie um encontro.</li></ul>` },
+                { id: 'sniper', name: 'Sniper (Virulence)', faction: 'Império', type: 'ranged', description: 'DPS à distância com DoTs mortais. Excelente sobrevivência devido aos seus escudos e à mecânica de rolamento.', verdict: 'Um atirador de elite que envenena seus alvos de um local seguro.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">Mantenha seus DoTs (<strong>Weakening Blasts, Corrosive Dart</strong>) sempre ativos nos alvos. Use a cobertura para ganhar bônus defensivos e acesso a habilidades poderosas como <strong>Takedown</strong>. Maximize seus tiros de <strong>Lethal Shot</strong> sob o cooldown ofensivo <strong>Viral Targeting</strong>.</p><h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Shield Probe:</strong> Cria um escudo que absorve dano por 10s. Essencial para mitigar dano direto.</li><li><strong>Evasion (Rolamento):</strong> Você rola para frente, evitando todos os ataques por 1.5s. Ótimo para reposicionamento e evitar mecânicas.</li><li><strong>Ballistic Shield:</strong> Desdobra um escudo que protege você e seus aliados próximos, reduzindo o dano recebido em 20%.</li><li><strong>Covered Escape:
+</strong> Permite rolar para uma nova cobertura, limpando debuffs de movimento e atordoamentos.</li></ul>` },
+                { id: 'gunslinger', name: 'Gunslinger (Dirty Fighting)', faction: 'República', type: 'ranged', description: 'O espelho do Sniper. Utiliza truques sujos e tiros com DoT. Sua capacidade de se proteger em cobertura e rolar para fora do perigo o torna muito resistente.', verdict: 'O pistoleiro que vence a luta antes mesmo que ela comece, com tiros certeiros e DoTs.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">Mantenha seus DoTs (<strong>Dirty Blast, Shrap Bomb</strong>) sempre ativos nos alvos. Use a cobertura para ganhar bônus defensivos e acesso a habilidades poderosas como <strong>Quickdraw</strong>. Maximize seus tiros de <strong>Speed Shot</strong> sob o cooldown ofensivo <strong>Smuggler's Luck</strong>.</p><h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Defense Screen:</strong> Cria um escudo que absorve dano por 10s. Essencial para mitigar dano direto.</li><li><strong>Dodge (Esquiva):</strong> Você rola para frente, evitando todos os ataques por 1.5s. Ótimo para reposicionamento e evitar mecânicas.</li><li><strong>Hunker Down:</strong> Desdobra um escudo que protege você e seus aliados próximos, reduzindo o dano recebido em 20%.</li><li><strong>Escape:
+</strong> Permite rolar para uma nova cobertura, limpando debuffs de movimento e atordoamentos.</li></ul>` },
+                { id: 'mercenary', name: 'Mercenary (Arsenal)', faction: 'Império', type: 'ranged', description: 'Usa armadura pesada, possui auto-curas e excelentes DCDs, tornando-o muito resistente e fácil de jogar.', verdict: 'Um DPS à distância que é um tanque por conta própria, ideal para sobreviver e causar dano constante.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">DPS explosivo à distância focado em empilhar bônus com <strong>Tracer Missile</strong> e usar habilidades de alto dano como <strong>Blazing Bolts, Heatseeker Missile</strong> e <strong>Rail Shot</strong>. Mantenha Blazing Bolts no cooldown e use Rail Shot quando "proccado". Construa cargas de Supercharged Gas para bursts de dano e cura.</p><h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Kolto Shield:</strong> Cria um escudo de absorção de dano que também cura você ao longo do tempo.</li><li><strong>Responsive Safeguards:</strong> Reduz o dano recebido em 25% e reflete uma parte do dano de volta aos atacantes, além de curar você.</li><li><strong>Kolto Surge:</strong> Uma poderosa cura explosiva que pode salvar sua vida em momentos críticos.</li><li><strong>Diversion:</strong> Habilidade que absorve ataques e aumenta sua chance de defesa/escudo por um curto período.</li></ul>` },
+                { id: 'commando', name: 'Commando (Gunnery)', faction: 'República', type: 'ranged', description: 'O espelho do Mercenary. Armadura pesada, auto-curas e excelentes DCDs, muito resistente e fácil de jogar.', verdict: 'Um DPS à distância que é um tanque por conta própria, ideal para sobreviver e causar dano constante.', tutorial: `<h4>Princípios da Rotação:</h4><p class="mb-4 text-stone-600">DPS explosivo à distância focado em empilhar bônus com <strong>Grav Round</strong> e usar habilidades de alto dano como <strong>Full Auto, Demolition Round</strong> e <strong>High Impact Bolt</strong>. Mantenha Full Auto no cooldown e use High Impact Bolt quando "proccado". Construa cargas de Supercharged Cell para bursts de dano e cura.</p><h4>DCDs Chave:</h4><ul class="list-disc list-inside space-y-1 text-stone-600"><li><strong>Medical Probe:</strong> Cria um escudo de absorção de dano que também cura você ao longo do tempo.</li><li><strong>Fortification:</strong> Reduz o dano recebido em 25% e reflete uma parte do dano de volta aos atacantes, além de curar você.</li><li><strong>Kolto Bomb:</strong> Uma poderosa cura explosiva que pode salvar sua vida em momentos críticos.</li><li><strong>Tech Override:</strong> Habilidade que absorve ataques e aumenta sua chance de defesa/escudo por um curto período.</li></ul>` },
+            ];
+
+            const styleGrid = document.getElementById('combat-style-grid');
+            const filters = document.getElementById('combat-style-filters');
+
+            function renderStyles(filter = 'all') {
+                styleGrid.innerHTML = '';
+                const filteredStyles = combatStylesData.filter(style => filter === 'all' || style.type === filter);
+                
+                filteredStyles.forEach(style => {
+                    const card = document.createElement('div');
+                    card.className = 'card p-6 combat-style-card flex flex-col';
+                    card.dataset.type = style.type;
+                    card.innerHTML = `
+                        <div class="flex-grow">
+                            <div class="flex items-center mb-3">
+                                <span class="inline-block h-8 w-8 rounded-full text-center leading-8 ${style.faction === 'Império' ? 'bg-red-200 text-red-800' : 'bg-blue-200 text-blue-800'}">${style.faction.charAt(0)}</span>
+                                <h3 class="ml-3 text-xl font-semibold text-stone-800">${style.name}</h3>
+                            </div>
+                            <p class="text-stone-600 mb-4">${style.description}</p>
+                            <p class="text-amber-700 bg-amber-100 p-3 rounded-lg font-semibold text-sm"><strong>Veredito:</strong> ${style.verdict}</p>
+                        </div>
+                        <div class="mt-4">
+                            <button data-id="${style.id}" class="btn-primary w-full text-center py-2 rounded-md view-details-btn">Ver Detalhes</button>
+                        </div>
+                    `;
+                    styleGrid.appendChild(card);
+                });
+                
+                document.querySelectorAll('.view-details-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const styleId = e.target.dataset.id;
+                        const styleData = combatStylesData.find(s => s.id === styleId);
+                        if (styleData) {
+                            openModal(`Tutorial: ${styleData.name}`, `<div class="text-stone-600">${styleData.tutorial}</div>`);
+                        }
+                    });
+                });
+            }
+
+            filters.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    document.querySelector('#combat-style-filters button.active').classList.remove('active');
+                    e.target.classList.add('active');
+                    renderStyles(e.target.dataset.filter);
+                }
+            });
+
+            // --- Stats Chart Logic ---
+            let guildPerkActive = false;
+            const togglePerkButton = document.getElementById('toggle-guild-perk');
+            
+            const statsData = {
+                labels: ['Critical (Crítico)', 'Alacrity (Alacridade)', 'Accuracy (Precisão)'],
+                datasets: [{
+                    label: 'Attribute Points (Pontos de Atributo)',
+                    data: [3500, 2054, 2694],
+                    backgroundColor: ['#f59e0b', '#3b82f6', '#10b981'],
+                    borderColor: ['#d97706', '#2563eb', '#059669'],
+                    borderWidth: 1
+                }]
+            };
+
+            const statsConfig = {
+                type: 'bar',
+                data: statsData,
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = '';
+                                    if (context.parsed.x !== null) {
+                                        if (context.label === 'Critical (Crítico)') {
+                                           return 'Todo o resto vai aqui!';
+                                        } else if (context.label === 'Alacrity (Alacridade)') {
+                                            const gcd = guildPerkActive ? '1.4s (com bônus Zeal)' : '1.4s';
+                                            return `Alvo: ${context.parsed.x} (~7.15% para GCD de ${gcd}). Valores abaixo de 560 só serão eficazes com o bônus Zeal.`;
+                                        } else if (context.label === 'Accuracy (Precisão)') {
+                                            return `Alvo: ${context.parsed.x} (110% para PvE de fim de jogo). Acima disso é desperdício.`;
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { beginAtZero: true, max: 4000, title: { display: true, text: 'Attribute Value (Valor do Atributo)' } },
+                        y: { ticks: { font: { weight: 'bold' } } }
+                    }
+                }
+            };
+
+            function initStatsChart() {
+                if (statsChartInstance) {
+                    statsChartInstance.destroy(); // Destroi a instância anterior se existir
+                }
+                statsChartInstance = new Chart(document.getElementById('stats-chart'), statsConfig);
+
+                if (togglePerkButton) {
+                    togglePerkButton.removeEventListener('click', toggleGuildPerk); // Evita múltiplos listeners
+                    togglePerkButton.addEventListener('click', toggleGuildPerk);
+                }
+            }
+
+            function toggleGuildPerk() {
+                guildPerkActive = !guildPerkActive;
+                if(guildPerkActive) {
+                    statsChartInstance.data.datasets[0].data[1] = 560;
+                    togglePerkButton.textContent = 'Bônus Ativado! Desativar?';
+                    togglePerkButton.classList.replace('btn-primary', 'bg-green-600');
+                    togglePerkButton.classList.add('hover:bg-green-700');
+                } else {
+                    statsChartInstance.data.datasets[0].data[1] = 2054;
+                    togglePerkButton.textContent = 'Sim, ativar bônus da Guilda';
+                    togglePerkButton.classList.replace('bg-green-600', 'btn-primary');
+                    togglePerkButton.classList.remove('hover:bg-green-700');
+                }
+                statsChartInstance.update();
+            }
+            
+
+            // --- Datacron Logic ---
+            const datacronData = [
+                { planet: "Coruscant", stat: "+2 Endurance (Vigor)", location: "No Setor Justicar, em uma plataforma elevada. Necessita de saltos precisos.", difficulty: "Fácil" },
+                { planet: "Coruscant", stat: "+2 Presence (Presença)", location: "No Antigo Mercado Galáctico, perto de um elevador quebrado no nível superior.", difficulty: "Fácil" },
+                { planet: "Coruscant", stat: "+2 Mastery (Maestria)", location: "No Templo Jedi, escalando escombros e vigas para um andar superior.", difficulty: "Médio" },
+                { planet: "Coruscant", stat: "Yellow Shard (Fragmento Amarelo)", location: "Na Seção de Trabalhos, em uma área no teto acessível por tubos e caixas.", difficulty: "Difícil" },
+                { planet: "Dromund Kaas", stat: "+2 Endurance (Vigor)", location: "Na Propriedade de Lord Grathan, em uma área secreta ao leste da entrada da propriedade, atrás de algumas pedras.", difficulty: "Fácil" },
+                { planet: "Dromund Kaas", stat: "+2 Mastery (Maestria)", location: "No Espaçoporto de Kaas City, em uma viga alta acessível por um contêiner e saltos.", difficulty: "Médio" },
+                { planet: "Balmorra (Império)", stat: "+2 Mastery (Maestria)", location: "Nas Planícies Markaran, na Fábrica de Droides Okara, no meio de uma série de tubos.", difficulty: "Médio" },
+                { planet: "Balmorra (República)", stat: "+2 Endurance (Vigor)", location: "Em Bugtown, no ninho da Rainha Colicóide, atrás de um caminho escondido na caverna.", difficulty: "Difícil" },
+                { planet: "Taris (República)", stat: "+2 Mastery (Maestria)", location: "Em uma base da República destruída, requer um puzzle de salto complicado para alcançar.", difficulty: "Médio" },
+                { planet: "Tatooine", stat: "+3 Endurance (Vigor)", location: "Dentro do transporte de areia Jawa, acessível por um canyon no sul do Deserto do Jundland.", difficulty: "Médio" },
+                { planet: "Tatooine", stat: "+3 Mastery (Maestria)", location: "No Mar de Dunas, requer o uso de um balão de ar quente para alcançar uma plataforma elevada.", difficulty: "Difícil" },
+                { planet: "Alderaan", stat: "+3 Mastery (Maestria)", location: "Na região de Juran, no topo de uma montanha com vista para o Forte Cademimu. Necessita de escalada e saltos.", difficulty: "Médio" },
+                { planet: "Hoth", stat: "+4 Endurance (Vigor)", location: "Em uma caverna de Tauntaun no Deserto de Gelo, no setor ocidental.", difficulty: "Fácil" },
+                { planet: "Hoth", stat: "+4 Mastery (Maestria)", location: "No Cemitério de Naves Estelares, dentro de uma nave acidentada, após atravessar destroços.", difficulty: "Difícil" },
+                { planet: "Belsavis", stat: "Green Shard (Fragmento Verde)", location: "Na Tumba, em uma caverna sob uma árvore. Requer ativar 4 cubos espalhados pela área para desbloqueá-lo.", difficulty: "Difícil" },
+                { planet: "Voss", stat: "+4 Presence (Presença)", location: "No Santuário da Cura, em uma plataforma elevada que requer uma série de saltos ou 'rocket boost'.", difficulty: "Fácil" },
+                { planet: "Corellia", stat: "Green Shard (Fragmento Verde)", location: "No Parque Axial, em um túnel acessado por um longo e complexo puzzle de salto e um ponto de agarre (grapple point).", difficulty: "Muito Difícil" },
+                { planet: "Ilum", stat: "+4 Mastery (Maestria)", location: "Na Plataforma de Gelo Oriental, no canto sudeste, além de uma zona de exaustão que esgota rapidamente sua vida.", difficulty: "Fácil" },
+                { planet: "Makeb", stat: "+10 Endurance (Vigor)", location: "Na Mesa de Frinn, acessível por uma série de rampas e plataformas rochosas.", difficulty: "Médio" },
+                { planet: "Rishi", stat: "+10 Mastery (Maestria)", location: "Um dos 4 datacrons de Rishi que concedem um bônus a 'todos os stats' ao completar uma missão após coletá-los. Este em particular fica na área do naufrágio.", difficulty: "Muito Difícil" },
+                { planet: "Rishi", stat: "+10 Endurance (Vigor)", location: "Um dos 4 datacrons de Rishi. Este fica próximo à praia na Selva Esmeralda.", difficulty: "Muito Difícil" },
+                { planet: "Rishi", stat: "+10 Presence (Presença)", location: "Um dos 4 datacrons de Rishi. Localizado na aldeia dos Rishii, exige saltos.", difficulty: "Muito Difícil" },
+                { planet: "Rishi", stat: "+10 Critical (Crítico)", location: "Um dos 4 datacrons de Rishi. Encontrado em uma área escondida no Pântano.", difficulty: "Muito Difícil" },
+                { planet: "Hutta", stat: "+2 Mastery (Maestria)", location: "Na Colina ao norte do Pântano do Carbono, com um tubo escalável em seu lado sul. Fácil de perder, mas simples de pegar.", difficulty: "Fácil" },
+                { planet: "Tython", stat: "+2 Mastery (Maestria)", location: "No Templo Tython, em uma caverna atrás da Cachoeira. Requer saltos precisos.", difficulty: "Fácil" },
+                { planet: "Tython", stat: "+2 Endurance (Vigor)", location: "Na Ruína dos Diabos de Flesh-Raider, perto do centro, em uma plataforma elevada.", difficulty: "Médio" },
+                { planet: "Ord Mantell", stat: "+2 Mastery (Maestria)", location: "Na área da Antiga Fábrica de Colicoids, em um túnel de serviço abandonado. Simples, mas escondido.", difficulty: "Fácil" },
+                { planet: "Ord Mantell", stat: "+2 Endurance (Vigor)", location: "No Recinto de Pesquisa de Oradam, em uma pequena colina atrás da base. Fácil de alcançar.", difficulty: "Fácil" },
+                { planet: "Nar Shaddaa (Império)", stat: "+3 Mastery (Maestria)", location: "No Setor Corelliano, em uma plataforma alta acessível via tubos e caixas.", difficulty: "Difícil" },
+                { planet: "Nar Shaddaa (República)", stat: "+3 Mastery (Maestria)", location: "No Distrito do Mercado, em uma viga acima das lojas. Requer saltos complicados.", difficulty: "Difícil" },
+                { planet: "Nar Shaddaa", stat: "Orange Shard (Fragmento Laranja)", location: "No Casino Star Cluster, na sala de jackpot, acessível por uma rota secreta de salto.", difficulty: "Muito Difícil" },
+                { planet: "Quesh", stat: "+4 Endurance (Vigor)", location: "No Canyon da Infiltração, perto de uma base de pesquisa Republicana abandonada. Fácil acesso.", difficulty: "Fácil" },
+                { planet: "Quesh", stat: "+4 Mastery (Maestria)", location: "No Lago de Veneno, no topo de um afloramento rochoso cercado por gás venenoso. Requer cuidados ou imunidade.", difficulty: "Médio" },
+                { planet: "Voss", stat: "Yellow Shard (Fragmento Amarelo)", location: "Na Área de Missões de Voss, em um pequeno poço escondido atrás de uma árvore. Pouco óbvio.", difficulty: "Médio" },
+                { planet: "Voss", stat: "Orange Shard (Fragmento Laranja)", location: "Na Cidade de Voss-Ka, em uma torre alta que requer uma série complexa de saltos.", difficulty: "Muito Difícil" },
+                { planet: "Rishi", stat: "+10 Alacrity (Alacridade)", location: "Um dos 4 datacrons de Rishi. Encontrado em um penhasco com vista para a baía.", difficulty: "Muito Difícil" },
+                { planet: "Yavin 4", stat: "+10 Mastery (Maestria)", location: "Na Floresta do Massacre, perto das ruínas do templo. Pode exigir combates com inimigos de elite.", difficulty: "Médio" },
+                { planet: "Yavin 4", stat: "+10 Endurance (Vigor)", location: "Na Bacia do Templo, no topo de uma estrutura em ruínas. Requer saltos.", difficulty: "Médil" },
+                { planet: "Odessen", stat: "+10 Mastery (Maestria)", location: "No Centro de Operações da Base, atrás de algumas caixas. Fácil acesso se a missão estiver ativa.", difficulty: "Fácil" },
+                { planet: "Iokath", stat: "+10 Mastery (Maestria)", location: "Dentro da Área de Teste de Iokath, em uma sala secreta. Requer ativar um painel.", difficulty: "Médio" },
+                { planet: "Umbar", stat: "+10 Endurance (Vigor)", location: "No Caminho da Colheita, em uma caverna escondida. Requer explorar a borda do mapa.", difficulty: "Médio" },
+                { planet: "Onderon", stat: "+10 Mastery (Maestria)", location: "Na Selva Reales, perto de uma cachoeira. Fácil de encontrar.", difficulty: "Fácil" },
+                { planet: "Mek-Sha", stat: "+10 Endurance (Vigor)", location: "No Porto de Mek-Sha, em um esconderijo discreto. Requer saltos ou 'rocket boost'.", difficulty: "Médio" },
+                { planet: "Ossus", stat: "+10 Mastery (Maestria)", location: "No Vale do Rift, em uma área elevada. Requer escalar.", difficulty: "Médio" },
+            ];
+
+            const planetFilter = document.getElementById('datacron-planet-filter');
+            const datacronList = document.getElementById('datacron-list');
+            const uniquePlanets = [...new Set(datacronData.map(d => d.planet))].sort();
+
+            uniquePlanets.forEach(planet => {
+                const option = document.createElement('option');
+                option.value = planet;
+                option.textContent = planet;
+                planetFilter.appendChild(option);
+            });
+
+            function renderDatacrons(filter = 'all') {
+                datacronList.innerHTML = '';
+                const filteredDatacrons = datacronData.filter(d => filter === 'all' || d.planet === filter);
+
+                if (filteredDatacrons.length === 0) {
+                    datacronList.innerHTML = `<p class="text-stone-500 text-center py-4">Nenhum datacron encontrado para esta seleção. Tente outro planeta!</p>`;
+                    return;
+                }
+
+                filteredDatacrons.forEach(d => {
+                    let difficultyColor = 'text-green-600';
+                    if (d.difficulty === 'Médio') difficultyColor = 'text-yellow-600';
+                    if (d.difficulty === 'Difícil') difficultyColor = 'text-orange-600';
+                    if (d.difficulty === 'Muito Difícil') difficultyColor = 'text-red-600';
+
+                    const item = document.createElement('div');
+                    item.className = 'p-3 bg-stone-50 rounded-lg border border-stone-200';
+                    item.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-stone-700">${d.planet}</h4>
+                                <p class="text-sm text-stone-600">${d.location}</p>
+                            </div>
+                            <div class="text-right ml-4 flex-shrink-0">
+                                <p class="font-semibold text-blue-700">${d.stat}</p>
+                                <p class="text-xs font-medium ${difficultyColor}">${d.difficulty}</p>
+                            </div>
+                        </div>
+                    `;
+                    datacronList.appendChild(item);
+                });
+            }
+
+            planetFilter.addEventListener('change', (e) => {
+                renderDatacrons(e.target.value);
+            });
+            
+            function initDatacronChart() {
+                if (datacronChartInstance) {
+                    datacronChartInstance.destroy(); // Destroi a instância anterior se existir
+                }
+                const datacronSummaryCtx = document.getElementById('datacron-summary-chart').getContext('2d');
+                datacronChartInstance = new Chart(datacronSummaryCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Total Mastery (Maestria)', 'Total Endurance (Vigor)', 'Total Presence (Presença)', 'Total Critical (Crítico)', 'Total Alacrity (Alacridade)'],
+                        datasets: [{
+                            label: 'Total Attribute Bonuses (Bônus de Atributos Totais)',
+                            data: [1443, 1193, 400, 10, 10], // Valores aproximados baseados em guias e adicionais para Crítico/Alacridade
+                            backgroundColor: [
+                                'rgba(245, 158, 11, 0.7)', // amber-500
+                                'rgba(22, 163, 74, 0.7)',  // green-600
+                                'rgba(59, 130, 246, 0.7)',  // blue-500
+                                'rgba(234, 88, 12, 0.7)', // orange-600 for crit
+                                'rgba(6, 182, 212, 0.7)'  // cyan-600 for alacrity
+                            ],
+                            borderColor: ['#f59e0b', '#16a34a', '#3b82f6', '#ea580c', '#06b6d4'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'top' },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.label}: +${context.raw}`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+
+            // --- Companion Influence Logic ---
+            const influenceSlider = document.getElementById('influence-slider');
+            const influenceLevel = document.getElementById('influence-level');
+            const presenceBonus = document.getElementById('presence-bonus');
+
+            function updatePresence(level) {
+                const bonus = (level - 1) * 50;
+                influenceLevel.textContent = level;
+                presenceBonus.textContent = `+${bonus}`;
+            }
+
+            influenceSlider.addEventListener('input', (e) => {
+                updatePresence(e.target.value);
+            });
+
+            // Initial rendering and page display
+            renderStyles(); // Render styles for the first time
+            renderDatacrons(); // Render datacrons for the first time
+            updatePresence(1); // Set initial influence display
+
+            // Show the initial page
+            showPage('inicio');
+        });
+    </script>
+</body>
+</html>
