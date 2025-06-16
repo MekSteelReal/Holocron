@@ -5,394 +5,293 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Holocron SWTOR: Guia Definitivo para o Poder</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Orbitron:wght@400;700;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS Custom Properties (Variables) */
+        /* CSS Custom Properties (Variables) - Nova Paleta de Cores */
         :root {
-            --primary-color: #FFD700; /* Gold/Holocron Yellow - Brighter */
-            --secondary-color: #0F0F0F; /* Very Dark Grey/Black - Main background */
-            --tertiary-color: #1A1A1A; /* Dark Grey - Card backgrounds, collapsible headers */
-            --text-color: #FFFFFF; /* Pure White - Main text */
-            --input-bg-color: #2A2A2A; /* Slightly lighter dark grey for inputs */
-            --accent-republic-blue: #007BFF; /* Bright Blue - Republic elements, links */
-            --accent-sith-red: #DC143C; /* Crimson Red - Sith elements */
-            --accent-green: #32CD32; /* Lime Green - Positive feedback, specific highlights */
-            --accent-orange: #FFA500; /* Orange - Warnings, moderate feedback */
+            --primary-yellow: #FFD700; /* Ouro/Amarelo Holocron - Vibrante */
+            --secondary-blue: #007BFF; /* Azul República - Vibrante */
+            --accent-green: #32CD32; /* Verde Limão - Para feedback positivo */
+            --neutral-white: #FFFFFF; /* Branco Puro - Texto principal */
+            --dark-background-deep: #0C121B; /* Azul Escuro Quase Preto - Fundo Geral */
+            --dark-background-mid: #1A2536; /* Azul Escuro Médio - Fundos de cartões */
+            --dark-background-light: #2A3B52; /* Azul Escuro Claro - Cabeçalhos de recolhíveis, inputs */
+            --sith-accent-red: #E74C3C; /* Vermelho mais neutro para Sith/crítico, para não destoar muito */
+            --warning-orange: #FFA500; /* Laranja para avisos */
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--secondary-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            font-family: 'Montserrat', sans-serif; /* Nova fonte para o corpo */
+            background-color: var(--dark-background-deep);
+            color: var(--neutral-white);
+            line-height: 1.7; /* Mais espaço entre linhas */
             margin: 0;
             padding: 0;
-            overflow-x: hidden; /* Prevent horizontal scroll from subtle animations */
-            background: linear-gradient(135deg, var(--secondary-color) 0%, #000000 100%); /* Subtle gradient for body */
+            overflow-x: hidden;
+            background: linear-gradient(135deg, var(--dark-background-deep) 0%, #080D15 100%); /* Gradiente mais profundo */
         }
         .container {
-            max-width: 1200px;
+            max-width: 1280px; /* Container um pouco mais largo */
             margin: 0 auto;
-            padding: 1rem;
+            padding: 2rem; /* Mais padding do container */
         }
 
-        /* Custom scrollbar for a futuristic look */
+        /* Barra de rolagem personalizada */
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 12px; /* Barra mais larga */
         }
         ::-webkit-scrollbar-track {
-            background: var(--tertiary-color);
+            background: var(--dark-background-mid);
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
+            background: var(--primary-yellow);
             border-radius: 10px;
-            border: 2px solid var(--tertiary-color);
+            border: 3px solid var(--dark-background-mid);
         }
         ::-webkit-scrollbar-thumb:hover {
             background: #FFC400;
         }
 
-        /* Hero section specific styles */
+        /* Estilos da seção Hero */
         .hero-section {
-            background-image: url('https://placehold.co/1200x400/0d0d0d/FFD700?text=A+Galáxia+Espera'); /* More thematic placeholder */
+            background-image: url('https://placehold.co/1400x500/1A2536/FFD700?text=A+Galaxia+Espera'); /* Placeholder ajustado */
             background-size: cover;
             background-position: center;
             position: relative;
-            padding: 6rem 1rem;
-            animation: fadeInBackground 2s ease-out; /* Subtle fade in for background */
+            padding: 10rem 2rem; /* Muito mais padding vertical */
+            animation: fadeInBackground 2.5s ease-out;
+            border-bottom: 5px solid var(--primary-yellow); /* Borda inferior proeminente */
+            box-shadow: inset 0 -10px 20px rgba(0, 0, 0, 0.5); /* Sombra interna para profundidade */
         }
         .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%);
-        }
-        .hero-content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.85) 100%);
         }
         .hero-title {
             font-family: 'Orbitron', sans-serif;
-            color: var(--primary-color);
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 25px rgba(255, 215, 0, 0.6);
-            line-height: 1;
-            animation: glowPulse 2s infinite alternate; /* Pulsing glow animation */
+            color: var(--primary-yellow);
+            text-shadow: 0 0 25px rgba(255, 215, 0, 0.9), 0 0 45px rgba(255, 215, 0, 0.7);
+            font-size: 5.5rem; /* Título maior */
+            letter-spacing: 0.05em; /* Leve espaçamento */
         }
         .hero-subtitle {
-            color: var(--text-color);
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
-            animation: fadeInText 2.5s ease-out;
+            color: var(--neutral-white);
+            text-shadow: 0 0 10px rgba(0,0,0,0.7);
+            font-size: 2.5rem; /* Subtítulo maior */
+            max-width: 900px;
         }
 
-        /* Keyframe Animations */
+        /* Animações Keyframe */
         @keyframes glowPulse {
-            0% { text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 25px rgba(255, 215, 0, 0.6); }
-            100% { text-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 30px rgba(255, 215, 0, 0.8); }
+            0% { text-shadow: 0 0 25px rgba(255, 215, 0, 0.9), 0 0 45px rgba(255, 215, 0, 0.7); }
+            100% { text-shadow: 0 0 30px rgba(255, 215, 0, 1), 0 0 55px rgba(255, 215, 0, 0.9); }
         }
         @keyframes fadeInBackground {
             from { opacity: 0; }
             to { opacity: 1; }
         }
         @keyframes fadeInText {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Header and Mobile Menu Toggle */
+        /* Cabeçalho e Toggle do Menu */
         .header-container {
-            background: rgba(13, 13, 13, 0.95); /* Slightly transparent for effect */
-            backdrop-filter: blur(5px); /* Frosted glass effect */
-            border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Subtle bottom border */
+            background: rgba(12, 18, 27, 0.98); /* Fundo sólido quase preto/azul */
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--primary-yellow);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+            padding: 1.25rem 2rem;
             position: sticky;
             top: 0;
             z-index: 50;
         }
 
         .hamburger-icon {
-            display: flex; /* Always visible to toggle menu */
-            flex-direction: column;
-            justify-content: space-around;
-            width: 30px;
-            height: 25px;
-            cursor: pointer;
-            z-index: 60; /* Above menu overlay */
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
+            width: 40px; /* Ícone maior */
+            height: 35px; /* Ícone maior */
+            left: 2rem; /* Mais afastado da borda */
         }
         .hamburger-icon span {
-            display: block;
-            width: 100%;
-            height: 3px;
-            background-color: var(--primary-color);
-            border-radius: 2px;
-            transition: all 0.3s ease;
+            height: 5px; /* Barras mais grossas */
         }
         .hamburger-icon.open span:nth-child(1) {
-            transform: translateY(11px) rotate(45deg);
-        }
-        .hamburger-icon.open span:nth-child(2) {
-            opacity: 0;
+            transform: translateY(15px) rotate(45deg);
         }
         .hamburger-icon.open span:nth-child(3) {
-            transform: translateY(-11px) rotate(-45deg);
+            transform: translateY(-15px) rotate(-45deg);
         }
 
         .mobile-menu-overlay {
-            display: none; /* Hidden by default */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95); /* Darker, more opaque */
-            z-index: 55; /* Below hamburger */
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-        .mobile-menu-overlay.open {
-            display: flex;
-            opacity: 1;
-        }
-        .mobile-menu-overlay ul {
-            list-style: none;
-            padding: 0;
-            text-align: center;
+            background: rgba(8, 13, 21, 0.99); /* Fundo ainda mais escuro para o overlay */
+            padding: 4rem 0; /* Mais padding vertical */
         }
         .mobile-menu-overlay ul li {
-            margin: 1.5rem 0;
+            margin: 2.5rem 0; /* Mais espaçamento entre os links */
         }
         .mobile-menu-overlay ul li a {
-            font-size: 2rem;
-            color: var(--text-color);
-            transition: color 0.3s ease;
-            padding: 0.5rem 1rem; /* Added padding for touch targets */
-            border-radius: 0.5rem;
+            font-size: 2.8rem; /* Links muito maiores */
+            padding: 1rem 2rem; /* Mais padding para touch */
+            border-radius: 1rem;
+            letter-spacing: 0.08em; /* Mais espaçamento entre letras */
         }
         .mobile-menu-overlay ul li a:hover {
-            color: var(--primary-color);
-            background-color: rgba(255, 215, 0, 0.1);
+            color: var(--primary-yellow);
+            background-color: rgba(255, 215, 0, 0.2);
+            transform: scale(1.08); /* Efeito de escala mais pronunciado */
         }
 
-        /* Section Titles */
+        /* Títulos de Seção */
         .section-title {
             font-family: 'Orbitron', sans-serif;
-            color: var(--primary-color);
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 0.75rem; /* Increased padding */
-            margin-bottom: 3.5rem; /* More breathing room */
-            text-align: center;
-            font-size: 2.8rem; /* Slightly larger font size */
+            color: var(--primary-yellow);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6);
+            border-bottom: 4px solid var(--primary-yellow); /* Borda mais grossa */
+            padding-bottom: 1.25rem;
+            margin-bottom: 5rem; /* Muito mais espaço */
+            font-size: 3.8rem; /* Título da seção ainda maior */
+            letter-spacing: 0.03em;
         }
         @media (max-width: 768px) {
             .section-title {
-                font-size: 2.2rem;
+                font-size: 3rem;
+                margin-bottom: 3.5rem;
+            }
+            .hero-title {
+                font-size: 4.5rem;
+            }
+            .hero-subtitle {
+                font-size: 2rem;
             }
         }
 
-        /* Card styling */
+        /* Estilo do Card */
         .card {
-            background-color: var(--tertiary-color); /* Updated to tertiary color */
-            border-radius: 1rem; /* More rounded */
-            padding: 2.5rem; /* Increased padding */
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8); /* Stronger shadow */
-            border: 1px solid #444; /* Darker border */
-            margin-bottom: 3rem; /* Increased margin */
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: var(--dark-background-mid); /* Fundo do card */
+            border-radius: 1.5rem; /* Muito mais arredondado */
+            padding: 3.5rem; /* Muito mais padding */
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.95), 0 0 0 2px rgba(68, 68, 68, 0.4); /* Sombra mais forte e borda sutil */
+            margin-bottom: 5rem; /* Muito mais margem */
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            border: 1px solid var(--dark-background-light); /* Borda mais definida */
         }
         .card:hover {
-            transform: translateY(-5px); /* Lift effect on hover */
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.9);
+            transform: translateY(-10px); /* Efeito de elevação mais pronunciado */
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 1), 0 0 0 3px rgba(255, 215, 0, 0.3); /* Sombra mais escura e borda de brilho */
         }
 
-        /* Collapsible elements */
+        /* Elementos Recolhíveis */
         .collapsible-header {
-            background-color: var(--secondary-color); /* Updated to secondary color */
-            padding: 1.2rem 1.8rem; /* Increased padding */
-            border-radius: 0.75rem; /* More rounded */
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.6rem;
-            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-            font-weight: bold;
-            font-size: 1.2rem; /* Larger font */
-            border-left: 5px solid var(--primary-color); /* Thicker accent border */
+            background-color: var(--dark-background-light); /* Fundo do cabeçalho */
+            padding: 1.75rem 2.25rem; /* Mais padding */
+            border-radius: 1.25rem; /* Mais arredondado */
+            margin-bottom: 1rem;
+            font-size: 1.45rem; /* Fonte maior */
+            border-left: 8px solid var(--primary-yellow); /* Borda de destaque mais grossa */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7);
         }
         .collapsible-header:hover {
-            background-color: #333;
-            transform: translateY(-3px);
-            box-shadow: 0 3px 10px rgba(255, 215, 0, 0.4);
+            background-color: #384F6E; /* Cor de fundo no hover */
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
         }
         .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.8s ease-in-out, padding 0.8s ease-in-out; /* Even slower transition */
-            padding: 0 1.8rem; /* Consistent padding */
-            border-left: 5px solid var(--tertiary-color); /* Subtle border for content */
-            background-color: #222; /* Slightly different background */
-            border-bottom-left-radius: 0.75rem;
-            border-bottom-right-radius: 0.75rem;
-            padding-top: 0; /* Reset initial padding */
-        }
-        .collapsible-content.active {
-            max-height: 10000px; /* Large enough value to show all content */
-            padding: 1.8rem;
-            padding-top: 1rem; /* Add top padding when active */
-        }
-        .collapsible-header .arrow {
-            transition: transform 0.3s ease;
-        }
-        .collapsible-header.active .arrow {
-            transform: rotate(90deg);
+            border-left: 8px solid var(--dark-background-mid); /* Borda sutil para o conteúdo */
+            background-color: #1E2B3E; /* Fundo do conteúdo ligeiramente diferente */
+            border-bottom-left-radius: 1.25rem;
+            border-bottom-right-radius: 1.25rem;
+            padding: 2.25rem; /* Mais padding */
+            padding-top: 1.75rem; /* Ajuste o padding superior */
         }
 
-        /* Buttons */
+        /* Botões */
         .btn-primary {
-            background-color: var(--primary-color);
-            color: var(--secondary-color); /* Text color contrast */
-            padding: 1rem 2rem; /* Even larger padding */
-            border-radius: 0.75rem; /* More rounded */
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, letter-spacing 0.2s ease;
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 0.08em; /* Slightly more spaced letters */
-            font-size: 1.1rem;
+            background-image: linear-gradient(to right, var(--primary-yellow) 0%, #FFCC00 100%);
+            color: var(--dark-background-deep); /* Texto em cor escura para contraste */
+            padding: 1.25rem 2.8rem; /* Padding maior */
+            border-radius: 1rem; /* Mais arredondado */
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.7), 0 0 0 2px rgba(255, 215, 0, 0.4);
+            font-size: 1.3rem; /* Fonte maior */
+            letter-spacing: 0.12em;
         }
         .btn-primary:hover {
-            background-color: #FFC400; /* Slightly darker yellow on hover */
-            transform: translateY(-4px) scale(1.02); /* More pronounced lift and slight scale */
-            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
-            letter-spacing: 0.1em;
+            background-position: right center;
+            transform: translateY(-6px) scale(1.05); /* Elevação e escala mais pronunciadas */
+            box-shadow: 0 12px 30px rgba(255, 215, 0, 0.9), 0 0 0 3px rgba(255, 215, 0, 0.5);
+            letter-spacing: 0.15em;
         }
-        .btn-secondary { /* For Reset Simulation button */
-            background-color: var(--tertiary-color);
-            color: var(--text-color);
-            padding: 1rem 2rem;
-            border-radius: 0.75rem;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-size: 1.1rem;
+        .btn-secondary {
+            background-color: var(--dark-background-light);
+            color: var(--neutral-white);
+            padding: 1.25rem 2.8rem;
+            border-radius: 1rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+            font-size: 1.3rem;
+            letter-spacing: 0.12em;
         }
         .btn-secondary:hover {
-            background-color: #333;
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            background-color: #4A607F; /* Cor de hover para o secundário */
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.9);
         }
 
-        /* Input Fields */
+        /* Campos de Input */
         .input-field {
-            background-color: var(--input-bg-color); /* New input background color */
-            border: 1px solid #555;
-            padding: 0.85rem; /* More padding */
-            border-radius: 0.6rem;
-            color: var(--text-color);
-            width: 100%;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: var(--dark-background-light);
+            border: 2px solid #5A6E8C; /* Borda mais visível */
+            padding: 1.1rem; /* Mais padding */
+            border-radius: 0.8rem;
+            color: var(--neutral-white);
+            font-size: 1.15rem; /* Fonte maior */
         }
         .input-field:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.4);
-            outline: none;
+            border-color: var(--primary-yellow);
+            box-shadow: 0 0 0 5px rgba(255, 215, 0, 0.6);
         }
         .input-field::placeholder {
-            color: #AAAAAA;
+            color: #CCDDEE; /* Placeholder mais claro */
         }
 
-        /* Tooltip styles */
+        /* Estilos de Tooltip */
         .tooltip {
-            position: relative;
-            display: inline-block;
-            cursor: help;
-            border-bottom: 1px dashed var(--primary-color); /* More visible underline */
-            color: var(--primary-color); /* Highlight tooltip trigger */
+            border-bottom: 2px dashed var(--primary-yellow);
+            color: var(--primary-yellow);
+            font-weight: 700; /* Mais negrito */
         }
         .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 300px; /* Even wider tooltip */
-            background-color: var(--tertiary-color); /* Darker background */
-            color: var(--text-color);
-            text-align: center;
-            border-radius: 8px; /* More rounded */
-            padding: 10px 15px; /* More padding */
-            position: absolute;
-            z-index: 1000; /* Highest z-index */
-            bottom: 135%; /* Tooltip further above the text */
-            left: 50%;
-            margin-left: -150px; /* Half of width */
-            opacity: 0;
-            transition: opacity 0.4s, transform 0.4s;
-            transform: translateY(10px);
-            font-size: 0.95rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.7);
-            border: 1px solid #555; /* Subtle border */
+            background-color: var(--dark-background-mid);
+            color: var(--neutral-white);
+            border-radius: 12px; /* Mais arredondado */
+            padding: 15px 20px;
+            width: 400px; /* Tooltip mais largo */
+            margin-left: -200px; /* Metade da largura */
+            transform: translateY(20px); /* Deslocamento inicial maior */
+            font-size: 1.05rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.9);
+            border: 2px solid var(--dark-background-light); /* Borda definida */
         }
         .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
             transform: translateY(0);
         }
         .tooltip .tooltiptext::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -8px; /* Larger arrow base */
-            border-width: 8px;
-            border-style: solid;
-            border-color: var(--tertiary-color) transparent transparent transparent;
+            border-color: var(--dark-background-mid) transparent transparent transparent;
         }
 
-        /* Page specific display */
-        .content-page {
-            display: none; /* Hidden by default */
-            animation: fadeInPage 0.5s ease-out; /* Fade in when page becomes active */
-        }
-        .content-page.active-page {
-            display: block; /* Show active page */
-        }
-        /* Specific hero section display logic for intro page */
-        #introducao.active-page {
-            display: block;
-        }
-        #introducao:not(.active-page) {
-            display: none;
-        }
-
-        @keyframes fadeInPage {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Custom text colors for faction/feedback */
+        /* Cores de texto personalizadas para facção/feedback */
         .republic-text {
-            color: var(--accent-republic-blue);
+            color: var(--secondary-blue);
         }
         .sith-text {
-            color: var(--accent-sith-red);
+            color: var(--sith-accent-red);
         }
         .positive-feedback {
             color: var(--accent-green);
         }
         .warning-feedback {
-            color: var(--accent-orange);
+            color: var(--warning-orange);
         }
         .critical-feedback {
-            color: var(--accent-sith-red);
+            color: var(--sith-accent-red);
         }
     </style>
 </head>
@@ -448,8 +347,8 @@
             </p>
 
             <!-- User Character Information -->
-            <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 text-lg">
-                <h3 class="text-2xl font-bold text-yellow-300 mb-4">Informações do criador:</h3>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 text-lg" style="background-color: var(--dark-background-light); border-color: var(--dark-background-mid);">
+                <h3 class="text-2xl font-bold text-yellow-300 mb-4" style="color: var(--primary-yellow);">Informações do criador:</h3>
                 <p class="mb-2"><strong>Nome do Personagem:</strong> Inrique</p>
                 <p class="mb-2"><strong>Legado:</strong> Bezzar'kin</p>
                 <p class="mb-2"><strong>Facção:</strong> República</p>
@@ -588,7 +487,7 @@
                             <li><strong>Set Bonuses (Bônus de Conjunto):</strong> Antigamente, vinham de peças de armadura. Atualmente, vêm de <span class="tooltip">Implantes (Implants)<span class="tooltiptext">Itens de Legendary que concedem bônus de conjunto.</span></span> (Legendary Items). São cruciais para o desempenho da sua classe.</li>
                             <li><strong>Tactical Items (Itens Táticos):</strong> Um item adicional que muda ou aprimora uma habilidade específica da sua classe. Cada classe tem vários, escolha o que melhor se adapta ao seu estilo de jogo.</li>
                         </ul>
-                        <h4 class="font-bold text-yellow-300 mb-2">Estatísticas (Stats) Essenciais no Nível Máximo:</h4>
+                        <h4 class="font-bold text-yellow-300 mb-2" style="color: var(--primary-yellow);">Estatísticas (Stats) Essenciais no Nível Máximo:</h4>
                         <ul class="list-disc ml-6 space-y-1">
                             <li><strong>Mastery (Maestria):</strong> Aumenta o dano, cura e crítico. É a sua estatística primária.</li>
                             <li><strong>Endurance (Vigor):</strong> Aumenta a vida.</li>
@@ -842,7 +741,7 @@
                 </div>
             </div>
 
-            <h3 class="text-2xl font-bold text-yellow-300 mb-4">Suas Estatísticas Atuais:</h3>
+            <h3 class="text-2xl font-bold text-yellow-300 mb-4" style="color: var(--primary-yellow);">Suas Estatísticas Atuais:</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                 <div>
                     <label for="statMastery" class="block text-gray-400 text-sm font-bold mb-2">Mastery:</label>
@@ -881,8 +780,8 @@
             <button onclick="runSimulation()" class="btn-primary w-full py-3 mb-6">Executar Simulação</button>
             <button onclick="resetSimulation()" class="btn-secondary w-full py-3 mb-6">Redefinir Simulação</button>
 
-            <div id="simulationResults" class="card p-6 mt-8 border border-gray-700 hidden">
-                <h3 class="text-2xl font-bold text-yellow-300 mb-4">Resultados da Simulação:</h3>
+            <div id="simulationResults" class="card p-6 mt-8 border hidden" style="background-color: var(--dark-background-light); border-color: var(--dark-background-mid);">
+                <h3 class="text-2xl font-bold text-yellow-300 mb-4" style="color: var(--primary-yellow);">Resultados da Simulação:</h3>
                 <p id="simGreeting" class="mb-2 text-lg"></p>
                 <div id="simLevelAdvice" class="mb-3 text-lg"></div>
                 <div id="simCompanionAdvice" class="mb-3 text-lg"></div>
@@ -899,14 +798,14 @@
             <p class="mb-4 text-lg">
                 Jogar em grupo é uma das melhores formas de aproveitar SWTOR ao máximo, seja para conteúdo PvE (Operations, Flashpoints), PvP ou simplesmente para socializar. Ter uma comunidade de jogadores que falam a mesma língua torna a experiência muito mais rica.
             </p>
-            <div class="bg-gray-800 p-8 rounded-lg shadow-md border border-gray-700">
-                <h3 class="text-3xl font-bold text-yellow-300 mb-4">Recomendação: Guilda Brazucas!</h3>
+            <div class="bg-gray-800 p-8 rounded-lg shadow-md border border-gray-700" style="background-color: var(--dark-background-light); border-color: var(--dark-background-mid);">
+                <h3 class="text-3xl font-bold text-yellow-300 mb-4" style="color: var(--primary-yellow);">Recomendação: Guilda Brazucas!</h3>
                 <p class="mb-2"><strong>Guild Leader:</strong> Ramɓo</p>
                 <p class="mb-2"><strong>XP Bonus:</strong> 15%</p>
                 <p class="mb-2"><strong>Reputation Bonus:</strong> 15%</p>
                 <p class="mb-4"><strong>Discord:</strong> <a href="https://discord.gg/WeDVyYyBxh" target="_blank" class="republic-text hover:text-blue-300">discord.gg/WeDVyYyBxh</a></p>
 
-                <h4 class="text-2xl font-bold text-yellow-300 mb-4">Brazucas Perks:</h4>
+                <h4 class="text-2xl font-bold text-yellow-300 mb-4" style="color: var(--primary-yellow);">Brazucas Perks:</h4>
                 <ul class="list-disc ml-6 space-y-3">
                     <li>
                         <p class="font-semibold">1. Forward Command Room</p>
@@ -952,7 +851,7 @@
         </section>
     </main>
 
-    <footer class="bg-gray-800 p-6 mt-8 rounded-t-xl text-center text-gray-400 text-sm">
+    <footer class="bg-gray-800 p-6 mt-8 rounded-t-xl text-center text-gray-400 text-sm" style="background-color: var(--dark-background-light);">
         <p>&copy; 2025 O Holocron de SWTOR. Todas as informações são baseadas no conhecimento atual do jogo. Star Wars: The Old Republic é propriedade da Electronic Arts e BioWare.</p>
     </footer>
 
@@ -994,9 +893,11 @@
                     if (link.dataset.pageId === pageId) {
                         link.classList.add('text-yellow-400', 'font-bold');
                         link.classList.remove('text-white'); // Assuming default text-white for non-active nav links
+                        link.style.color = 'var(--primary-yellow)'; /* Aplicar cor diretamente para override */
                     } else {
                         link.classList.remove('text-yellow-400', 'font-bold');
                         link.classList.add('text-white');
+                        link.style.color = 'var(--neutral-white)'; /* Aplicar cor diretamente para override */
                     }
                 });
 
