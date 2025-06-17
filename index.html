@@ -12,7 +12,7 @@
     
     <!-- Chosen Palette: Galactic Neutral -->
     <!-- Application Structure Plan: A single-page application designed as a player's journey. It starts with an 'Início' section covering game basics. 'Identidade do Personagem' allows deep exploration of Origin Stories, Combat Styles, and Disciplines. 'Jornada do Herói' guides players through leveling and complex endgame gearing. 'Aliados e Economia' covers Companions, Crafting, and the GTN. 'Conteúdo Endgame' serves as an interactive directory for activities. Finally, the 'Simulador de Otimização' provides personalized advice. This task-oriented, progressive structure was chosen to logically guide both new and veteran players through the vastness of SWTOR, making complex information digestible and actionable at each stage of their adventure. -->
-    <!-- Visualization & Content Choices: Player Status -> Goal: Compare -> HTML Table -> Justification: Clear, direct comparison. Combat Styles -> Goal: Organize/Explore -> Nested Accordions (HTML/JS) -> Justification: Manages high information density, allowing progressive disclosure. Gearing Path -> Goal: Explain Process -> Interactive Flowchart (HTML/Tailwind) -> Interaction: Hover for details -> Justification: Visually simplifies a complex, multi-path system. Currencies -> Goal: Inform -> Icon Cards (HTML/Tailwind) -> Justification: Quick visual reference. Companion Influence -> Goal: Show Relationship -> Line Chart (Chart.js) -> Justification: Effectively shows the non-linear increase in power. Crafting Skills -> Goal: Show Relationships -> Interactive Diagram (HTML/JS) -> Interaction: Click to highlight pairs -> Justification: Makes synergistic choices intuitive. -->
+    <!-- Visualization & Content Choices: Player Status -> Goal: Compare -> HTML Table -> Justification: Clear, direct comparison. Combat Styles -> Goal: Organize/Explore -> Nested Accordions (HTML/JS) -> Justification: Manages high information density, allowing progressive disclosure. Gearing Path -> Goal: Explain Process -> Interactive Flowchart (HTML/Tailwind) -> Interaction: Hover for details -> Justification: Visually simplifies a complex, multi-path system. Currencies -> Goal: Inform -> Icon Cards (HTML/Tailwind) -> Justification: Quick visual reference. Companion Influence -> Goal: Show Relationship -> Line Chart (Chart.js) -> Justification: Effectively shows the non-linear increase in power. Crafting Skills -> Goal: Show Relationships -> Interactive Diagram (HTML/JS) -> Interaction: Click to highlight pairs -> Justification: Makes synergistic choices intuitive. Datacrons -> Goal: Inform/Explore -> Filterable List/Cards (HTML/JS) -> Justification: Allows users to quickly find datacron locations and their bonuses by planet and faction, crucial for character optimization. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 
     <style>
@@ -208,11 +208,13 @@
                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
                     <button data-tab="jornada-nivelamento" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500">Nivelamento</button>
                     <button data-tab="jornada-equipamentos" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500">Equipamentos (Nível 80)</button>
+                    <button data-tab="jornada-datacrons" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500">Datacrons</button>
                 </nav>
             </div>
 
             <div id="jornada-nivelamento" class="tab-content"></div>
             <div id="jornada-equipamentos" class="tab-content hidden"></div>
+            <div id="jornada-datacrons" class="tab-content hidden"></div>
         </div>
         
         <!-- Aliados e Economia Page -->
@@ -320,6 +322,7 @@
                 setupAliadosEconomia();
                 setupEndgame();
                 setupSimulator();
+                setupDatacrons(); // Chamada da nova função de datacrons
                 
                 // Initial page load
                 const initialPage = window.location.hash.substring(1) || 'inicio';
@@ -521,6 +524,115 @@
                     }
                 };
 
+                data.datacrons = [
+                    // Coruscant (Republic)
+                    { planet: 'Coruscant', faction: 'Republica', stat: 'Endurance', bonus: 2, location: 'Mercado de Antiguidades' },
+                    { planet: 'Coruscant', faction: 'Republica', stat: 'Presence', bonus: 2, location: 'Território Sol Negro' },
+                    { planet: 'Coruscant', faction: 'Republica', stat: 'Willpower', bonus: 2, location: 'Templo Jedi' },
+                    { planet: 'Coruscant', faction: 'Republica', stat: 'Aim', bonus: 2, location: 'Antigo Mercado Galáctico' },
+                    { planet: 'Coruscant', faction: 'Republica', stat: 'Strength', bonus: 2, location: 'Praça do Senado' },
+
+                    // Dromund Kaas (Empire)
+                    { planet: 'Dromund Kaas', faction: 'Imperio', stat: 'Endurance', bonus: 2, location: 'Cidade Kaas' },
+                    { planet: 'Dromund Kaas', faction: 'Imperio', stat: 'Presence', bonus: 2, location: 'Templo Negro' },
+                    { planet: 'Dromund Kaas', faction: 'Imperio', stat: 'Willpower', bonus: 2, location: 'Academia Sith' },
+                    { planet: 'Dromund Kaas', faction: 'Imperio', stat: 'Aim', bonus: 2, location: 'Tumba de Freedon Nadd' },
+                    { planet: 'Dromund Kaas', faction: 'Imperio', stat: 'Strength', bonus: 2, location: 'Porto Espacial de Dromund Kaas' },
+
+                    // Balmorra (Republic Side)
+                    { planet: 'Balmorra', faction: 'Republica', stat: 'Willpower', bonus: 2, location: 'Planícies de Sundari' },
+                    { planet: 'Balmorra', faction: 'Republica', stat: 'Cunning', bonus: 2, location: 'Posto Avançado Gorak' },
+                    { planet: 'Balmorra', faction: 'Republica', stat: 'Endurance', bonus: 2, location: 'Fábrica de Droides Okara' },
+                    { planet: 'Balmorra', faction: 'Republica', stat: 'Strength', bonus: 2, location: 'Sobrik' },
+                    { planet: 'Balmorra', faction: 'Republica', stat: 'Presence', bonus: 2, location: 'Posto Avançado Markaran Inferior' },
+
+                    // Balmorra (Imperial Side)
+                    { planet: 'Balmorra', faction: 'Imperio', stat: 'Aim', bonus: 2, location: 'Rota de Patrulha Tirigaan' },
+                    { planet: 'Balmorra', faction: 'Imperio', stat: 'Strength', bonus: 2, location: 'Guarnição Abandonada' },
+                    { planet: 'Balmorra', faction: 'Imperio', stat: 'Willpower', bonus: 2, location: 'Planícies de Sundari' },
+                    { planet: 'Balmorra', faction: 'Imperio', stat: 'Endurance', bonus: 2, location: 'Armas Balmorranas' },
+                    { planet: 'Balmorra', faction: 'Imperio', stat: 'Cunning', bonus: 2, location: 'Planícies Markaranas' },
+
+                    // Nar Shaddaa
+                    { planet: 'Nar Shaddaa', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Cidade das Sombras' },
+                    { planet: 'Nar Shaddaa', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Setor Nikto' },
+                    { planet: 'Nar Shaddaa', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Calçadão Inferior' },
+                    { planet: 'Nar Shaddaa', faction: 'Both', stat: 'Presence', bonus: 2, location: 'Setor da Luz Vermelha' },
+                    { planet: 'Nar Shaddaa', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Setor Industrial' },
+
+                    // Tatooine
+                    { planet: 'Tatooine', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Anchorhead' },
+                    { planet: 'Tatooine', faction: 'Both', stat: 'Presence', bonus: 2, location: 'Jundland' },
+                    { planet: 'Tatooine', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Covil dos Foras da Lei' },
+                    { planet: 'Tatooine', faction: 'Both', stat: 'Aim', bonus: 2, location: 'O Mar de Dunas' },
+                    { planet: 'Tatooine', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Poço de Sarlacc' },
+
+                    // Alderaan
+                    { planet: 'Alderaan', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Território Kaamos' },
+                    { planet: 'Alderaan', faction: 'Both', stat: 'Presence', bonus: 2, location: 'Vale Glarus' },
+                    { planet: 'Alderaan', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Terras Baixas Alsakanas' },
+                    { planet: 'Alderaan', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Posto de Guarda Rhyne' },
+                    { planet: 'Alderaan', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Montanhas Juran' },
+
+                    // Taris (Republic)
+                    { planet: 'Taris', faction: 'Republica', stat: 'Endurance', bonus: 2, location: 'Porto Espacial de Taris' },
+                    { planet: 'Taris', faction: 'Republica', stat: 'Aim', bonus: 2, location: 'Catacumbas de Taris' },
+                    { planet: 'Taris', faction: 'Republica', stat: 'Willpower', bonus: 2, location: 'Enclave Jedi de Taris' },
+                    { planet: 'Taris', faction: 'Republica', stat: 'Presence', bonus: 2, location: 'Sedimento Brell' },
+                    { planet: 'Taris', faction: 'Republica', stat: 'Strength', bonus: 2, location: 'Pântano Tularan' },
+
+                    // Quesh
+                    { planet: 'Quesh', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'O Lago Ácido' },
+                    { planet: 'Quesh', faction: 'Both', stat: 'Cunning', bonus: 2, location: 'Mesa Vulkar' },
+                    { planet: 'Quesh', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Palácio de Broga' },
+                    { planet: 'Quesh', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Santuário Imperial' },
+
+                    // Hoth
+                    { planet: 'Hoth', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Fissura Glacial' },
+                    { planet: 'Hoth', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Cemitério de Naves Estelares' },
+                    { planet: 'Hoth', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Desertos de Whiterock' },
+                    { planet: 'Hoth', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Tundra Clabburn' },
+                    { planet: 'Hoth', faction: 'Both', stat: 'Presence', bonus: 2, location: 'Cume de Highmount' },
+
+                    // Belsavis
+                    { planet: 'Belsavis', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Prisão Imperial' },
+                    { planet: 'Belsavis', faction: 'Both', stat: 'Presence', bonus: 2, location: 'A Tumba' },
+                    { planet: 'Belsavis', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Os Antigos' },
+                    { planet: 'Belsavis', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Base da República' },
+                    { planet: 'Belsavis', faction: 'Both', stat: 'Strength', bonus: 2, location: 'O Verde Profundo' },
+
+                    // Voss
+                    { planet: 'Voss', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Teste dos Anciões' },
+                    { planet: 'Voss', faction: 'Both', stat: 'Cunning', bonus: 2, location: 'Terras Gormak' },
+                    { planet: 'Voss', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Santuário de Cura' },
+                    { planet: 'Voss', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Os Caminhos Antigos' },
+                    { planet: 'Voss', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Terras do Pesadelo' },
+
+                    // Corellia
+                    { planet: 'Corellia', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Vale do Trabalho' },
+                    { planet: 'Corellia', faction: 'Both', stat: 'Presence', bonus: 2, location: 'Cidade de Coronet' },
+                    { planet: 'Corellia', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Distrito Governamental' },
+                    { planet: 'Corellia', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Parque Axial' },
+                    { planet: 'Corellia', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Distrito Jedi Verde' },
+
+                    // Ilum
+                    { planet: 'Ilum', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Caverna de Gelo de Ilum' },
+                    { planet: 'Ilum', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Base Imperial' },
+                    { planet: 'Ilum', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Base da República' },
+                    { planet: 'Ilum', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Lago de Gelo Ocidental' },
+
+                    // Makeb
+                    { planet: 'Makeb', faction: 'Both', stat: 'Endurance', bonus: 5, location: 'Mansão de Solida Hesk' },
+                    { planet: 'Makeb', faction: 'Both', stat: 'Presence', bonus: 5, location: 'Gancho Gravitacional Sete' },
+
+                    // Rishi
+                    { planet: 'Rishi', faction: 'Both', stat: 'Mastery', bonus: 10, location: 'Grilhões da Mente' },
+                    { planet: 'Rishi', faction: 'Both', stat: 'Mastery', bonus: 10, location: 'Fortaleza Submersa' },
+
+                    // Yavin 4
+                    { planet: 'Yavin 4', faction: 'Both', stat: 'Mastery', bonus: 10, location: 'Vila Massassi' },
+                    { planet: 'Yavin 4', faction: 'Both', stat: 'Mastery', bonus: 10, location: 'Templo do Sacrifício' },
+                ];
             }
             
             function setupNavigation() {
@@ -967,6 +1079,66 @@
                 });
 
                 updateClassOptions();
+            }
+
+            function setupDatacrons() {
+                const container = document.getElementById('jornada-datacrons');
+                container.innerHTML = `
+                    <div class="content-card mb-8">
+                        <h3 class="text-xl font-semibold text-white mb-4">Localização de Datacrons</h3>
+                        <p class="mb-4 text-gray-400">Colecionar Datacrons permanentemente aumenta as estatísticas do seu personagem e de todos os personagens da sua Legado. Use os filtros abaixo para encontrar os datacrons por planeta e facção.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label for="datacron-planet-filter" class="block text-sm font-medium text-gray-300 mb-1">Filtrar por Planeta</label>
+                                <select id="datacron-planet-filter" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-blue-500 focus:border-blue-500"></select>
+                            </div>
+                            <div>
+                                <label for="datacron-faction-filter" class="block text-sm font-medium text-gray-300 mb-1">Filtrar por Facção</label>
+                                <select id="datacron-faction-filter" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="all">Todas as Facções</option>
+                                    <option value="Republica">República</option>
+                                    <option value="Imperio">Império</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="datacron-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    </div>
+                `;
+
+                const planetFilter = document.getElementById('datacron-planet-filter');
+                const factionFilter = document.getElementById('datacron-faction-filter');
+                const datacronListContainer = document.getElementById('datacron-list');
+
+                const uniquePlanets = [...new Set(data.datacrons.map(d => d.planet))].sort();
+                planetFilter.innerHTML = '<option value="all">Todos os Planetas</option>' + uniquePlanets.map(p => `<option value="${p}">${p}</option>`).join('');
+
+                function renderDatacrons() {
+                    const selectedPlanet = planetFilter.value;
+                    const selectedFaction = factionFilter.value;
+
+                    const filteredDatacrons = data.datacrons.filter(d => {
+                        const matchesPlanet = selectedPlanet === 'all' || d.planet === selectedPlanet;
+                        const matchesFaction = selectedFaction === 'all' || d.faction === selectedFaction || d.faction === 'Both';
+                        return matchesPlanet && matchesFaction;
+                    });
+
+                    datacronListContainer.innerHTML = filteredDatacrons.map(d => `
+                        <div class="p-4 bg-gray-800 rounded-lg border border-gray-700">
+                            <h4 class="font-bold text-lg text-white">${d.stat} +${d.bonus}</h4>
+                            <p class="text-sm text-gray-400"><strong>Planeta:</strong> ${d.planet} ${d.faction !== 'Both' ? `(${d.faction})` : ''}</p>
+                            <p class="text-sm text-gray-400"><strong>Localização:</strong> ${d.location}</p>
+                        </div>
+                    `).join('');
+
+                    if (filteredDatacrons.length === 0) {
+                        datacronListContainer.innerHTML = `<p class="text-gray-500 col-span-full text-center">Nenhum datacron encontrado para os filtros selecionados.</p>`;
+                    }
+                }
+
+                planetFilter.addEventListener('change', renderDatacrons);
+                factionFilter.addEventListener('change', renderDatacrons);
+
+                renderDatacrons(); // Initial render
             }
 
             // Iniciar a aplicação
