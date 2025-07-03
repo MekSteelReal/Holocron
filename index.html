@@ -1,1148 +1,421 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Holocron SWTOR: Guia Definitivo do Herói</title>
+    <title>O Holocron de SWTOR: Versão Definitiva</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Chosen Palette: Galactic Neutral -->
-    <!-- Application Structure Plan: A single-page application designed as a player's journey. It starts with an 'Início' section covering game basics. 'Identidade do Personagem' allows deep exploration of Origin Stories, Combat Styles, and Disciplines. 'Jornada do Herói' guides players through leveling and complex endgame gearing. 'Aliados e Economia' covers Companions, Crafting, and the GTN. 'Conteúdo Endgame' serves as an interactive directory for activities. Finally, the 'Simulador de Otimização' provides personalized advice. This task-oriented, progressive structure was chosen to logically guide both new and veteran players through the vastness of SWTOR, making complex information digestible and actionable at each stage of their adventure. -->
-    <!-- Visualization & Content Choices: Player Status -> Goal: Compare -> HTML Table -> Justification: Clear, direct comparison. Combat Styles -> Goal: Organize/Explore -> Nested Accordions (HTML/JS) -> Justification: Manages high information density, allowing progressive disclosure. Gearing Path -> Goal: Explain Process -> Interactive Flowchart (HTML/Tailwind) -> Interaction: Hover for details -> Justification: Visually simplifies a complex, multi-path system. Currencies -> Goal: Inform -> Icon Cards (HTML/Tailwind) -> Justification: Quick visual reference. Companion Influence -> Goal: Show Relationship -> Line Chart (Chart.js) -> Justification: Effectively shows the non-linear increase in power. Crafting Skills -> Goal: Show Relationships -> Interactive Diagram (HTML/JS) -> Interaction: Click to highlight pairs -> Justification: Makes synergistic choices intuitive. Datacrons -> Goal: Inform/Explore -> Filterable List/Cards (HTML/JS) -> Justification: Allows users to quickly find datacron locations and their bonuses by planet and faction, crucial for character optimization. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #111827;
-            color: #d1d5db;
+        :root {
+            --background-color: #0a0e1a; /* Azul escuro do espaço */
+            --holocron-bg: #111827; /* Azul-cinza escuro */
+            --text-color: #e5e7eb; /* Cinza claro */
+            --header-color: #f9fafb; /* Branco */
+            --primary-gold: #f59e0b; /* Dourado/Âmbar brilhante */
+            --accent-blue: #3b82f6; /* Azul brilhante */
+            --glow-gold: 0 0 15px rgba(245, 158, 11, 0.6);
+            --glow-blue: 0 0 12px rgba(59, 130, 246, 0.5);
         }
-        .nav-link {
-            transition: all 0.2s ease-in-out;
-            border-left: 3px solid transparent;
-        }
-        .nav-link.active {
-            background-color: #374151;
-            color: #ffffff;
-            border-left-color: #3b82f6;
-        }
-        .nav-link:hover {
-            background-color: #4b5563;
-            color: #ffffff;
-            border-left-color: #60a5fa;
-        }
-        .page { display: none; }
-        .page.active { display: block; }
 
-        .content-card {
-            background-color: #1f2937;
-            border: 1px solid #374151;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), inset 0 0 15px rgba(59, 130, 246, 0.1); }
+            50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), inset 0 0 20px rgba(59, 130, 246, 0.2); }
         }
-        .content-card:hover {
-            border-color: #4b5563;
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--background-color);
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+            color: var(--text-color);
+            font-family: 'Lato', sans-serif;
         }
-        .btn-primary {
-            background-color: #3b82f6;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            transition: background-color 0.2s;
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--header-color);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
-        .btn-primary:hover {
-            background-color: #2563eb;
-        }
-        .btn-secondary {
-            background-color: #4b5563;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-        .btn-secondary:hover {
-            background-color: #6b7280;
-        }
-        .accordion-content {
-            max-height: 0;
+        h1 { color: var(--primary-gold); }
+        h2 { border-bottom: 2px solid var(--primary-gold); padding-bottom: 0.5rem; margin-top: 2rem; color: var(--accent-blue); }
+
+        #holocron-container {
+            background-color: var(--holocron-bg);
+            border: 2px solid var(--accent-blue);
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+            animation: pulseGlow 8s infinite ease-in-out;
+            margin-top: 2rem;
             overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
         }
-        .tab-button.active {
-            border-bottom-color: #3b82f6;
-            color: #ffffff;
+
+        .tab-button {
+            background-color: transparent;
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            transition: all 0.3s ease;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+            padding: 0.75rem 2rem;
         }
-        .chart-container {
+        .tab-button.active, .tab-button:hover {
+            background-color: var(--accent-blue);
+            color: white;
+            text-shadow: 0 0 5px white;
+            box-shadow: var(--glow-blue);
+        }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .holocron-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--primary-gold);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.3s ease-in-out;
             position: relative;
-            width: 100%;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 400px;
-            max-height: 50vh;
         }
+        .holocron-card:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.3), var(--glow-gold); }
+
+        .edit-btn, .remove-btn, .add-btn, .save-btn, .cancel-btn {
+            cursor: pointer; transition: all 0.2s; padding: 4px; border-radius: 50%;
+            background-color: rgba(30, 41, 59, 0.8); border: 1px solid var(--accent-blue);
+        }
+        .edit-btn:hover, .remove-btn:hover, .add-btn:hover, .save-btn:hover, .cancel-btn:hover {
+            transform: scale(1.2); background-color: var(--primary-gold); color: white; border-color: var(--primary-gold);
+        }
+        .edit-controls { position: absolute; top: 10px; right: 10px; display: flex; gap: 8px; z-index: 10; }
+
+        .editable-content[contenteditable="true"] {
+            outline: 2px dashed var(--accent-blue); padding: 10px; background-color: rgba(59, 130, 246, 0.1);
+        }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { border: 1px solid var(--primary-gold); padding: 0.75rem; text-align: left; }
+        th { background-color: rgba(245, 158, 11, 0.1); color: var(--primary-gold); }
+        tr:nth-child(even) { background-color: rgba(255, 255, 255, 0.02); }
     </style>
 </head>
-<body class="flex">
-
-    <!-- Sidebar Navigation -->
-    <aside class="w-16 md:w-64 bg-gray-900 text-gray-300 min-h-screen fixed transition-all duration-300">
-        <div class="p-4 border-b border-gray-700">
-            <h1 class="text-lg md:text-2xl font-bold text-white hidden md:block">Holocron</h1>
-            <span class="text-2xl md:hidden">❖</span>
+<body>
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="text-center mb-8">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">O Holocron de SWTOR</h1>
+            <p class="text-lg max-w-3xl mx-auto text-gray-300">Saudações, Arquivista. Explore os fragmentos de conhecimento deste repositório. O destino da galáxia pode depender disso.</p>
         </div>
-        <nav class="mt-4">
-            <a href="#inicio" data-page="inicio" class="nav-link flex items-center p-4">
-                <span class="text-xl w-8 text-center">🏠</span><span class="hidden md:inline ml-4">Início</span>
-            </a>
-            <a href="#identidade" data-page="identidade" class="nav-link flex items-center p-4">
-                <span class="text-xl w-8 text-center">👤</span><span class="hidden md:inline ml-4">Identidade</span>
-            </a>
-            <a href="#jornada" data-page="jornada" class="nav-link flex items-center p-4">
-                <span class="text-xl w-8 text-center">🚀</span><span class="hidden md:inline ml-4">Jornada do Herói</span>
-            </a>
-            <a href="#aliados" data-page="aliados" class="nav-link flex items-center p-4">
-                <span class="text-xl w-8 text-center">🤝</span><span class="hidden md:inline ml-4">Aliados e Economia</span>
-            </a>
-            <a href="#endgame" data-page="endgame" class="nav-link flex items-center p-4">
-                <span class="text-xl w-8 text-center">🎯</span><span class="hidden md:inline ml-4">Conteúdo Endgame</span>
-            </a>
-            <a href="#simulador" data-page="simulador" class="nav-link flex items-center p-4">
-                <span class="text-xl w-8 text-center">⚙️</span><span class="hidden md:inline ml-4">Simulador</span>
-            </a>
-        </nav>
-    </aside>
 
-    <!-- Main Content -->
-    <main class="ml-16 md:ml-64 p-4 md:p-8 flex-1">
-        
-        <!-- Início Page -->
-        <div id="inicio" class="page">
-            <h2 class="text-4xl font-bold text-white mb-2">Bem-vindo ao Holocron de SWTOR</h2>
-            <p class="text-lg text-gray-400 mb-8">Seu guia definitivo para a galáxia de Star Wars: The Old Republic.</p>
-            
-            <div class="content-card mb-8">
-                <h3 class="text-2xl font-semibold text-white mb-4">O que é SWTOR?</h3>
-                <p>Star Wars: The Old Republic (SWTOR) é um MMORPG que o coloca no centro de sua própria saga Star Wars. Ambientado mais de 3.000 anos antes dos filmes, você pode jogar como Jedi, Sith, Caçador de Recompensas e muitas outras classes icônicas. O jogo é conhecido por sua narrativa rica, com 8 histórias de classe únicas, e continua recebendo atualizações e novas expansões, garantindo um universo sempre em evolução para explorar.</p>
+        <div id="holocron-container">
+            <!-- Tab Buttons -->
+            <div id="tab-container" class="p-4 flex flex-wrap justify-center gap-2 bg-black bg-opacity-20">
+                <!-- Buttons populated by JS -->
             </div>
 
-            <div class="content-card">
-                <h3 class="text-2xl font-semibold text-white mb-4">Status de Jogador: Free-to-Play vs. Assinante</h3>
-                <p class="mb-6 text-gray-400">SWTOR oferece diferentes níveis de acesso. Entender as diferenças é crucial para planejar sua jornada.</p>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left table-auto">
-                        <thead class="bg-gray-800 text-gray-300 uppercase text-sm">
-                            <tr>
-                                <th class="p-3">Característica</th>
-                                <th class="p-3">Free-to-Play (F2P)</th>
-                                <th class="p-3">Preferencial</th>
-                                <th class="p-3">Assinante (Subscriber)</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-700">
-                            <tr class="bg-gray-900/50">
-                                <td class="p-3 font-semibold">Limite de Nível</td>
-                                <td class="p-3">60</td>
-                                <td class="p-3">60 (70 com expansões compradas)</td>
-                                <td class="p-3 text-green-400 font-bold">80+ (acesso a todas)</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-semibold">Acesso a Expansões</td>
-                                <td class="p-3">As 2 primeiras (Hutt Cartel, Revan)</td>
-                                <td class="p-3">As que possuía ao assinar</td>
-                                <td class="p-3 text-green-400 font-bold">Todas as atuais e futuras</td>
-                            </tr>
-                             <tr class="bg-gray-900/50">
-                                <td class="p-3 font-semibold">Limite de Créditos</td>
-                                <td class="p-3">1,000,000</td>
-                                <td class="p-3">1,000,000</td>
-                                <td class="p-3 text-green-400 font-bold">Ilimitado</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-semibold">Conteúdo de Endgame</td>
-                                <td class="p-3">Limitado</td>
-                                <td class="p-3">Limitado</td>
-                                <td class="p-3 text-green-400 font-bold">Acesso Total (Operações, etc)</td>
-                            </tr>
-                             <tr class="bg-gray-900/50">
-                                <td class="p-3 font-semibold">Slots de Personagem</td>
-                                <td class="p-3">4 por servidor</td>
-                                <td class="p-3">12 por servidor</td>
-                                <td class="p-3 text-green-400 font-bold">24 por servidor (até 100)</td>
-                            </tr>
-                             <tr>
-                                <td class="p-3 font-semibold">Ganhos de XP</td>
-                                <td class="p-3">Normal</td>
-                                <td class="p-3">Normal</td>
-                                <td class="p-3 text-green-400 font-bold">Bônus de 20%</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <!-- Tab Panels -->
+            <div id="panels-container" class="p-4 md:p-6">
+                
+                <div id="panel-parte1" class="tab-panel">
+                    <section class="editable-content">
+                        <h2 class="text-4xl font-bold mb-6">Parte I: Visão Geral do Jogo</h2>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">O que é Star Wars: The Old Republic?</h3>
+                            <p>SWTOR é um MMORPG (Massively Multiplayer Online Role-Playing Game) ambientado no universo Star Wars, milhares de anos antes dos filmes clássicos. É um jogo focado na história, com diálogo cinematográfico e dublagem completa para todos os personagens no jogo base. Permite interação online com outros jogadores, participação em missões em grupo e cutscenes, mas também foi projetado para jogadores solo, especialmente as expansões mais recentes.</p>
+                        </div>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Status Atual (2025)</h3>
+                            <p>O jogo continua forte após mais de 10 anos, recebendo atualizações regulares. A Broadsword Online Games assumiu o desenvolvimento em 2023 e o jogo já recebeu as atualizações 7.3, 7.4 e 7.5 sob sua gestão, introduzindo novos conteúdos de história e melhorias. Há expectativas para futuras atualizações como Galactic Threads e Master’s Enigma.</p>
+                        </div>
+                         <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Modelo de Negócio e Servidores</h3>
+                            <p>SWTOR opera com um modelo híbrido free-to-play, com algumas restrições. Uma assinatura opcional oferece benefícios significativos, incluindo aumento do limite de nível para 80, acesso a todas as expansões, e concessão mensal de Moedas do Cartel. Existem cinco mega-servidores, com Star Forge (NA) e Darth Malgus (EU) sendo os mais populosos.</p>
+                        </div>
+                    </section>
                 </div>
-                 <p class="mt-4 text-sm text-gray-500">* Dica: Uma assinatura de apenas um mês desbloqueia permanentemente todas as expansões lançadas até aquela data para sua conta, mesmo que você volte a ser Preferencial.</p>
+
+                <div id="panel-parte2" class="tab-panel">
+                    <section class="editable-content">
+                        <h2 class="text-4xl font-bold mb-6">Parte II: Personagens e Estilos de Combate</h2>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">As 8 Histórias de Classe Únicas</h3>
+                            <p>O jogo oferece oito papéis icônicos com histórias de origem distintas. Cada uma é uma campanha de RPG completa, com três atos e um elenco de companheiros memoráveis.</p>
+                            <div class="grid md:grid-cols-2 gap-6 mt-4">
+                                <div>
+                                    <h4 class="text-xl font-bold mt-3 mb-1">Histórias da República:</h4>
+                                    <ul class="list-disc list-inside ml-4 space-y-2">
+                                        <li><b>Cavaleiro Jedi (Tython):</b> A jornada do herói quintessencial. Começa em Tython, um mundo exuberante ameaçado por Flesh Raiders.</li>
+                                        <li><b>Consular Jedi (Tython):</b> Uma história mais cerebral e diplomática, focada na lore Jedi e na construção de alianças.</li>
+                                        <li><b>Soldado (Ord Mantell):</b> Uma história militar de honra e dever, liderando o Esquadrão Havoc em um mundo devastado pela guerra civil.</li>
+                                        <li><b>Contrabandista (Ord Mantell):</b> Uma história espirituosa sobre enriquecer e acidentalmente se tornar um herói, com humor à la Han Solo.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold mt-3 mb-1">Histórias Imperiais:</h4>
+                                    <ul class="list-disc list-inside ml-4 space-y-2">
+                                        <li><b>Guerreiro Sith (Korriban):</b> Uma história de poder brutal, como a Ira do Imperador. Começa no desolado mundo natal dos Sith.</li>
+                                        <li><b>Inquisidor Sith (Korriban):</b> Um conto de ascensão da escravidão ao poder através de segredos sombrios. Frequentemente considerada a melhor história Sith.</li>
+                                        <li><b>Agente Imperial (Nal Hutta):</b> Um thriller de espionagem e conspiração, amplamente considerada a história mais bem escrita do jogo.</li>
+                                        <li><b>Caçador de Recompensas (Nal Hutta):</b> Construindo uma reputação para competir na lendária Grande Caçada.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-6 mb-2 text-amber-400">Análises Aprofundadas dos Estilos de Combate</h3>
+                            <p>A partir da atualização 7.0, a história da classe foi dissociada do estilo de jogo. Assinantes podem desbloquear um segundo Estilo de Combate. A tabela abaixo detalha as disciplinas, papéis e recomendações de equipamento para cada estilo.</p>
+                            <div class="overflow-x-auto mt-4">
+                                <table id="combat-styles-table"></table>
+                            </div>
+                        </div>
+                         <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-6 mb-2 text-amber-400">Otimização de Atributos e Filosofia de Combate</h3>
+                            <p>O combate de alto nível em SWTOR não é uma rotação fixa, mas um <strong>sistema de prioridades dinâmico</strong>. O objetivo é tomar a melhor decisão a cada GCD, considerando cooldowns, procs e recursos. Para otimização de DPS em PvE, as metas de estatísticas são cruciais:</p>
+                            <ul class="list-disc list-inside ml-4 space-y-1 mt-2">
+                                <li><strong>Precisão (Accuracy):</strong> 110% (rating de 2.694). Esta é a meta mais importante para não errar ataques em chefes.</li>
+                                <li><strong>Celeridade (Alacrity):</strong> ~7.15% (rating de ~2.054) para um GCD de 1.4s. Algumas classes têm metas diferentes.</li>
+                                <li><strong>Crítico (Critical):</strong> Todo o resto. Após atingir as metas de Precisão e Celeridade, todos os pontos restantes vão para Crítico.</li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="panel-parte3" class="tab-panel">
+                    <section class="editable-content">
+                        <h2 class="text-4xl font-bold mb-6">Parte III: A História e a Lore</h2>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">A Grande Guerra Galáctica e o Tratado de Coruscant</h3>
+                            <p>A era de SWTOR é definida por um conflito de 28 anos que culminou no Saque de Coruscant. O Império Sith forçou a República a assinar o humilhante Tratado de Coruscant, iniciando uma tensa Guerra Fria. O que poucos sabiam era que essa paz era uma farsa do Imperador Sith Vitiate. Seu verdadeiro objetivo era usar a guerra como uma distração para que a República e seu próprio Império se exaurissem, enquanto ele, em segredo, construía o Império Eterno de Zakuul.</p>
+                        </div>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">A Linha do Tempo em Evolução</h3>
+                            <p>A vasta quantidade de conteúdo pode ser avassaladora. Siga esta ordem para uma experiência cronológica:</p>
+                            <ol class="list-decimal list-inside ml-4 space-y-1">
+                                <li>Jogo Base (Capítulos 1-3) -> Ilum</li>
+                                <li>Rise of the Hutt Cartel (Makeb)</li>
+                                <li>Shadow of Revan (Rishi & Yavin 4) -> Ziost</li>
+                                <li>Knights of the Fallen Empire (KotFE)</li>
+                                <li>Knights of the Eternal Throne (KotET)</li>
+                                <li>Arco de Iokath e do Traidor (Fractured Alliances)</li>
+                                <li>Onslaught (Onderon, Mek-Sha)</li>
+                                <li>Legacy of the Sith (Manaan, Elom)</li>
+                                <li>Atualizações contínuas (Ruhnuk, Voss, etc.)</li>
+                            </ol>
+                        </div>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Datacrons: Bônus Permanentes</h3>
+                            <p>Datacrons são objetos escondidos que concedem bônus permanentes de estatísticas a todos os seus personagens no mesmo Legado. A coleta completa oferece um aumento notável nas estatísticas. Guias visuais são indispensáveis para encontrá-los.</p>
+                            <ul id="datacron-list" class="list-disc list-inside ml-4 space-y-2 grid md:grid-cols-2 lg:grid-cols-3 gap-x-4 mt-4"></ul>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="panel-parte4" class="tab-panel">
+                    <section class="editable-content">
+                        <h2 class="text-4xl font-bold mb-6">Parte IV: Companheiros e Romances</h2>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">O Sistema de Companheiros</h3>
+                            <p>Companheiros são aliados que o acompanham, podendo desempenhar os papéis de DPS, Tanque ou Curador. Sua eficácia é determinada pelo nível de Influência (até 50). O jogo oferece diversas opções de romance, incluindo romances de classe e aqueles que surgem nas expansões, como Lana Beniko e Theron Shan, que são muito populares.</p>
+                        </div>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Preferências de Presentes de Companheiro (Amor)</h3>
+                            <div class="overflow-x-auto mt-4">
+                                <table id="companion-gifts-table"></table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="panel-parte5" class="tab-panel">
+                    <section class="editable-content">
+                        <h2 class="text-4xl font-bold mb-6">Parte V: Conteúdo de Fim de Jogo (Endgame)</h2>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Progressão de Equipamento (Gearing)</h3>
+                            <p>As moedas principais são Comendas de Conquista, Estabilizadores FP-1, Catalisadores OP-1, Aceleradores WZ-1 e Fragmentos de Tecnologia. Itens Táticos e Implantes Lendários são cruciais para a otimização.</p>
+                            <h4 class="text-xl font-bold mt-3 mb-1">Método Hyde e Zeek</h4>
+                            <p>Este é o método mais eficiente para equipar personagens. Em vez de aprimorar cada peça, você aprimora uma única peça, a desconstrói para uma missão especial, e desbloqueia a compra de modificações de alto nível por créditos e Fragmentos de Tecnologia para todos os seus personagens.</p>
+                            <h4 class="text-xl font-bold mt-3 mb-1">Equipamento Rakata</h4>
+                            <p>O melhor equipamento do jogo (iRating 344 Roxo) é obtido em Operações de Modo Mestre. As peças de Rakata de alto nível são não modificáveis, exigindo que você obtenha a peça exata com a combinação de estatísticas que precisa.</p>
+                        </div>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Atividades de Grupo</h3>
+                            <ul class="list-disc list-inside ml-4 space-y-1">
+                                <li><b>Flashpoints:</b> Masmorras para 4 jogadores. O modo Story pode ser feito solo com um "Droide de Suporte de Combate GSI".</li>
+                                <li><b>Operations:</b> Raids de grande escala para 8 ou 16 jogadores, o auge do conteúdo PvE.</li>
+                                <li><b>Jogador vs. Jogador (PvP):</b> Inclui Warzones (8v8) e Arenas (4v4).</li>
+                                <li><b>Fortalezas e Conquista:</b> Sistema de moradia e evento semanal de objetivos.</li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="panel-parte6" class="tab-panel">
+                    <section class="editable-content">
+                        <h2 class="text-4xl font-bold mb-6">Parte VI: Habilidades de Criação (Crafting)</h2>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Profissões e Produtos Notáveis</h3>
+                            <ul class="list-disc list-inside ml-4 space-y-1">
+                                <li><b>Biochem:</b> Essencial para consumíveis reutilizáveis (stims, adrenals, medpacs).</li>
+                                <li><b>Artifice:</b> Cria cristais de cor, dyes e enhancements. Itens cosméticos são muito lucrativos.</li>
+                                <li><b>Cybertech:</b> Cria earpieces, armorings e mods, componentes cruciais para equipamentos.</li>
+                                <li><b>Armormech, Armstech, Synthweaving:</b> Criam Augments, a camada final de otimização.</li>
+                            </ul>
+                        </div>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Tabela de Sinergia de Crew Skills</h3>
+                            <div class="overflow-x-auto mt-4">
+                                <table id="crafting-synergy-table"></table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="panel-parte7" class="tab-panel">
+                    <section class="editable-content">
+                        <h2 class="text-4xl font-bold mb-6">Parte VII: Recursos e Eventos</h2>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Recursos da Comunidade</h3>
+                            <ul class="list-disc list-inside ml-4 space-y-1">
+                                <li><b>Swtorista.com:</b> Um recurso abrangente para iniciantes e veteranos.</li>
+                                <li><b>VULKK.com:</b> Guias de classes, builds e endgame.</li>
+                                <li><b>Illeva Guides:</b> Guias detalhados de datacrons e achievements.</li>
+                                <li><b>Reddit (r/swtor) e Discord:</b> Para discussões e grupos.</li>
+                            </ul>
+                        </div>
+                        <div class="holocron-card">
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Guia de Eventos Recorrentes</h3>
+                            <p>SWTOR emprega um robusto sistema de eventos recorrentes para manter o universo dinâmico.</p>
+                            <div class="overflow-x-auto mt-4">
+                                <table id="events-table"></table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
             </div>
         </div>
-
-        <!-- Identidade Page -->
-        <div id="identidade" class="page">
-            <h2 class="text-4xl font-bold text-white mb-2">Identidade do Personagem</h2>
-            <p class="text-lg text-gray-400 mb-8">A base da sua saga: quem você é e como você luta.</p>
-            <div id="class-explorer" class="space-y-4"></div>
-        </div>
-        
-        <!-- Jornada do Herói Page -->
-        <div id="jornada" class="page">
-            <h2 class="text-4xl font-bold text-white mb-2">Jornada do Herói</h2>
-            <p class="text-lg text-gray-400 mb-8">Guias para subir de nível e se equipar para os desafios do endgame.</p>
-            
-            <div class="border-b border-gray-700 mb-6">
-                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                    <button data-tab="jornada-nivelamento" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500">Nivelamento</button>
-                    <button data-tab="jornada-equipamentos" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500">Equipamentos (Nível 80)</button>
-                    <button data-tab="jornada-datacrons" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500">Datacrons</button>
-                </nav>
-            </div>
-
-            <div id="jornada-nivelamento" class="tab-content"></div>
-            <div id="jornada-equipamentos" class="tab-content hidden"></div>
-            <div id="jornada-datacrons" class="tab-content hidden"></div>
-        </div>
-        
-        <!-- Aliados e Economia Page -->
-        <div id="aliados" class="page">
-            <h2 class="text-4xl font-bold text-white mb-2">Aliados e Economia</h2>
-            <p class="text-lg text-gray-400 mb-8">Seus companheiros e seu lugar na economia galáctica.</p>
-
-            <div class="border-b border-gray-700 mb-6">
-                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                    <button data-tab="aliados-companheiros" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500">Companheiros</button>
-                    <button data-tab="aliados-crafting" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500">Criação & GTN</button>
-                </nav>
-            </div>
-
-            <div id="aliados-companheiros" class="tab-content"></div>
-            <div id="aliados-crafting" class="tab-content hidden"></div>
-        </div>
-
-        <!-- Conteúdo Endgame Page -->
-        <div id="endgame" class="page">
-             <h2 class="text-4xl font-bold text-white mb-2">Conteúdo Endgame</h2>
-            <p class="text-lg text-gray-400 mb-8">O que fazer após atingir o nível máximo? A verdadeira jornada começa aqui.</p>
-            <div id="endgame-content-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        </div>
-
-        <!-- Simulador Page -->
-        <div id="simulador" class="page">
-            <h2 class="text-4xl font-bold text-white mb-2">Simulador de Otimização</h2>
-            <p class="text-lg text-gray-400 mb-8">Insira os detalhes do seu personagem para receber dicas personalizadas de otimização.</p>
-
-            <div class="content-card max-w-4xl mx-auto">
-                <form id="simulation-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label for="char-level" class="block text-sm font-medium text-gray-300 mb-1">Nível do Personagem</label>
-                        <input type="number" id="char-level" name="char-level" min="1" max="80" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-blue-500 focus:border-blue-500" required>
-                    </div>
-                    <div>
-                        <label for="char-faction" class="block text-sm font-medium text-gray-300 mb-1">Facção</label>
-                        <select id="char-faction" name="char-faction" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-blue-500 focus:border-blue-500" required>
-                            <option value="Republica">República</option>
-                            <option value="Imperio">Império</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="char-class" class="block text-sm font-medium text-gray-300 mb-1">Classe (História de Origem)</label>
-                        <select id="char-class" name="char-class" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-blue-500 focus:border-blue-500" required>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="char-style" class="block text-sm font-medium text-gray-300 mb-1">Estilo de Combate</label>
-                        <select id="char-style" name="char-style" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-blue-500 focus:border-blue-500" required>
-                        </select>
-                    </div>
-                     <div>
-                        <label for="char-discipline" class="block text-sm font-medium text-gray-300 mb-1">Disciplina</label>
-                        <select id="char-discipline" name="char-discipline" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-blue-500 focus:border-blue-500" required>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="companion-influence" class="block text-sm font-medium text-gray-300 mb-1">Nível de Influência do Companheiro</label>
-                        <input type="number" id="companion-influence" name="companion-influence" min="1" max="50" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-blue-500 focus:border-blue-500" required>
-                    </div>
-                    <div class="md:col-span-2">
-                        <label for="play-style" class="block text-sm font-medium text-gray-300 mb-1">Principal Foco no Jogo</label>
-                        <select id="play-style" name="play-style" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-blue-500 focus:border-blue-500" required>
-                            <option value="solo">História e Conteúdo Solo</option>
-                            <option value="group">Flashpoints e Operações (Grupo)</option>
-                            <option value="pvp">PvP (Jogador vs Jogador)</option>
-                            <option value="all">Um pouco de tudo</option>
-                        </select>
-                    </div>
-                    <div class="md:col-span-2 text-center">
-                        <button type="submit" class="btn-primary px-8 py-3 text-lg">Gerar Recomendações</button>
-                    </div>
-                </form>
-            </div>
-            
-            <div id="simulation-results" class="hidden mt-8">
-                 <h3 class="text-3xl font-bold text-white mb-6 text-center">Holocron Personalizado para Seu Personagem</h3>
-                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div id="sim-stats-card" class="content-card"></div>
-                    <div id="sim-gear-card" class="content-card"></div>
-                    <div id="sim-companion-card" class="content-card"></div>
-                    <div id="sim-content-card" class="content-card"></div>
-                 </div>
-            </div>
-
-        </div>
-
     </main>
-    
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const data = {
-                // Data objects will be populated here
-            };
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- DATA ---
+            const combatStylesData = [
+                { style: 'Guardian / Juggernaut', discipline: 'Defense / Immortal', role: 'Tanque', tactical: 'Grit Teeth / Jaw Breaker', implants: 'Force Resistance + Retaliator', stats: 'Escudo (5500-6000) > Absorção' },
+                { style: 'Guardian / Juggernaut', discipline: 'Vigilance / Vengeance', role: 'DPS (DoT)', tactical: 'Hemophilic Slash', implants: 'Fearless Victor + Champion\'s Precision', stats: 'Precisão (2694) -> Celeridade (2054) -> Crítico' },
+                { style: 'Guardian / Juggernaut', discipline: 'Focus / Rage', role: 'DPS (Burst)', tactical: 'Cauterized Coronary', implants: 'Fearless Victor + Dispatcher', stats: 'Precisão (2694) -> Celeridade (2054) -> Crítico' },
+                { style: 'Sentinel / Marauder', discipline: 'Watchman / Annihilation', role: 'DPS (DoT)', tactical: 'Spiteful Saber', implants: 'Fearless Victor + Berserker\'s Call', stats: 'Precisão (2694) -> Celeridade (2054) -> Crítico' },
+                { style: 'Sentinel / Marauder', discipline: 'Combat / Carnage', role: 'DPS (Burst)', tactical: 'Fanged God Form', implants: 'Fearless Victor + Dispatcher', stats: 'Precisão (2694) -> Celeridade (1123) -> Crítico' },
+                { style: 'Sentinel / Marauder', discipline: 'Concentration / Fury', role: 'DPS (Burst)', tactical: 'Cauterized Coronary', implants: 'Fearless Victor + Force-Bound', stats: 'Precisão (2694) -> Celeridade (2054) -> Crítico' },
+                { style: 'Sage / Sorcerer', discipline: 'Seer / Corruption', role: 'Curador', tactical: 'One for All / All for One', implants: 'Revitalize + Unyielding Power', stats: 'Celeridade (5431) -> Crítico' },
+                { style: 'Sage / Sorcerer', discipline: 'Telekinetics / Lightning', role: 'DPS (Burst)', tactical: 'Stormwatch', implants: 'Gathering Storm + Unmatched Haste', stats: 'Precisão (2694) -> Celeridade (3209) -> Crítico' },
+                { style: 'Sage / Sorcerer', discipline: 'Balance / Madness', role: 'DPS (DoT)', tactical: 'Tempest of Rho', implants: 'Gathering Storm + The Slow Mercy', stats: 'Precisão (2694) -> Celeridade (5431) -> Crítico' },
+                { style: 'Shadow / Assassin', discipline: 'Kinetic Combat / Darkness', role: 'Tanque', tactical: 'Two Cloaks / The Life Warden', implants: 'Dynamic Force + Force Resistance', stats: 'Escudo (5000-5500) > Absorção' },
+                { style: 'Shadow / Assassin', discipline: 'Infiltration / Deception', role: 'DPS (Burst)', tactical: 'The Awakened Flame', implants: 'Dynamic Force + Force Training', stats: 'Precisão (2694) -> Celeridade (2054) -> Crítico' },
+                { style: 'Shadow / Assassin', discipline: 'Serenity / Hatred', role: 'DPS (DoT)', tactical: 'The Dying Force', implants: 'Dynamic Force + The Force-Bound', stats: 'Precisão (2694) -> Celeridade (2054) -> Crítico' },
+                { style: 'Commando / Mercenary', discipline: 'Combat Medic / Bodyguard', role: 'Curador', tactical: 'SC-4 Treatment Scanner', implants: 'Advanced Scanning + Concentrated Fire', stats: 'Celeridade (5431) -> Crítico' },
+                { style: 'Commando / Mercenary', discipline: 'Gunnery / Arsenal', role: 'DPS (Burst)', tactical: 'Primed Ignition', implants: 'Concentrated Fire + Overcharged Cells', stats: 'Precisão (2694) -> Celeridade (4021) -> Crítico' },
+                { style: 'Commando / Mercenary', discipline: 'Assault Specialist / Innovative Ordnance', role: 'DPS (DoT)', tactical: 'Energized Charges', implants: 'Concentrated Fire + Overcharged Cells', stats: 'Precisão (2694) -> Celeridade (2054) -> Crítico' },
+                { style: 'Vanguard / Powertech', discipline: 'Shield Specialist / Shield Tech', role: 'Tanque', tactical: 'Thermal Screen / Oil Fire', implants: 'Supercommando + Squad Leader', stats: 'Escudo (6000-6500) > Absorção' },
+                { style: 'Vanguard / Powertech', discipline: 'Plasmatech / Pyrotech', role: 'DPS (DoT)', tactical: 'Superheated Fuel', implants: 'Shock Trooper + Mandalorian Armaments', stats: 'Precisão (2694) -> Celeridade (2054) -> Crítico' },
+                { style: 'Vanguard / Powertech', discipline: 'Tactics / Advanced Prototype', role: 'DPS (Burst)', tactical: 'Overwhelming Offense', implants: 'Shock Trooper + Mandalorian Armaments', stats: 'Precisão (2694) -> Celeridade (2054) -> Crítico' },
+                { style: 'Gunslinger / Sniper', discipline: 'Sharpshooter / Marksmanship', role: 'DPS (Burst)', tactical: 'Agitating Energies', implants: 'Locked and Loaded + Improved Targeting', stats: 'Precisão (2694) -> Celeridade (2054) -> Crítico' },
+                { style: 'Gunslinger / Sniper', discipline: 'Saboteur / Engineering', role: 'DPS (DoT)', tactical: 'Ruthless Interrogation', implants: 'Locked and Loaded + Energy Regulators', stats: 'Precisão (2694) -> Celeridade (2054) -> Crítico' },
+                { style: 'Gunslinger / Sniper', discipline: 'Dirty Fighting / Virulence', role: 'DPS (DoT)', tactical: 'Exploited Weakness', implants: 'Locked and Loaded + Improved Targeting', stats: 'Precisão (2694) -> Celeridade (2700-2800) -> Crítico' },
+                { style: 'Scoundrel / Operative', discipline: 'Sawbones / Medicine', role: 'Curador', tactical: 'Critical Surgery', implants: 'Tactician + Aggressive Treatment', stats: 'Celeridade (2054) -> Crítico' },
+                { style: 'Scoundrel / Operative', discipline: 'Scrapper / Concealment', role: 'DPS (Burst)', tactical: 'Acid Lash', implants: 'Tactician + Locked and Loaded', stats: 'Precisão (2694) -> Celeridade (2054) -> Crítico' },
+                { style: 'Scoundrel / Operative', discipline: 'Ruffian / Lethality', role: 'DPS (DoT)', tactical: 'Synox Shots', implants: 'Tactician + Locked and Loaded', stats: 'Precisão (2694) -> Celeridade (2054) -> Crítico' },
+            ];
+            const datacronsData = ["Alderaan: Maestria +4, Resistência +3, Presença +3", "Balmorra: Varia por facção", "Belsavis: Maestria +4, Resistência +4, Presença +4", "Corellia: Maestria +4, Presença +4", "Coruscant (Rep): Resistência +2, Maestria +2, Presença +2", "Dromund Kaas (Imp): Resistência +2, Maestria +2, Presença +2", "Frota: Todas as estatísticas +10", "Hoth: Maestria +4, Resistência +4, Presença +4", "Hutta (Imp): Maestria +2, Presença +2", "Ilum: Maestria +4, Resistência +4", "Korriban (Imp): Resistência +2, Maestria +2", "Makeb: Resistência +10, Presença +10", "Mek-Sha: Maestria +7, Resistência +7", "Nar Shaddaa: Maestria +3, Presença +3", "Onderon: Maestria +7, Presença +7", "Ord Mantell (Rep): Maestria +2, Presença +2", "Ossus: Maestria +6, Resistência +2, Presença +6", "Quesh: Maestria +4, Resistência +4", "Rishi: Maestria +40 (4 datacrons)", "Taris: Varia por facção", "Tatooine: Maestria +3, Presença +3", "Tython (Rep): Maestria +2, Resistência +2", "Voss: Maestria +4, Resistência +4, Presença +4"];
+            const companionGiftsData = [ { companion: 'Mako', class: 'Caçador de Recompensas', loves: 'Tecnologia' }, { companion: 'Vette', class: 'Guerreiro Sith', loves: 'Bens do Submundo' }, { companion: 'Kira Carsen', class: 'Cavaleiro Jedi', loves: 'Tecnologia' }, { companion: 'Elara Dorne', class: 'Soldado', loves: 'Luxo' }, { companion: 'Gault Rennow', class: 'Caçador de Recompensas', loves: 'Luxo' }, { companion: 'Malavai Quinn', class: 'Guerreiro Sith', loves: 'Arma' }, { companion: 'Corso Riggs', class: 'Contrabandista', loves: 'Arma' }, { companion: 'Aric Jorgan', class: 'Soldado', loves: 'Arma' }, { companion: 'Andronikos Revel', class: 'Inquisidor Sith', loves: 'Bens do Submundo' }, { companion: 'Vector Hyllis', class: 'Agente Imperial', loves: 'Artefato Cultural' }, { companion: 'Felix Iresso', class: 'Consular Jedi', loves: 'Arma' }, { companion: 'T7-O1', class: 'Cavaleiro Jedi', loves: 'Tecnologia' }, { companion: 'Lana Beniko', class: 'Todos (História)', loves: 'Artefato Cultural' }, { companion: 'Theron Shan', class: 'Todos (História)', loves: 'Tecnologia' } ];
+            const craftingSynergyData = [ { craft: 'Armormech', gathering: 'Scavenging', mission: 'Underworld Trading' }, { craft: 'Armstech', gathering: 'Scavenging', mission: 'Investigation' }, { craft: 'Artifice', gathering: 'Archaeology', mission: 'Treasure Hunting' }, { craft: 'Biochem', gathering: 'Bioanalysis', mission: 'Diplomacy' }, { craft: 'Cybertech', gathering: 'Scavenging', mission: 'Underworld Trading' }, { craft: 'Synthweaving', gathering: 'Archaeology', mission: 'Underworld Trading' } ];
+            const eventsData = [ { event: 'Bounty Contract Week', frequency: 'Rotacional', activity: 'Caçar alvos de recompensa.' }, { event: 'Rakghoul Resurgence', frequency: 'Rotacional', activity: 'Missões em zona de quarentena.' }, { event: 'Relics of the Gree', frequency: 'Rotacional', activity: 'Missões e chefe mundial em Ilum.' }, { event: 'Pirate Incursion', frequency: 'Rotacional', activity: 'Missões diárias em Dantooine.' }, { event: 'Nar Shaddaa Nightlife', frequency: 'Anual (Verão)', activity: 'Jogar em máquinas de cassino.' }, { event: 'Feast of Prosperity', frequency: 'Anual (Outono)', activity: 'Missões de culinária.' }, { event: 'Life Day', frequency: 'Anual (Inverno)', activity: 'Atividades festivas.' }, { event: 'Galactic Seasons', frequency: 'Sazonal', activity: 'Completar objetivos diários/semanais.' } ];
 
-            // Main setup function
-            function initializeHolocron() {
-                populateData();
-                setupNavigation();
-                setupTabbedInterfaces();
-                setupClassExplorer();
-                setupJornadaHeroi();
-                setupAliadosEconomia();
-                setupEndgame();
-                setupSimulator();
-                setupDatacrons(); // Chamada da nova função de datacrons
-                
-                // Initial page load
-                const initialPage = window.location.hash.substring(1) || 'inicio';
-                showPage(initialPage);
-                updateActiveLink(initialPage);
+            // --- RENDER FUNCTIONS ---
+            function populateTable(tableId, headers, data, renderRow) {
+                const table = document.getElementById(tableId);
+                if (!table) return;
+                let html = `<thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+                html += data.map(renderRow).join('');
+                html += `</tbody>`;
+                table.innerHTML = html;
             }
-
-            function populateData() {
-                data.origins = {
-                    Republica: [
-                        { id: 'jedi_knight', name: 'Cavaleiro Jedi' },
-                        { id: 'jedi_consular', name: 'Jedi Consular' },
-                        { id: 'trooper', name: 'Soldado' },
-                        { id: 'smuggler', name: 'Contrabandista' }
-                    ],
-                    Imperio: [
-                        { id: 'sith_warrior', name: 'Guerreiro Sith' },
-                        { id: 'sith_inquisitor', name: 'Inquisidor Sith' },
-                        { id: 'bounty_hunter', name: 'Caçador de Recompensas' },
-                        { id: 'imperial_agent', name: 'Agente Imperial' }
-                    ]
-                };
-
-                data.combatStyles = {
-                    jedi_knight: [ 'guardian', 'sentinel' ],
-                    jedi_consular: [ 'sage', 'shadow' ],
-                    trooper: [ 'commando', 'vanguard' ],
-                    smuggler: [ 'scoundrel', 'gunslinger' ],
-                    sith_warrior: [ 'juggernaut', 'marauder' ],
-                    sith_inquisitor: [ 'sorcerer', 'assassin' ],
-                    bounty_hunter: [ 'mercenary', 'powertech' ],
-                    imperial_agent: [ 'operative', 'sniper' ]
-                };
-
-                data.styleDetails = {
-                    guardian: { name: "Guardião", faction: 'Republica', roleIcon: '🛡️', description: "Defensor da paz, mestre do combate com sabre de luz único, capaz de proteger aliados e subjugar inimigos.", weapon: "Sabre de Luz Único" },
-                    sentinel: { name: "Sentinela", faction: 'Republica', roleIcon: '⚔️', description: "Guerreiro ágil que usa dois sabres de luz em um turbilhão de ataques, focando em dano massivo e rápido.", weapon: "Dois Sabres de Luz" },
-                    sage: { name: "Sábio", faction: 'Republica', roleIcon: '❤️', description: "Mestre da Força que manipula energias telecinéticas e cura feridas, lutando à distância.", weapon: "Sabre de Luz (Foco)" },
-                    shadow: { name: "Sombra", faction: 'Republica', roleIcon: '🛡️', description: "Usa furtividade e um sabre de luz de lâmina dupla para ataques surpresa ou para proteger seus aliados.", weapon: "Sabre de Luz de Lâmina Dupla" },
-                    commando: { name: "Comando", faction: 'Republica', roleIcon: '❤️', description: "Soldado de elite com um canhão de assalto pesado, oferecendo poder de fogo devastador ou suporte de cura no campo de batalha.", weapon: "Canhão de Assalto" },
-                    vanguard: { name: "Vanguarda", faction: 'Republica', roleIcon: '🛡️', description: "A ponta de lança do exército, usando um rifle blaster e táticas de combate próximo para proteger aliados e eliminar alvos.", weapon: "Rifle Blaster" },
-                    scoundrel: { name: "Vigarista", faction: 'Republica', roleIcon: '❤️', description: "Usa furtividade, uma pistola blaster e truques sujos para curar aliados ou pegar inimigos desprevenidos.", weapon: "Pistola Blaster" },
-                    gunslinger: { name: "Pistoleiro", faction: 'Republica', roleIcon: '⚔️', description: "Mestre do tiroteio, empunhando duas pistolas blaster para um poder de fogo implacável à distância, utilizando cobertura para se proteger.", weapon: "Duas Pistolas Blaster" },
-                    
-                    juggernaut: { name: "Juggernaut", faction: 'Imperio', roleIcon: '🛡️', description: "Força imparável da natureza, usando raiva e um sabre de luz único para esmagar oponentes ou suportar ataques incríveis.", weapon: "Sabre de Luz Único" },
-                    marauder: { name: "Maroto", faction: 'Imperio', roleIcon: '⚔️', description: "Predador letal que canaliza o ódio em ataques furiosos com dois sabres de luz, um executor da vontade do Império.", weapon: "Dois Sabres de Luz" },
-                    sorcerer: { name: "Feiticeiro", faction: 'Imperio', roleIcon: '❤️', description: "Manipulador do lado sombrio que lança raios, corrompe a vida e cura aliados com energias proibidas.", weapon: "Sabre de Luz (Foco)" },
-                    assassin: { name: "Assassino", faction: 'Imperio', roleIcon: '🛡️', description: "Caçador furtivo que usa um sabre de luz de lâmina dupla e o lado sombrio para eliminar alvos das sombras ou defender seus mestres.", weapon: "Sabre de Luz de Lâmina Dupla" },
-                    mercenary: { name: "Mercenário", faction: 'Imperio', roleIcon: '❤️', description: "Armado com duas pistolas e um arsenal de alta tecnologia, o Mercenário pode descarregar dano massivo ou prover cura eficiente.", weapon: "Duas Pistolas Blaster" },
-                    powertech: { name: "Powertech", faction: 'Imperio', roleIcon: '🛡️', description: "Guerreiro tecnológico que usa lança-chamas, jatos e um blaster para combate próximo, protegendo clientes ou incinerando inimigos.", weapon: "Pistola Blaster" },
-                    operative: { name: "Operativo", faction: 'Imperio', roleIcon: '❤️', description: "Agente secreto letal que utiliza furtividade, um rifle blaster e facas envenenadas para curar aliados ou eliminar alvos com precisão cirúrgica.", weapon: "Rifle Blaster" },
-                    sniper: { name: "Franco-atirador", faction: 'Imperio', roleIcon: '⚔️', description: "Mestre da precisão à longa distância, usando um rifle de precisão e cobertura para eliminar alvos antes que saibam o que os atingiu.", weapon: "Rifle de Precisão" }
-                };
-
-                data.disciplines = {
-                    guardian: [
-                        { id: 'defense', name: 'Defesa', role: 'Tanque', description: 'Focado em alta capacidade de sobrevivência, usando o sabre de luz para desviar ataques e proteger aliados.' },
-                        { id: 'vigilance', name: 'Vigilância', role: 'Dano (Contínuo)', description: 'Causa dano consistente através de queimaduras e ataques de área, excelente contra múltiplos inimigos.' },
-                        { id: 'focus', name: 'Foco', role: 'Dano (Explosivo)', description: 'Concentra o poder da Força em ataques devastadores de alvo único.' }
-                    ],
-                    juggernaut: [
-                        { id: 'immortal', name: 'Imortal', role: 'Tanque', description: 'O mais resiliente dos tanques, usando o lado sombrio para suportar ataques brutais e proteger aliados.' },
-                        { id: 'vengeance', name: 'Vingança', role: 'Dano (Contínuo)', description: 'Usa a raiva para criar uma ofensiva torrencial com dano contínuo e em área.' },
-                        { id: 'rage', name: 'Raiva', role: 'Dano (Explosivo)', description: 'Canaliza a fúria em ataques esmagadores, causando dano massivo em alvos únicos.' }
-                    ],
-                    sentinel: [
-                        { id: 'watchman', name: 'Vigília', role: 'Dano (Contínuo)', description: 'Especialista em dano ao longo do tempo (DoTs), aplicando queimaduras e sangramentos.' },
-                        { id: 'combat', name: 'Combate', role: 'Dano (Explosivo)', description: 'Uma tempestade de golpes rápidos, focando em janelas de dano explosivo.' },
-                        { id: 'concentration', name: 'Concentração', role: 'Dano (Explosivo)', description: 'Usa ataques poderosos da Força em conjunto com os sabres de luz para dano massivo.' }
-                    ],
-                    marauder: [
-                        { id: 'annihilation', name: 'Aniquilação', role: 'Dano (Contínuo)', description: 'Mestre em fazer os inimigos sangrarem até a morte com uma série de ataques DoT.' },
-                        { id: 'carnage', name: 'Carnificina', role: 'Dano (Explosivo)', description: 'Um turbilhão de lâminas, focado em dano explosivo e rápido.' },
-                        { id: 'fury', name: 'Fúria', role: 'Dano (Explosivo)', description: 'Canaliza a raiva pura em ataques devastadores da Força, esmagando os inimigos.' }
-                    ],
-                     sage: [
-                        { id: 'seer', name: 'Vidente', role: 'Cura', description: 'Focado em curas potentes de alvo único e múltiplo, mantendo os aliados vivos.' },
-                        { id: 'telekinesis', name: 'Telecinese', role: 'Dano (Explosivo)', description: 'Arremessa pedras e detritos nos inimigos com a Força para dano explosivo à distância.' },
-                        { id: 'balance', name: 'Equilíbrio', role: 'Dano (Contínuo)', description: 'Drena a vida dos inimigos com a Força, causando dano contínuo e se auto-curando.' }
-                    ],
-                    sorcerer: [
-                        { id: 'corruption', name: 'Corrupção', role: 'Cura', description: 'Usa o lado sombrio para remendar feridas e sustentar aliados em combate.' },
-                        { id: 'lightning', name: 'Relâmpago', role: 'Dano (Explosivo)', description: 'Invoca raios da Força para eletrocutar inimigos com dano massivo e explosivo.' },
-                        { id: 'madness', name: 'Loucura', role: 'Dano (Contínuo)', description: 'Assola os inimigos com aflições do lado sombrio, drenando sua força vital.' }
-                    ],
-                    shadow: [
-                        { id: 'kinetic_combat', name: 'Combate Cinético', role: 'Tanque', description: 'Utiliza a Força para criar escudos e aparar ataques, um tanque evasivo e difícil de atingir.' },
-                        { id: 'infiltration', name: 'Infiltração', role: 'Dano (Explosivo)', description: 'Usa furtividade para se posicionar e desferir ataques surpresa devastadores.' },
-                        { id: 'serenity', name: 'Serenidade', role: 'Dano (Contínuo)', description: 'Aplica DoTs com a Força, enfraquecendo múltiplos alvos e se auto-curando.' }
-                    ],
-                     assassin: [
-                        { id: 'darkness', name: 'Escuridão', role: 'Tanque', description: 'Protege-se com o poder do lado sombrio, um tanque que drena a vida e resiste a danos.' },
-                        { id: 'deception', name: 'Engano', role: 'Dano (Explosivo)', description: 'Ataca das sombras com picos de dano de relâmpago, eliminando alvos rapidamente.' },
-                        { id: 'hatred', name: 'Ódio', role: 'Dano (Contínuo)', description: 'Espalha DoTs mortais que sugam a vida dos inimigos, excelente em lutas longas.' }
-                    ]
-                    // Add other disciplines here following the same pattern
-                };
-                
-                 data.levelingTips = {
-                    new_player: [
-                        "Foque nas missões roxas (história) para o máximo de XP.",
-                        "Use os itens de Aumento de XP que o jogo oferece gratuitamente.",
-                        "Junte-se a uma Guilda para ganhar um bônus passivo de XP.",
-                        "Assine o jogo para um bônus de 20% de XP e acesso a todo o conteúdo.",
-                        "Pegue um Speeder (veículo) o mais rápido possível para se locomover mais rápido.",
-                        "Não tenha medo de pular inimigos que não fazem parte de um objetivo de missão.",
-                    ],
-                    veteran_player: [
-                        "Use desbloqueios de Legado para aumentos de XP em atividades específicas (Warzones, Flashpoints, etc).",
-                        "Desbloqueie 'Pilotagem de Speeder Aprimorada I' para usar speeders no nível 1.",
-                        "Use o 'Rocket Boost' do Legado para se mover mais rápido em áreas internas.",
-                        "Reduza o tempo de recarga da Viagem Rápida a zero com desbloqueios de Legado.",
-                        "Use um Compêndio de Companheiro para levar seu aliado ao nível 50 de influência instantaneamente.",
-                        "Crie um personagem com Furtividade (Assassino/Sombra/Operativo/Vigarista) para pular a maioria dos combates.",
-                    ]
-                };
-
-                data.gearing = {
-                    currencies: [
-                        { name: "Fragmentos de Tecnologia", icon: "⚙️", source: "Quase tudo: Conquista, PvP, Operações, etc.", use: "Implantes Lendários, Itens Táticos, materiais de criação." },
-                        { name: "Comendas de Conquista", icon: "🏆", source: "Conquista semanal, Heroicas, Áreas Diárias.", use: "Equipamento inicial de Nível 80 (Noble Decurion)." },
-                        { name: "Estabilizadores FP-1", icon: "🔵", source: "Flashpoints, Heroicas, Áreas Diárias.", use: "Equipamento de Flashpoint (Supreme Decurion)." },
-                        { name: "Catalisadores OP-1", icon: "🟣", source: "Operações (principalmente).", use: "Melhor equipamento do jogo (Rakata)." },
-                        { name: "Acelerantes WZ-1", icon: "⚔️", source: "Apenas PvP.", use: "Equipamento de PvP (Thyrsian)." },
-                    ],
-                    path: [
-                        { step: 1, title: "Início (Nível 80)", description: "Complete a Conquista semanal para ganhar <strong>Comendas de Conquista</strong>." },
-                        { step: 2, title: "Equipamento de Conquista", description: "Use as Comendas para comprar um conjunto completo de equipamento <strong>Noble Decurion (324 verde)</strong> na Frota. Este é seu equipamento inicial." },
-                        { step: 3, title: "Caminho Casual (Hyde & Zeek)", description: "Faça Flashpoints no modo Mestre para obter peças <strong>Supreme Decurion (azul)</strong>. Leve uma peça 340 azul e uma 340 roxa (de Operações ou Caches) para Hyde & Zeek para desbloquear cópias baratas para todos os seus personagens." },
-                         { step: 4, title: "Caminho Hardcore (Rakata)", description: "Participe de Operações no modo Veterano e Mestre para obter <strong>Catalisadores OP-1</strong> e peças de equipamento <strong>Rakata (roxo)</strong>, o melhor do jogo. Aprimore-as até 344." },
-                        { step: 5, title: "Otimização Final", description: "Não se esqueça dos <strong>Implantes Lendários</strong> e <strong>Itens Táticos</strong>, que definem sua build, e dos <strong>Aumentos (Augments)</strong> em todas as peças para maximizar seus atributos." }
-                    ]
-                };
-                 data.companions = {
-                    gifts: [
-                        { type: 'Weapon', lovers: 'Andronikos Revel, Aric Jorgan, Broonmark, Corso Riggs...', emoji: '🔫' },
-                        { type: 'Military Gear', lovers: 'Akaavi Spar, Arcann, Aric Jorgan, HK-51, Malavai Quinn...', emoji: '🎖️' },
-                        { type: 'Courting', lovers: 'Doc, Guss, Corso Riggs, Vector Hyllus...', emoji: '❤️' },
-                        { type: 'Luxury', lovers: 'Bowdaar, Gault, Risha, Senya, Tharan Cedrax...', emoji: '💎' },
-                        { type: 'Technology', lovers: 'Blizz, Mako, T7-O1, Theron Shan, Yuun...', emoji: '🔌' },
-                        { type: 'Republic Memorabilia', lovers: 'Elara Dorne, Kira Carsen, M1-4X, Z0-0M...', emoji: '🔵' },
-                        { type: 'Imperial Memorabilia', lovers: 'Arcann, Darth Hexid, Malavai Quinn, Shae Vizla...', emoji: '🔴' },
-                        { type: 'Cultural Artifact', lovers: 'Ashara Zavros, Khem Val, Lana Beniko, Talos Drellik...', emoji: '🏺' },
-                        { type: 'Trophy', lovers: 'Bowdaar, Lord Scourge, Paxton Rall, Torian Cadera...', emoji: '🏆' },
-                        { type: 'Underworld Good', lovers: 'Blizz, Guss, Kaliyo Djannis, Vette, Nico Okarr...', emoji: '🎲' },
-                        { type: 'Maintenance', lovers: 'C2-N2, SCORPIO, Treek, 2V-R8...', emoji: '🔧' },
-                        { type: 'Delicacies', lovers: 'Akk Dog, Koth, Tanno Vik...', emoji: '🍖' }
-                    ]
-                };
-                
-                data.crafting = {
-                    skills: [
-                        { id: 'armormech', name: 'Armoreiro', pairs: ['scavenging', 'underworld_trading'], out: 'Armaduras (não-Força), Aumentos' },
-                        { id: 'armstech', name: 'Armeiro', pairs: ['scavenging', 'investigation'], out: 'Blasters, Aumentos' },
-                        { id: 'artifice', name: 'Artífice', pairs: ['archaeology', 'treasure_hunting'], out: 'Sabres de luz, Cristais de Cor, Tinturas' },
-                        { id: 'biochem', name: 'Bioquímico', pairs: ['bioanalysis', 'diplomacy'], out: 'Medpacs, Estimulantes, Implantes' },
-                        { id: 'cybertech', name: 'Cibertecnia', pairs: ['scavenging', 'underworld_trading'], out: 'Auriculares, Mods, Granadas' },
-                        { id: 'synthweaving', name: 'Tecelagem Sintética', pairs: ['archaeology', 'underworld_trading'], out: 'Armaduras (Força), Aumentos' }
-                    ],
-                    gathering: [
-                        { id: 'archaeology', name: 'Arqueologia' },
-                        { id: 'bioanalysis', name: 'Bioanálise' },
-                        { id: 'scavenging', name: 'Escavação' },
-                        { id: 'slicing', name: 'Fatiamento (Slicing)' }
-                    ],
-                    mission: [
-                        { id: 'diplomacy', name: 'Diplomacia' },
-                        { id: 'investigation', name: 'Investigação' },
-                        { id: 'treasure_hunting', name: 'Caça ao Tesouro' },
-                        { id: 'underworld_trading', name: 'Comércio do Submundo' }
-                    ]
-                };
-
-                data.endgame = [
-                     { title: "Operações", icon: "👥", description: "O principal conteúdo de grupo para 8 ou 16 jogadores. Requer assinatura. É aqui que se obtém o melhor equipamento (Rakata). A comunicação e a coordenação são essenciais.", difficulty: "Alta", players: "8/16" },
-                     { title: "Flashpoints", icon: "⚔️", description: "Missões instanciadas para 4 jogadores. Disponíveis nos modos História (solo), Veterano (qualquer papel) e Mestre (1 tanque, 1 cura, 2 DPS), oferecendo um desafio escalonado.", difficulty: "Variada", players: "1-4" },
-                     { title: "PvP (Warzones & Arenas)", icon: "💥", description: "Combate contra outros jogadores. Warzones são baseadas em objetivos (8v8), enquanto Arenas são deathmatch (4v4). Possui uma trilha de equipamento e recompensas sazonais próprias.", difficulty: "Competitiva", players: "8/16" },
-                     { title: "Uprisings", icon: "⚡", description: "Missões de grupo rápidas e focadas em combate, com menos história que Flashpoints. Ótimas para ação rápida em grupo de 4 jogadores.", difficulty: "Média", players: "4" },
-                     { title: "Chefes Mundiais", icon: "🐲", description: "Inimigos extremamente poderosos no mundo aberto que requerem grandes grupos (geralmente 8-16+) para serem derrotados. Uma ótima atividade de comunidade.", difficulty: "Alta", players: "8+" },
-                     { title: "Temporadas Galácticas", icon: "⭐", description: "Um sistema de 'passe de batalha' gratuito com recompensas cosméticas e de moedas por completar objetivos diários e semanais em todo o jogo.", difficulty: "Baixa", players: "Solo/Grupo" },
-                ];
-                
-                data.simulation = {
-                    stats: {
-                        tank: "Priorize os atributos de <strong>Escudo</strong> e <strong>Absorção</strong> para mitigar dano. Resistência (Endurance) virá naturalmente com o equipamento. Um pouco de Precisão (Accuracy) é útil, mas não é a prioridade máxima.",
-                        healer: "Seu principal atributo é <strong>Alacridade (Alacrity)</strong> até atingir o ponto de 1.4s de GCD (geralmente 2054+). Depois, invista em <strong>Poder (Power)</strong> e <strong>Crítico (Critical)</strong> para curas mais fortes e frequentes.",
-                        dps: "Atingir 110% de <strong>Precisão (Accuracy)</strong> é sua prioridade número 1 (2694). Depois, siga as recomendações de <strong>Alacridade (Alacrity)</strong> para sua classe (algumas preferem mais, outras menos) e, em seguida, invista todo o resto em <strong>Crítico (Critical)</strong>."
-                    },
-                    gear: {
-                        solo: "O equipamento de <strong>Conquista (Noble Decurion)</strong> e o caminho de <strong>Flashpoint (Supreme Decurion)</strong> são mais que suficientes. Foque em obter seus <strong>Implantes Lendários</strong>, pois eles definem sua build.",
-                        group: "Para Flashpoints Mestre e Operações, o equipamento <strong>Rakata</strong> é o objetivo final. Comece com a rota de Flashpoints para se equipar e depois transicione para o equipamento de Operações. <strong>Aumentos (Augments)</strong> em todas as peças são obrigatórios.",
-                        pvp: "Siga a trilha de equipamento PvP (<strong>Thyrsian</strong>) usando <strong>Acelerantes WZ-1</strong>. Ele tem estatísticas otimizadas para PvP e um bônus de perícia."
-                    },
-                    companion: "Para conteúdo solo desafiador, um companheiro com <strong>Influência 30+</strong> no papel de <strong>Cura</strong> aumentará drasticamente sua capacidade de sobrevivência. Para farm rápido, um companheiro de <strong>Dano</strong> com alta influência pode acelerar o processo.",
-                    content: {
-                        solo: "Foque em completar as <strong>histórias de expansão</strong> e as <strong>missões de área diária/heroicas</strong>. Elas fornecem moedas importantes e são divertidas de fazer solo.",
-                        group: "Junte-se a uma <strong>Guilda</strong>! É a melhor maneira de encontrar grupos para <strong>Operações</strong> e <strong>Flashpoints Mestre</strong>. Não tenha medo de começar com o Modo História das Operações para aprender as mecânicas.",
-                        pvp: "Participe das <strong>Temporadas PvP</strong> para ganhar recompensas exclusivas. Tente focar nos objetivos da Warzone, não apenas em matar outros jogadores. Conhecer suas habilidades defensivas e de interrupção é a chave para a vitória."
-                    }
-                };
-
-                data.datacrons = [
-                    // Coruscant (Republic)
-                    { planet: 'Coruscant', faction: 'Republica', stat: 'Endurance', bonus: 2, location: 'Mercado de Antiguidades' },
-                    { planet: 'Coruscant', faction: 'Republica', stat: 'Presence', bonus: 2, location: 'Território Sol Negro' },
-                    { planet: 'Coruscant', faction: 'Republica', stat: 'Willpower', bonus: 2, location: 'Templo Jedi' },
-                    { planet: 'Coruscant', faction: 'Republica', stat: 'Aim', bonus: 2, location: 'Antigo Mercado Galáctico' },
-                    { planet: 'Coruscant', faction: 'Republica', stat: 'Strength', bonus: 2, location: 'Praça do Senado' },
-
-                    // Dromund Kaas (Empire)
-                    { planet: 'Dromund Kaas', faction: 'Imperio', stat: 'Endurance', bonus: 2, location: 'Cidade Kaas' },
-                    { planet: 'Dromund Kaas', faction: 'Imperio', stat: 'Presence', bonus: 2, location: 'Templo Negro' },
-                    { planet: 'Dromund Kaas', faction: 'Imperio', stat: 'Willpower', bonus: 2, location: 'Academia Sith' },
-                    { planet: 'Dromund Kaas', faction: 'Imperio', stat: 'Aim', bonus: 2, location: 'Tumba de Freedon Nadd' },
-                    { planet: 'Dromund Kaas', faction: 'Imperio', stat: 'Strength', bonus: 2, location: 'Porto Espacial de Dromund Kaas' },
-
-                    // Balmorra (Republic Side)
-                    { planet: 'Balmorra', faction: 'Republica', stat: 'Willpower', bonus: 2, location: 'Planícies de Sundari' },
-                    { planet: 'Balmorra', faction: 'Republica', stat: 'Cunning', bonus: 2, location: 'Posto Avançado Gorak' },
-                    { planet: 'Balmorra', faction: 'Republica', stat: 'Endurance', bonus: 2, location: 'Fábrica de Droides Okara' },
-                    { planet: 'Balmorra', faction: 'Republica', stat: 'Strength', bonus: 2, location: 'Sobrik' },
-                    { planet: 'Balmorra', faction: 'Republica', stat: 'Presence', bonus: 2, location: 'Posto Avançado Markaran Inferior' },
-
-                    // Balmorra (Imperial Side)
-                    { planet: 'Balmorra', faction: 'Imperio', stat: 'Aim', bonus: 2, location: 'Rota de Patrulha Tirigaan' },
-                    { planet: 'Balmorra', faction: 'Imperio', stat: 'Strength', bonus: 2, location: 'Guarnição Abandonada' },
-                    { planet: 'Balmorra', faction: 'Imperio', stat: 'Willpower', bonus: 2, location: 'Planícies de Sundari' },
-                    { planet: 'Balmorra', faction: 'Imperio', stat: 'Endurance', bonus: 2, location: 'Armas Balmorranas' },
-                    { planet: 'Balmorra', faction: 'Imperio', stat: 'Cunning', bonus: 2, location: 'Planícies Markaranas' },
-
-                    // Nar Shaddaa
-                    { planet: 'Nar Shaddaa', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Cidade das Sombras' },
-                    { planet: 'Nar Shaddaa', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Setor Nikto' },
-                    { planet: 'Nar Shaddaa', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Calçadão Inferior' },
-                    { planet: 'Nar Shaddaa', faction: 'Both', stat: 'Presence', bonus: 2, location: 'Setor da Luz Vermelha' },
-                    { planet: 'Nar Shaddaa', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Setor Industrial' },
-
-                    // Tatooine
-                    { planet: 'Tatooine', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Anchorhead' },
-                    { planet: 'Tatooine', faction: 'Both', stat: 'Presence', bonus: 2, location: 'Jundland' },
-                    { planet: 'Tatooine', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Covil dos Foras da Lei' },
-                    { planet: 'Tatooine', faction: 'Both', stat: 'Aim', bonus: 2, location: 'O Mar de Dunas' },
-                    { planet: 'Tatooine', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Poço de Sarlacc' },
-
-                    // Alderaan
-                    { planet: 'Alderaan', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Território Kaamos' },
-                    { planet: 'Alderaan', faction: 'Both', stat: 'Presence', bonus: 2, location: 'Vale Glarus' },
-                    { planet: 'Alderaan', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Terras Baixas Alsakanas' },
-                    { planet: 'Alderaan', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Posto de Guarda Rhyne' },
-                    { planet: 'Alderaan', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Montanhas Juran' },
-
-                    // Taris (Republic)
-                    { planet: 'Taris', faction: 'Republica', stat: 'Endurance', bonus: 2, location: 'Porto Espacial de Taris' },
-                    { planet: 'Taris', faction: 'Republica', stat: 'Aim', bonus: 2, location: 'Catacumbas de Taris' },
-                    { planet: 'Taris', faction: 'Republica', stat: 'Willpower', bonus: 2, location: 'Enclave Jedi de Taris' },
-                    { planet: 'Taris', faction: 'Republica', stat: 'Presence', bonus: 2, location: 'Sedimento Brell' },
-                    { planet: 'Taris', faction: 'Republica', stat: 'Strength', bonus: 2, location: 'Pântano Tularan' },
-
-                    // Quesh
-                    { planet: 'Quesh', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'O Lago Ácido' },
-                    { planet: 'Quesh', faction: 'Both', stat: 'Cunning', bonus: 2, location: 'Mesa Vulkar' },
-                    { planet: 'Quesh', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Palácio de Broga' },
-                    { planet: 'Quesh', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Santuário Imperial' },
-
-                    // Hoth
-                    { planet: 'Hoth', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Fissura Glacial' },
-                    { planet: 'Hoth', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Cemitério de Naves Estelares' },
-                    { planet: 'Hoth', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Desertos de Whiterock' },
-                    { planet: 'Hoth', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Tundra Clabburn' },
-                    { planet: 'Hoth', faction: 'Both', stat: 'Presence', bonus: 2, location: 'Cume de Highmount' },
-
-                    // Belsavis
-                    { planet: 'Belsavis', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Prisão Imperial' },
-                    { planet: 'Belsavis', faction: 'Both', stat: 'Presence', bonus: 2, location: 'A Tumba' },
-                    { planet: 'Belsavis', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Os Antigos' },
-                    { planet: 'Belsavis', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Base da República' },
-                    { planet: 'Belsavis', faction: 'Both', stat: 'Strength', bonus: 2, location: 'O Verde Profundo' },
-
-                    // Voss
-                    { planet: 'Voss', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Teste dos Anciões' },
-                    { planet: 'Voss', faction: 'Both', stat: 'Cunning', bonus: 2, location: 'Terras Gormak' },
-                    { planet: 'Voss', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Santuário de Cura' },
-                    { planet: 'Voss', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Os Caminhos Antigos' },
-                    { planet: 'Voss', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Terras do Pesadelo' },
-
-                    // Corellia
-                    { planet: 'Corellia', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Vale do Trabalho' },
-                    { planet: 'Corellia', faction: 'Both', stat: 'Presence', bonus: 2, location: 'Cidade de Coronet' },
-                    { planet: 'Corellia', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Distrito Governamental' },
-                    { planet: 'Corellia', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Parque Axial' },
-                    { planet: 'Corellia', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Distrito Jedi Verde' },
-
-                    // Ilum
-                    { planet: 'Ilum', faction: 'Both', stat: 'Endurance', bonus: 2, location: 'Caverna de Gelo de Ilum' },
-                    { planet: 'Ilum', faction: 'Both', stat: 'Willpower', bonus: 2, location: 'Base Imperial' },
-                    { planet: 'Ilum', faction: 'Both', stat: 'Aim', bonus: 2, location: 'Base da República' },
-                    { planet: 'Ilum', faction: 'Both', stat: 'Strength', bonus: 2, location: 'Lago de Gelo Ocidental' },
-
-                    // Makeb
-                    { planet: 'Makeb', faction: 'Both', stat: 'Endurance', bonus: 5, location: 'Mansão de Solida Hesk' },
-                    { planet: 'Makeb', faction: 'Both', stat: 'Presence', bonus: 5, location: 'Gancho Gravitacional Sete' },
-
-                    // Rishi
-                    { planet: 'Rishi', faction: 'Both', stat: 'Mastery', bonus: 10, location: 'Grilhões da Mente' },
-                    { planet: 'Rishi', faction: 'Both', stat: 'Mastery', bonus: 10, location: 'Fortaleza Submersa' },
-
-                    // Yavin 4
-                    { planet: 'Yavin 4', faction: 'Both', stat: 'Mastery', bonus: 10, location: 'Vila Massassi' },
-                    { planet: 'Yavin 4', faction: 'Both', stat: 'Mastery', bonus: 10, location: 'Templo do Sacrifício' },
-                ];
-            }
+            populateTable('combat-styles-table', ['Estilo', 'Disciplina', 'Papel', 'Tático', 'Implantes', 'Atributos'], combatStylesData, item => `<tr><td>${item.style}</td><td>${item.discipline}</td><td>${item.role}</td><td>${item.tactical}</td><td>${item.implants}</td><td>${item.stats}</td></tr>`);
+            populateTable('companion-gifts-table', ['Companheiro', 'Classe', 'Ama'], companionGiftsData, item => `<tr><td>${item.companion}</td><td>${item.class}</td><td>${item.loves}</td></tr>`);
+            populateTable('crafting-synergy-table', ['Fabricação', 'Coleta', 'Missão'], craftingSynergyData, item => `<tr><td><b>${item.craft}</b></td><td>${item.gathering}</td><td>${item.mission}</td></tr>`);
+            populateTable('events-table', ['Evento', 'Frequência', 'Atividades'], eventsData, item => `<tr><td><b>${item.event}</b></td><td>${item.frequency}</td><td>${item.activity}</td></tr>`);
             
-            function setupNavigation() {
-                const navLinks = document.querySelectorAll('.nav-link');
-                navLinks.forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const pageId = link.dataset.page;
-                        showPage(pageId);
-                        window.location.hash = pageId;
-                    });
-                });
+            const datacronList = document.getElementById('datacron-list');
+            if(datacronList) { datacronList.innerHTML = datacronsData.map(d => `<li>${d}</li>`).join(''); }
 
-                window.addEventListener('hashchange', () => {
-                    const pageId = window.location.hash.substring(1) || 'inicio';
-                    showPage(pageId);
-                });
-            }
+            // --- TAB & CMS LOGIC ---
+            const tabContainer = document.getElementById('tab-container');
+            const panels = document.querySelectorAll('.tab-panel');
+            const panelData = [ { id: 'parte1', title: 'Visão Geral' }, { id: 'parte2', title: 'Personagens' }, { id: 'parte3', title: 'História & Lore' }, { id: 'parte4', title: 'Companheiros' }, { id: 'parte5', title: 'Endgame' }, { id: 'parte6', title: 'Crafting' }, { id: 'parte7', title: 'Recursos' } ];
 
-            function showPage(pageId) {
-                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-                const newPage = document.getElementById(pageId);
-                if (newPage) {
-                    newPage.classList.add('active');
-                    updateActiveLink(pageId);
-                    // Reset tabs on page change
-                    const firstTab = newPage.querySelector('.tab-button');
-                    if(firstTab) {
-                        firstTab.click();
+            panelData.forEach(data => {
+                const button = document.createElement('button');
+                button.className = 'tab-button';
+                button.textContent = data.title;
+                button.dataset.tab = `panel-${data.id}`;
+                tabContainer.appendChild(button);
+                
+                const panel = document.getElementById(`panel-${data.id}`);
+                if(panel) {
+                    const editableContent = panel.querySelector('.editable-content');
+                    if(editableContent) {
+                         editableContent.insertAdjacentHTML('afterbegin', '<div class="edit-controls"><button class="edit-btn" title="Editar Seção"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z" /></svg></button></div>');
                     }
                 }
-            }
-            
-            function updateActiveLink(pageId) {
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    if (link.dataset.page === pageId) {
-                        link.classList.add('active');
-                    } else {
-                        link.classList.remove('active');
-                    }
-                });
-            }
+            });
 
-            function setupTabbedInterfaces() {
-                document.querySelectorAll('[data-tab]').forEach(button => {
-                    button.addEventListener('click', () => {
-                        const tabId = button.dataset.tab;
-                        const container = button.closest('.page, .content-card, .tab-pane');
-                        
-                        container.querySelectorAll('.tab-button').forEach(btn => {
-                            btn.classList.remove('active', 'text-white', 'border-blue-500');
-                            btn.classList.add('text-gray-400', 'border-transparent');
-                        });
-                        button.classList.add('active', 'text-white', 'border-blue-500');
-                        button.classList.remove('text-gray-400', 'border-transparent');
+            const tabButtons = document.querySelectorAll('.tab-button');
 
-                        container.querySelectorAll('.tab-content').forEach(content => {
-                            if (content.id === tabId) {
-                                content.classList.remove('hidden');
-                            } else {
-                                content.classList.add('hidden');
-                            }
-                        });
-                    });
-                });
+            function switchTab(tabId) {
+                panels.forEach(panel => panel.classList.remove('active'));
+                tabButtons.forEach(button => button.classList.remove('active'));
+                const targetPanel = document.getElementById(tabId);
+                const targetButton = document.querySelector(`[data-tab="${tabId}"]`);
+                if(targetPanel) targetPanel.classList.add('active');
+                if(targetButton) targetButton.classList.add('active');
             }
 
-            function createAccordion(title, content, isOpen = false) {
-                const accordion = document.createElement('div');
-                accordion.className = 'content-card';
-                
-                const header = document.createElement('button');
-                header.className = 'w-full flex justify-between items-center text-left text-xl font-semibold text-white';
-                header.innerHTML = `<span>${title}</span><span class="transform transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}">▼</span>`;
-
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'accordion-content pt-4 text-gray-300';
-                contentDiv.innerHTML = content;
-                if (isOpen) {
-                    contentDiv.style.maxHeight = contentDiv.scrollHeight + 'px';
+            tabContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('tab-button')) {
+                    switchTab(e.target.dataset.tab);
                 }
-                
-                header.addEventListener('click', () => {
-                    const isOpening = !contentDiv.style.maxHeight || contentDiv.style.maxHeight === '0px';
-                    if (isOpening) {
-                        contentDiv.style.maxHeight = contentDiv.scrollHeight + 'px';
-                        header.querySelector('span:last-child').classList.add('rotate-180');
-                    } else {
-                        contentDiv.style.maxHeight = '0px';
-                        header.querySelector('span:last-child').classList.remove('rotate-180');
-                    }
-                });
+            });
+            switchTab('panel-parte1');
 
-                accordion.appendChild(header);
-                accordion.appendChild(contentDiv);
-                return accordion;
-            }
-
-            function setupClassExplorer() {
-                const container = document.getElementById('class-explorer');
-                container.innerHTML = '';
-                
-                const factions = ['Republica', 'Imperio'];
-                factions.forEach((faction, index) => {
-                    const factionTitle = faction === 'Republica' ? 
-                        '<span class="text-blue-400">República Galáctica</span>' : 
-                        '<span class="text-red-500">Império Sith</span>';
-                    
-                    let originStoriesHTML = '<div class="space-y-2 mt-4">';
-                    data.origins[faction].forEach(origin => {
-                        let combatStylesHTML = '<div class="space-y-1 pl-4 border-l-2 border-gray-600 ml-4">';
-                        data.combatStyles[origin.id].forEach(styleId => {
-                            const style = data.styleDetails[styleId];
-                            
-                            let disciplinesHTML = '<ul class="list-disc list-inside pl-4 text-gray-400 space-y-1">';
-                            data.disciplines[styleId]?.forEach(disc => {
-                                disciplinesHTML += `<li><strong>${disc.name} (${disc.role}):</strong> ${disc.description}</li>`;
-                            });
-                            disciplinesHTML += '</ul>';
-
-                            const styleContent = `
-                                <div class="p-4 bg-gray-800 rounded-lg">
-                                    <p class="mb-2">${style.description}</p>
-                                    <p class="text-sm text-gray-500 mb-2"><strong>Arma:</strong> ${style.weapon}</p>
-                                    <h5 class="font-semibold text-white mb-1 mt-3">Disciplinas:</h5>
-                                    ${disciplinesHTML}
-                                </div>
-                            `;
-                            combatStylesHTML += createAccordion(`${style.roleIcon} ${style.name}`, styleContent).outerHTML;
-                        });
-                        combatStylesHTML += '</div>';
-
-                        originStoriesHTML += createAccordion(origin.name, combatStylesHTML).outerHTML;
-                    });
-                    originStoriesHTML += '</div>';
-
-                    container.appendChild(createAccordion(factionTitle, originStoriesHTML, index === 0));
-                });
-            }
-
-            function setupJornadaHeroi() {
-                // Nivelamento
-                const nivelamentoContainer = document.getElementById('jornada-nivelamento');
-                nivelamentoContainer.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="content-card">
-                            <h3 class="text-xl font-semibold text-white mb-3">Dicas para Novos Jogadores</h3>
-                            <ul class="list-disc list-inside space-y-2 text-gray-300">
-                                ${data.levelingTips.new_player.map(tip => `<li>${tip}</li>`).join('')}
-                            </ul>
-                        </div>
-                        <div class="content-card">
-                            <h3 class="text-xl font-semibold text-white mb-3">Dicas para Jogadores Experientes (Legado)</h3>
-                            <ul class="list-disc list-inside space-y-2 text-gray-300">
-                                ${data.levelingTips.veteran_player.map(tip => `<li>${tip}</li>`).join('')}
-                            </ul>
-                        </div>
-                    </div>
-                `;
-
-                // Equipamentos
-                const equipamentosContainer = document.getElementById('jornada-equipamentos');
-                equipamentosContainer.innerHTML = `
-                    <div class="content-card mb-8">
-                        <h3 class="text-xl font-semibold text-white mb-4">Moedas de Equipamento</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            ${data.gearing.currencies.map(c => `
-                                <div class="p-4 bg-gray-800 rounded-lg">
-                                    <h4 class="font-bold text-lg text-white">${c.icon} ${c.name}</h4>
-                                    <p class="text-sm text-gray-400"><strong>Fonte:</strong> ${c.source}</p>
-                                    <p class="text-sm text-gray-400"><strong>Uso:</strong> ${c.use}</p>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                    <div class="content-card">
-                        <h3 class="text-xl font-semibold text-white mb-4">Caminho de Progressão de Equipamento</h3>
-                        <div class="relative pl-8">
-                            <!-- Vertical line -->
-                            <div class="absolute left-4 top-0 h-full w-0.5 bg-gray-600"></div>
-                            <div class="space-y-8">
-                                ${data.gearing.path.map(p => `
-                                    <div class="relative">
-                                        <div class="absolute -left-8 top-1/2 -translate-y-1/2 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold ring-4 ring-gray-900">${p.step}</div>
-                                        <div class="ml-4 p-4 bg-gray-800 rounded-lg">
-                                            <h4 class="font-bold text-lg text-white">${p.title}</h4>
-                                            <p class="text-gray-300">${p.description}</p>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            function setupAliadosEconomia() {
-                // Companheiros
-                const companheirosContainer = document.getElementById('aliados-companheiros');
-                companheirosContainer.innerHTML = `
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="content-card">
-                             <h3 class="text-xl font-semibold text-white mb-4">Maximizando a Influência</h3>
-                             <p class="mb-4 text-gray-400">A influência do seu companheiro é o fator mais importante para sua eficácia em combate e criação. Aumente-a através de conversas e, principalmente, presentes. Lembre-se, o equipamento deles é puramente cosmético!</p>
-                             <div class="mb-6">
-                                <label for="influence-slider" class="block text-sm font-medium text-gray-300">Nível de Influência: <span id="influence-level-display" class="font-bold text-white">1</span></label>
-                                <input id="influence-slider" type="range" min="1" max="50" value="1" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
-                             </div>
-                             <div class="chart-container"><canvas id="presence-chart"></canvas></div>
-                        </div>
-                        <div class="content-card">
-                            <h3 class="text-xl font-semibold text-white mb-4">Preferências de Presentes</h3>
-                            <p class="mb-4 text-gray-400">Dar o tipo certo de presente ("ama" ♥♥♥) maximiza o ganho de influência. Aqui está uma referência rápida.</p>
-                             <div class="h-96 overflow-y-auto pr-2">
-                                <table class="w-full text-left table-fixed">
-                                    <thead class="bg-gray-800 text-gray-300 uppercase text-sm sticky top-0">
-                                        <tr><th class="p-2 w-1/3">Tipo de Presente</th><th class="p-2 w-2/3">Companheiros que Amam</th></tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-gray-700">
-                                        ${data.companions.gifts.map((gift, i) => `
-                                            <tr class="${i % 2 === 0 ? 'bg-gray-900/50' : ''}">
-                                                <td class="p-2 font-semibold">${gift.emoji} ${gift.type}</td>
-                                                <td class="p-2 text-sm text-gray-400 break-words">${gift.lovers}</td>
-                                            </tr>
-                                        `).join('')}
-                                    </tbody>
-                                </table>
-                             </div>
-                        </div>
-                    </div>
-                `;
-                
-                let presenceChart;
-                const influenceSlider = document.getElementById('influence-slider');
-                const influenceLevelDisplay = document.getElementById('influence-level-display');
-
-                function updatePresenceChart(level) {
-                    influenceLevelDisplay.textContent = level;
-                    const presenceBonus = (level - 1) * 50;
-                    if (presenceChart) {
-                        presenceChart.data.datasets[0].data = [level];
-                        presenceChart.data.datasets[1].data = [presenceBonus];
-                        presenceChart.update();
-                    }
+            let originalContent = '';
+            document.getElementById('panels-container').addEventListener('click', function(e) {
+                const editBtn = e.target.closest('.edit-btn');
+                if (editBtn) {
+                    const contentDiv = editBtn.closest('.editable-content');
+                    originalContent = contentDiv.innerHTML;
+                    contentDiv.setAttribute('contenteditable', 'true');
+                    contentDiv.focus();
+                    editBtn.style.display = 'none';
+                    const controls = editBtn.parentElement;
+                    controls.insertAdjacentHTML('beforeend', `<button class="save-btn" title="Salvar"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></button><button class="cancel-btn" title="Cancelar"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>`);
                 }
-                
-                influenceSlider.addEventListener('input', (e) => updatePresenceChart(e.target.value));
-
-                const ctx = document.getElementById('presence-chart').getContext('2d');
-                presenceChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Influência'],
-                        datasets: [
-                        {
-                            label: 'Nível de Influência',
-                            data: [1],
-                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
-                            borderColor: 'rgba(59, 130, 246, 1)',
-                            borderWidth: 1,
-                            yAxisID: 'y',
-                        },
-                        {
-                            label: 'Bônus de Presença',
-                            data: [0],
-                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
-                            borderColor: 'rgba(16, 185, 129, 1)',
-                            borderWidth: 1,
-                            yAxisID: 'y1',
-                        }]
-                    },
-                    options: {
-                        maintainAspectRatio: false,
-                        responsive: true,
-                        scales: {
-                            y: { beginAtZero: true, max: 50, title: { display: true, text: 'Nível', color: '#d1d5db' }, ticks: { color: '#d1d5db' } },
-                            y1: { type: 'linear', position: 'right', beginAtZero: true, max: 2500, title: { display: true, text: 'Presença', color: '#d1d5db' }, ticks: { color: '#d1d5db' }, grid: { drawOnChartArea: false } },
-                        },
-                        plugins: { legend: { labels: { color: '#d1d5db' } } }
-                    }
-                });
-                updatePresenceChart(1);
-
-
-                // Criação & GTN
-                const craftingContainer = document.getElementById('aliados-crafting');
-                let craftingHTML = `
-                    <div class="content-card mb-6">
-                        <h3 class="text-xl font-semibold text-white mb-4">Habilidades de Tripulação (Criação)</h3>
-                        <p class="mb-4 text-gray-400">Escolher as profissões certas é a chave para a autossuficiência e para ganhar créditos. Clique em uma habilidade de criação para ver suas parceiras ideais.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                                <h4 class="font-bold text-center mb-2 text-lg text-blue-400">Criação</h4>
-                                <div class="space-y-2">
-                                    ${data.crafting.skills.map(s => `<button data-skill-id="${s.id}" class="crafting-skill-btn w-full p-3 bg-gray-800 rounded-md text-left transition hover:bg-gray-700">${s.name}</button>`).join('')}
-                                </div>
-                            </div>
-                             <div>
-                                <h4 class="font-bold text-center mb-2 text-lg text-green-400">Coleta</h4>
-                                <div class="space-y-2">
-                                    ${data.crafting.gathering.map(s => `<div data-skill-id="${s.id}" class="related-skill-display p-3 bg-gray-700 rounded-md transition">${s.name}</div>`).join('')}
-                                </div>
-                            </div>
-                             <div>
-                                <h4 class="font-bold text-center mb-2 text-lg text-yellow-400">Missão</h4>
-                                <div class="space-y-2">
-                                     ${data.crafting.mission.map(s => `<div data-skill-id="${s.id}" class="related-skill-display p-3 bg-gray-700 rounded-md transition">${s.name}</div>`).join('')}
-                                </div>
-                            </div>
-                        </div>
-                         <div id="crafting-output" class="mt-4 p-4 bg-gray-900 rounded-lg text-center text-gray-300">Selecione uma habilidade de criação para ver o que ela produz.</div>
-                    </div>
-                `;
-                craftingContainer.innerHTML = craftingHTML;
-                
-                const skillBtns = craftingContainer.querySelectorAll('.crafting-skill-btn');
-                const relatedDisplays = craftingContainer.querySelectorAll('.related-skill-display');
-                const outputDiv = craftingContainer.querySelector('#crafting-output');
-
-                skillBtns.forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const skillId = btn.dataset.skillId;
-                        const skillData = data.crafting.skills.find(s => s.id === skillId);
-                        
-                        // Highlight buttons
-                        skillBtns.forEach(b => b.classList.remove('bg-blue-600'));
-                        btn.classList.add('bg-blue-600');
-
-                        // Highlight related skills
-                        relatedDisplays.forEach(disp => {
-                            if (skillData.pairs.includes(disp.dataset.skillId)) {
-                                disp.classList.add('bg-green-600', 'text-white');
-                                disp.classList.remove('bg-gray-700');
-                            } else {
-                                disp.classList.remove('bg-green-600', 'text-white');
-                                disp.classList.add('bg-gray-700');
-                            }
-                        });
-                        
-                        // Update output
-                        outputDiv.innerHTML = `<strong>${skillData.name} produz:</strong> ${skillData.out}.`;
-                    });
-                });
-
-            }
-            
-            function setupEndgame() {
-                const container = document.getElementById('endgame-content-container');
-                container.innerHTML = '';
-                data.endgame.forEach(activity => {
-                    const card = document.createElement('div');
-                    card.className = 'content-card flex flex-col';
-                    card.innerHTML = `
-                        <div class="flex items-center mb-3">
-                           <span class="text-4xl mr-4">${activity.icon}</span>
-                           <h3 class="text-2xl font-bold text-white">${activity.title}</h3>
-                        </div>
-                        <p class="text-gray-300 flex-grow">${activity.description}</p>
-                        <div class="mt-4 pt-4 border-t border-gray-700 flex justify-between text-sm">
-                            <span class="font-semibold">Dificuldade: <span class="font-normal px-2 py-1 rounded-full bg-gray-700 text-yellow-300">${activity.difficulty}</span></span>
-                            <span class="font-semibold">Jogadores: <span class="font-normal px-2 py-1 rounded-full bg-gray-700 text-blue-300">${activity.players}</span></span>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            }
-
-            function setupSimulator() {
-                const form = document.getElementById('simulation-form');
-                const factionSelect = document.getElementById('char-faction');
-                const classSelect = document.getElementById('char-class');
-                const styleSelect = document.getElementById('char-style');
-                const disciplineSelect = document.getElementById('char-discipline');
-
-                function updateClassOptions() {
-                    const selectedFaction = factionSelect.value;
-                    classSelect.innerHTML = data.origins[selectedFaction]
-                        .map(o => `<option value="${o.id}">${o.name}</option>`).join('');
-                    updateStyleOptions();
+                const saveBtn = e.target.closest('.save-btn');
+                if (saveBtn) {
+                    const contentDiv = saveBtn.closest('.editable-content');
+                    contentDiv.setAttribute('contenteditable', 'false');
+                    const controls = saveBtn.parentElement;
+                    controls.querySelector('.save-btn').remove();
+                    controls.querySelector('.cancel-btn').remove();
+                    controls.querySelector('.edit-btn').style.display = 'flex';
                 }
-
-                function updateStyleOptions() {
-                    const selectedClass = classSelect.value;
-                    if (!selectedClass) {
-                        styleSelect.innerHTML = '';
-                        updateDisciplineOptions();
-                        return;
-                    };
-                    const availableStyles = data.combatStyles[selectedClass];
-                    styleSelect.innerHTML = availableStyles
-                        .map(sId => `<option value="${sId}">${data.styleDetails[sId].name}</option>`).join('');
-                    updateDisciplineOptions();
+                const cancelBtn = e.target.closest('.cancel-btn');
+                if (cancelBtn) {
+                    const contentDiv = cancelBtn.closest('.editable-content');
+                    contentDiv.setAttribute('contenteditable', 'false');
+                    contentDiv.innerHTML = originalContent;
                 }
-
-                function updateDisciplineOptions() {
-                    const selectedStyle = styleSelect.value;
-                    if (!selectedStyle || !data.disciplines[selectedStyle]) {
-                         disciplineSelect.innerHTML = '<option>Não aplicável</option>';
-                         return;
-                    }
-                    disciplineSelect.innerHTML = data.disciplines[selectedStyle]
-                        .map(d => `<option value="${d.role}">${d.name} (${d.role})</option>`).join('');
-                }
-
-                factionSelect.addEventListener('change', updateClassOptions);
-                classSelect.addEventListener('change', updateStyleOptions);
-                styleSelect.addEventListener('change', updateDisciplineOptions);
-                
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const formData = new FormData(form);
-                    const level = parseInt(formData.get('char-level'));
-                    const role = formData.get('char-discipline');
-                    const playStyle = formData.get('play-style');
-                    const companionInfluence = parseInt(formData.get('companion-influence'));
-                    
-                    const resultsContainer = document.getElementById('simulation-results');
-                    const statsCard = document.getElementById('sim-stats-card');
-                    const gearCard = document.getElementById('sim-gear-card');
-                    const companionCard = document.getElementById('sim-companion-card');
-                    const contentCard = document.getElementById('sim-content-card');
-
-                    let statsTip, gearTip, companionTip, contentTip;
-
-                    if (level < 80) {
-                        statsTip = "No nivelamento, não se preocupe muito com atributos. Apenas equipe as peças com maior Nível de Item (Item Rating).";
-                        gearTip = `Continue focando nas missões de história roxas. Você só precisa se preocupar com equipamento de endgame no nível 80. Use o vendedor de equipamento adaptativo na frota a cada 5-10 níveis se sentir que seu personagem está fraco.`;
-                        contentTip = "Seu foco principal deve ser a incrível história da sua classe! Aproveite a jornada. Se precisar de XP extra, faça algumas missões Heroicas ou Flashpoints no modo história."
-                    } else {
-                        statsTip = data.simulation.stats[role.toLowerCase()] || data.simulation.stats.dps;
-                        gearTip = data.simulation.gear[playStyle] || data.simulation.gear.all;
-                        contentTip = data.simulation.content[playStyle] || data.simulation.content.all;
-                    }
-                    
-                    companionTip = `Com um companheiro de influência <strong>${companionInfluence}</strong>, você está em uma boa posição. ${data.simulation.companion}`;
-
-                    statsCard.innerHTML = `<h4 class="text-xl font-bold text-white mb-3">Otimização de Atributos</h4><p class="text-gray-300">${statsTip}</p>`;
-                    gearCard.innerHTML = `<h4 class="text-xl font-bold text-white mb-3">Caminho de Equipamento</h4><p class="text-gray-300">${gearTip}</p>`;
-                    companionCard.innerHTML = `<h4 class="text-xl font-bold text-white mb-3">Uso de Companheiro</h4><p class="text-gray-300">${companionTip}</p>`;
-                    contentCard.innerHTML = `<h4 class="text-xl font-bold text-white mb-3">Foco de Conteúdo</h4><p class="text-gray-300">${contentTip}</p>`;
-
-                    resultsContainer.classList.remove('hidden');
-                    resultsContainer.scrollIntoView({ behavior: 'smooth' });
-                });
-
-                updateClassOptions();
-            }
-
-            function setupDatacrons() {
-                const container = document.getElementById('jornada-datacrons');
-                container.innerHTML = `
-                    <div class="content-card mb-8">
-                        <h3 class="text-xl font-semibold text-white mb-4">Localização de Datacrons</h3>
-                        <p class="mb-4 text-gray-400">Colecionar Datacrons permanentemente aumenta as estatísticas do seu personagem e de todos os personagens da sua Legado. Use os filtros abaixo para encontrar os datacrons por planeta e facção.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                            <div>
-                                <label for="datacron-planet-filter" class="block text-sm font-medium text-gray-300 mb-1">Filtrar por Planeta</label>
-                                <select id="datacron-planet-filter" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-blue-500 focus:border-blue-500"></select>
-                            </div>
-                            <div>
-                                <label for="datacron-faction-filter" class="block text-sm font-medium text-gray-300 mb-1">Filtrar por Facção</label>
-                                <select id="datacron-faction-filter" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="all">Todas as Facções</option>
-                                    <option value="Republica">República</option>
-                                    <option value="Imperio">Império</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div id="datacron-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-                    </div>
-                `;
-
-                const planetFilter = document.getElementById('datacron-planet-filter');
-                const factionFilter = document.getElementById('datacron-faction-filter');
-                const datacronListContainer = document.getElementById('datacron-list');
-
-                const uniquePlanets = [...new Set(data.datacrons.map(d => d.planet))].sort();
-                planetFilter.innerHTML = '<option value="all">Todos os Planetas</option>' + uniquePlanets.map(p => `<option value="${p}">${p}</option>`).join('');
-
-                function renderDatacrons() {
-                    const selectedPlanet = planetFilter.value;
-                    const selectedFaction = factionFilter.value;
-
-                    const filteredDatacrons = data.datacrons.filter(d => {
-                        const matchesPlanet = selectedPlanet === 'all' || d.planet === selectedPlanet;
-                        const matchesFaction = selectedFaction === 'all' || d.faction === selectedFaction || d.faction === 'Both';
-                        return matchesPlanet && matchesFaction;
-                    });
-
-                    datacronListContainer.innerHTML = filteredDatacrons.map(d => `
-                        <div class="p-4 bg-gray-800 rounded-lg border border-gray-700">
-                            <h4 class="font-bold text-lg text-white">${d.stat} +${d.bonus}</h4>
-                            <p class="text-sm text-gray-400"><strong>Planeta:</strong> ${d.planet} ${d.faction !== 'Both' ? `(${d.faction})` : ''}</p>
-                            <p class="text-sm text-gray-400"><strong>Localização:</strong> ${d.location}</p>
-                        </div>
-                    `).join('');
-
-                    if (filteredDatacrons.length === 0) {
-                        datacronListContainer.innerHTML = `<p class="text-gray-500 col-span-full text-center">Nenhum datacron encontrado para os filtros selecionados.</p>`;
-                    }
-                }
-
-                planetFilter.addEventListener('change', renderDatacrons);
-                factionFilter.addEventListener('change', renderDatacrons);
-
-                renderDatacrons(); // Initial render
-            }
-
-            // Iniciar a aplicação
-            initializeHolocron();
+            });
         });
     </script>
 </body>
