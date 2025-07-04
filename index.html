@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O Holocron de SWTOR: Versão 2.0</title>
+    <title>O Holocron de SWTOR: Versão 2.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,11 +26,6 @@
             50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), inset 0 0 20px rgba(59, 130, 246, 0.2); }
         }
         
-        @keyframes scanline {
-            0% { transform: translateY(-10%); }
-            100% { transform: translateY(110%); }
-        }
-
         html { scroll-behavior: smooth; }
 
         body {
@@ -58,12 +53,8 @@
         }
 
         #holocron-container::before, #holocron-container::after {
-            content: '';
-            position: absolute;
-            background: var(--accent-blue);
-            box-shadow: var(--glow-blue);
-            z-index: -1;
-            animation: pulseGlow 5s infinite ease-in-out;
+            content: ''; position: absolute; background: var(--accent-blue);
+            box-shadow: var(--glow-blue); z-index: -1; animation: pulseGlow 5s infinite ease-in-out;
         }
         #holocron-container::before { top: -2px; left: 20px; right: 20px; height: 2px; }
         #holocron-container::after { bottom: -2px; left: 20px; right: 20px; height: 2px; }
@@ -71,12 +62,9 @@
         /* Sidenav Styles */
         #sidenav {
             position: fixed; top: 0; left: 0; height: 100%; width: 280px;
-            background-color: var(--holocron-bg);
-            border-right: 2px solid var(--accent-blue);
-            transform: translateX(-100%);
-            transition: transform 0.3s ease-in-out;
-            z-index: 50; padding: 2rem; overflow-y: auto;
-            box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+            background-color: var(--holocron-bg); border-right: 2px solid var(--accent-blue);
+            transform: translateX(-100%); transition: transform 0.3s ease-in-out;
+            z-index: 50; padding: 2rem; overflow-y: auto; box-shadow: 5px 0 25px rgba(0,0,0,0.5);
         }
         #sidenav.open { transform: translateX(0); }
         #sidenav-header { color: var(--primary-gold); font-family: 'Playfair Display', serif; }
@@ -86,20 +74,14 @@
             clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
         }
         .sidenav-link:hover, .sidenav-link.active {
-            background-color: rgba(59, 130, 246, 0.1); color: white;
-            text-shadow: 0 0 5px white;
+            background-color: rgba(59, 130, 246, 0.1); color: white; text-shadow: 0 0 5px white;
         }
 
         /* Hamburger Menu Button */
         #menu-button {
-            position: fixed;
-            top: 1.5rem;
-            left: 1.5rem;
-            z-index: 60;
-            background-color: rgba(30, 41, 59, 0.8);
-            border: 1px solid var(--accent-blue);
-            border-radius: 4px; padding: 0.5rem;
-            transition: all 0.2s, opacity 0.3s ease-in-out;
+            position: fixed; top: 1.5rem; left: 1.5rem; z-index: 60;
+            background-color: rgba(30, 41, 59, 0.8); border: 1px solid var(--accent-blue);
+            border-radius: 4px; padding: 0.5rem; transition: all 0.2s, opacity 0.3s ease-in-out;
         }
         #menu-button:hover { background-color: var(--accent-blue); }
 
@@ -107,33 +89,42 @@
         .tab-panel.active { display: block; animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .holocron-card {
-            background-color: rgba(10, 14, 26, 0.5);
-            border: 1px solid var(--border-color);
-            padding: 1.5rem; margin-bottom: 1.5rem;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-            transition: all 0.3s ease-in-out; position: relative;
+        /* Accordion Styles */
+        .accordion-trigger {
+            background-color: rgba(10, 14, 26, 0.5); border: 1px solid var(--border-color);
+            padding: 1rem 1.5rem; margin-bottom: 0;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease-in-out;
             clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+            cursor: pointer;
         }
-        .holocron-card:hover { border-color: var(--primary-gold); box-shadow: inset 0 0 15px rgba(0,0,0,0.5), var(--glow-gold); }
-
-        .edit-btn, .remove-btn, .add-btn, .save-btn, .cancel-btn {
-            cursor: pointer; transition: all 0.2s; padding: 4px; border-radius: 50%;
-            background-color: rgba(30, 41, 59, 0.8); border: 1px solid var(--accent-blue);
+        .accordion-trigger:hover { border-color: var(--primary-gold); box-shadow: inset 0 0 15px rgba(0,0,0,0.5), var(--glow-gold); }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+            padding: 0 1.5rem;
+            border: 1px solid var(--border-color);
+            border-top: none;
         }
-        .edit-btn:hover, .remove-btn:hover, .add-btn:hover, .save-btn:hover, .cancel-btn:hover {
-            transform: scale(1.2); background-color: var(--primary-gold); color: white; border-color: var(--primary-gold);
+        .accordion-item.open .accordion-content {
+             padding: 1.5rem;
         }
-        .edit-controls { position: absolute; top: 10px; right: 10px; display: flex; gap: 8px; z-index: 10; }
-
-        .editable-content[contenteditable="true"] {
-            outline: 2px dashed var(--accent-blue); padding: 10px; background-color: rgba(59, 130, 246, 0.1);
-        }
+        .accordion-icon { transition: transform 0.3s ease; }
+        .open .accordion-icon { transform: rotate(90deg); }
         
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
         th, td { border: 1px solid var(--border-color); padding: 0.75rem; text-align: left; }
         th { background-color: rgba(245, 158, 11, 0.1); color: var(--primary-gold); }
         tr:nth-child(even) { background-color: rgba(255, 255, 255, 0.02); }
+
+        .intro-quote {
+            background-color: rgba(10, 14, 26, 0.7);
+            border-left: 4px solid var(--primary-gold);
+            padding: 1rem 1.5rem;
+            font-style: italic;
+            color: var(--text-color);
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
     </style>
 </head>
 <body>
@@ -141,9 +132,7 @@
     <div id="sidenav">
         <h3 id="sidenav-header" class="text-2xl font-bold mb-6">Arquivos do Holocron</h3>
         <nav>
-            <ul id="sidenav-links" class="space-y-2">
-                <!-- Links serão povoados por JS -->
-            </ul>
+            <ul id="sidenav-links" class="space-y-2"></ul>
         </nav>
     </div>
 
@@ -154,88 +143,138 @@
 
     <main class="container mx-auto p-4 md:p-8">
         <div class="text-center mb-8">
-            <h1 class="text-5xl md:text-6xl font-bold mb-4">O Holocron de SWTOR</h1>
-            <p class="text-lg max-w-3xl mx-auto text-gray-300">Saudações, Arquivista. Explore os fragmentos de conhecimento deste repositório. O destino da galáxia pode depender disso.</p>
+            <h1 class="text-5xl md:text-6xl font-bold mb-4 tracking-widest">HOLOCRON</h1>
+            <blockquote class="intro-quote max-w-3xl mx-auto">
+                Saudações, Arquivista. Explore os fragmentos de conhecimento deste repositório. O destino da galáxia pode depender disso.
+            </blockquote>
         </div>
 
         <div id="holocron-container">
-            <!-- Painéis de Abas -->
             <div id="panels-container" class="p-4 md:p-6">
                 
                 <div id="panel-parte1" class="tab-panel">
-                    <section class="editable-content">
-                        <h2 class="text-4xl font-bold mb-6">Parte I: Visão Geral do Jogo</h2>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">O que é Star Wars: The Old Republic?</h3>
-                            <p>SWTOR é um MMORPG (Massively Multiplayer Online Role-Playing Game) ambientado no universo Star Wars, milhares de anos antes dos filmes clássicos. É um jogo focado na história, com diálogo cinematográfico e dublagem completa para todos os personagens no jogo base. Permite interação online com outros jogadores, participação em missões em grupo e cutscenes, mas também foi projetado para jogadores solo, especialmente as expansões mais recentes.</p>
+                    <h2 class="text-4xl font-bold mb-6">Parte I: Visão Geral</h2>
+                    <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                            <h3 class="text-2xl font-bold text-amber-400">Bem-vindo à Velha República</h3>
+                            <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </div>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Status Atual (2025)</h3>
-                            <p>O jogo continua forte após mais de 10 anos, recebendo atualizações regulares. A Broadsword Online Games assumiu o desenvolvimento em 2023 e o jogo já recebeu as atualizações 7.3, 7.4 e 7.5 sob sua gestão, introduzindo novos conteúdos de história e melhorias. Há expectativas para futuras atualizações como Galactic Threads e Master’s Enigma.</p>
+                        <div class="accordion-content">
+                            <div class="pt-6">
+                                <p>Star Wars: The Old Republic (SWTOR) é um MMORPG focado na história, ambientado mais de 3.600 anos antes dos eventos dos filmes da saga Skywalker. Você entra numa era de "Guerra Fria" galáctica, um tempo de trégua instável entre a República Galáctica e um Império Sith ressurgente.</p>
+                                <p class="mt-4">O jogo, lançado em 2011, continua a receber atualizações regulares sob a gestão da Broadsword Online Games, garantindo um universo vivo e em constante evolução para explorar.</p>
+                            </div>
                         </div>
-                         <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Modelo de Negócio e Servidores</h3>
-                            <p>SWTOR opera com um modelo híbrido free-to-play, com algumas restrições. Uma assinatura opcional oferece benefícios significativos, incluindo aumento do limite de nível para 80, acesso a todas as expansões, e concessão mensal de Moedas do Cartel. Existem cinco mega-servidores, com Star Forge (NA) e Darth Malgus (EU) sendo os mais populosos.</p>
+                    </div>
+                    <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                            <h3 class="text-2xl font-bold text-amber-400">Modelo de Jogo: Gratuito vs. Assinatura</h3>
+                             <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </div>
-                    </section>
+                        <div class="accordion-content">
+                             <div class="pt-6 grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="text-xl font-bold mb-2">Free-to-Play (Gratuito)</h4>
+                                    <p>Ideal para experimentar o jogo. Você tem acesso a:</p>
+                                    <ul class="list-disc list-inside ml-4 mt-2">
+                                        <li>Todas as 8 histórias de classe originais (nível 1-50).</li>
+                                        <li>Centenas de horas de conteúdo narrativo.</li>
+                                        <li>Existem algumas restrições (limite de créditos, menos slots de personagem, etc.).</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold mb-2">Assinante (Subscriber)</h4>
+                                    <p>A experiência completa de SWTOR. Você recebe:</p>
+                                     <ul class="list-disc list-inside ml-4 mt-2">
+                                        <li>Acesso a TODAS as expansões da história.</li>
+                                        <li>Limite de nível aumentado para 80.</li>
+                                        <li>Remoção de todas as restrições do modo gratuito.</li>
+                                        <li>Concessão mensal de Moedas do Cartel (moeda premium).</li>
+                                        <li>XP e outras recompensas aumentadas.</li>
+                                    </ul>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                            <h3 class="text-2xl font-bold text-amber-400">Primeiros Passos na Galáxia</h3>
+                             <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="accordion-content">
+                            <ol class="list-decimal list-inside ml-4 space-y-2 pt-6">
+                                <li><strong>Download:</strong> O jogo está disponível gratuitamente no site oficial <a href="https://swtor.com" target="_blank" class="text-accent-blue hover:text-primary-gold underline">swtor.com</a> ou na plataforma <a href="https://store.steampowered.com/app/1286830/STAR_WARS_The_Old_Republic/" target="_blank" class="text-accent-blue hover:text-primary-gold underline">Steam</a>.</li>
+                                <li><strong>Escolha um Servidor:</strong> Seus personagens ficam presos a um servidor. Para uma experiência mais populosa, os servidores recomendados são <strong>Star Forge</strong> (América do Norte) e <strong>Darth Malgus</strong> (Europa).</li>
+                                <li><strong>Sua Primeira Escolha:</strong> A decisão mais importante é a sua facção. Você lutará pela democracia e esperança da <strong>República Galáctica</strong> ou pela ordem e poder do <strong>Império Sith</strong>? Esta escolha definirá sua jornada inicial.</li>
+                            </ol>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="panel-parte2" class="tab-panel">
-                    <section class="editable-content">
-                        <h2 class="text-4xl font-bold mb-6">Parte II: Personagens e Estilos de Combate</h2>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">As 8 Histórias de Classe Únicas</h3>
-                            <p>O jogo oferece oito papéis icônicos com histórias de origem distintas. Cada uma é uma campanha de RPG completa, com três atos e um elenco de companheiros memoráveis.</p>
+                    <h2 class="text-4xl font-bold mb-6">Parte II: Personagens e Companheiros</h2>
+                    <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                             <h3 class="text-2xl font-bold text-amber-400">As 8 Histórias de Classe Únicas</h3>
+                             <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="accordion-content">
+                             <p class="pt-6">O jogo oferece oito papéis icônicos com histórias de origem distintas. Cada uma é uma campanha de RPG completa, com três atos e um elenco de companheiros memoráveis.</p>
                             <div class="grid md:grid-cols-2 gap-6 mt-4">
                                 <div>
                                     <h4 class="text-xl font-bold mt-3 mb-1">Histórias da República:</h4>
                                     <ul class="list-disc list-inside ml-4 space-y-2">
-                                        <li><b>Cavaleiro Jedi (Tython):</b> A jornada do herói quintessencial. Começa em Tython, um mundo exuberante ameaçado por Flesh Raiders.</li>
-                                        <li><b>Consular Jedi (Tython):</b> Uma história mais cerebral e diplomática, focada na lore Jedi e na construção de alianças.</li>
-                                        <li><b>Soldado (Ord Mantell):</b> Uma história militar de honra e dever, liderando o Esquadrão Havoc em um mundo devastado pela guerra civil.</li>
-                                        <li><b>Contrabandista (Ord Mantell):</b> Uma história espirituosa sobre enriquecer e acidentalmente se tornar um herói, com humor à la Han Solo.</li>
+                                        <li><b>Cavaleiro Jedi (Tython):</b> A jornada do herói quintessencial.</li>
+                                        <li><b>Consular Jedi (Tython):</b> Uma história mais cerebral e diplomática.</li>
+                                        <li><b>Soldado (Ord Mantell):</b> Uma história militar de honra e dever.</li>
+                                        <li><b>Contrabandista (Ord Mantell):</b> Uma história espirituosa e charmosa.</li>
                                     </ul>
                                 </div>
                                 <div>
                                     <h4 class="text-xl font-bold mt-3 mb-1">Histórias Imperiais:</h4>
                                     <ul class="list-disc list-inside ml-4 space-y-2">
-                                        <li><b>Guerreiro Sith (Korriban):</b> Uma história de poder brutal, como a Ira do Imperador. Começa no desolado mundo natal dos Sith.</li>
-                                        <li><b>Inquisidor Sith (Korriban):</b> Um conto de ascensão da escravidão ao poder através de segredos sombrios. Frequentemente considerada a melhor história Sith.</li>
-                                        <li><b>Agente Imperial (Nal Hutta):</b> Um thriller de espionagem e conspiração, amplamente considerada a história mais bem escrita do jogo.</li>
-                                        <li><b>Caçador de Recompensas (Nal Hutta):</b> Construindo uma reputação para competir na lendária Grande Caçada.</li>
+                                        <li><b>Guerreiro Sith (Korriban):</b> Uma história de poder brutal e ambição.</li>
+                                        <li><b>Inquisidor Sith (Korriban):</b> Um conto de ascensão da escravidão ao poder.</li>
+                                        <li><b>Agente Imperial (Nal Hutta):</b> Um thriller de espionagem e conspiração.</li>
+                                        <li><b>Caçador de Recompensas (Nal Hutta):</b> Construindo uma reputação temível.</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-6 mb-2 text-amber-400">Análises Aprofundadas dos Estilos de Combate</h3>
-                            <p>A partir da atualização 7.0, a história da classe foi dissociada do estilo de jogo. Assinantes podem desbloquear um segundo Estilo de Combate. A tabela abaixo detalha as disciplinas, papéis e recomendações de equipamento para cada estilo.</p>
-                            <div class="overflow-x-auto mt-4">
-                                <table id="combat-styles-table"></table>
+                    </div>
+                    <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                             <h3 class="text-2xl font-bold text-amber-400">Sistema de Companheiros e Romances</h3>
+                             <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="accordion-content">
+                            <p class="pt-6">Companheiros são aliados que o acompanham, podendo desempenhar os papéis de DPS, Tanque ou Curador. Sua eficácia é determinada pelo nível de Influência (até 50). O jogo oferece diversas opções de romance, incluindo romances de classe e aqueles que surgem nas expansões, como Lana Beniko e Theron Shan.</p>
+                            <h4 class="text-xl font-bold mt-4 mb-2">Preferências de Presentes (Amor)</h4>
+                            <div class="overflow-x-auto mt-2">
+                                <table id="companion-gifts-table"></table>
                             </div>
                         </div>
-                         <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-6 mb-2 text-amber-400">Otimização de Atributos e Filosofia de Combate</h3>
-                            <p>O combate de alto nível em SWTOR não é uma rotação fixa, mas um <strong>sistema de prioridades dinâmico</strong>. O objetivo é tomar a melhor decisão a cada GCD, considerando cooldowns, procs e recursos. Para otimização de DPS em PvE, as metas de estatísticas são cruciais:</p>
-                            <ul class="list-disc list-inside ml-4 space-y-1 mt-2">
-                                <li><strong>Precisão (Accuracy):</strong> 110% (rating de 2.694). Esta é a meta mais importante para não errar ataques em chefes.</li>
-                                <li><strong>Celeridade (Alacrity):</strong> ~7.15% (rating de ~2.054) para um GCD de 1.4s. Algumas classes têm metas diferentes.</li>
-                                <li><strong>Crítico (Critical):</strong> Todo o resto. Após atingir as metas de Precisão e Celeridade, todos os pontos restantes vão para Crítico.</li>
-                            </ul>
-                        </div>
-                    </section>
+                    </div>
                 </div>
 
-                <div id="panel-parte3" class="tab-panel">
-                    <section class="editable-content">
-                        <h2 class="text-4xl font-bold mb-6">Parte III: A História e a Lore</h2>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">A Grande Guerra Galáctica e o Tratado de Coruscant</h3>
-                            <p>A era de SWTOR é definida por um conflito de 28 anos que culminou no Saque de Coruscant. O Império Sith forçou a República a assinar o humilhante Tratado de Coruscant, iniciando uma tensa Guerra Fria. O que poucos sabiam era que essa paz era uma farsa do Imperador Sith Vitiate. Seu verdadeiro objetivo era usar a guerra como uma distração para que a República e seu próprio Império se exaurissem, enquanto ele, em segredo, construía o Império Eterno de Zakuul.</p>
+                 <div id="panel-parte3" class="tab-panel">
+                    <h2 class="text-4xl font-bold mb-6">Parte III: História e Lore</h2>
+                     <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                             <h3 class="text-2xl font-bold text-amber-400">A Grande Guerra Galáctica e o Tratado de Coruscant</h3>
+                             <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </div>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">A Linha do Tempo em Evolução</h3>
-                            <p>A vasta quantidade de conteúdo pode ser avassaladora. Siga esta ordem para uma experiência cronológica:</p>
+                        <div class="accordion-content">
+                            <p class="pt-6">A era de SWTOR é definida por um conflito de 28 anos que culminou no Saque de Coruscant. O Império Sith forçou a República a assinar o humilhante Tratado de Coruscant, iniciando uma tensa Guerra Fria. O que poucos sabiam era que essa paz era uma farsa do Imperador Sith Vitiate. Seu verdadeiro objetivo era usar a guerra como uma distração para que a República e seu próprio Império se exaurissem, enquanto ele, em segredo, construía o Império Eterno de Zakuul.</p>
+                        </div>
+                    </div>
+                     <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                             <h3 class="text-2xl font-bold text-amber-400">A Linha do Tempo em Evolução</h3>
+                             <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="accordion-content">
+                            <p class="pt-6">A vasta quantidade de conteúdo pode ser avassaladora. Siga esta ordem para uma experiência cronológica:</p>
                             <ol class="list-decimal list-inside ml-4 space-y-1">
                                 <li>Jogo Base (Capítulos 1-3) -> Ilum</li>
                                 <li>Rise of the Hutt Cartel (Makeb)</li>
@@ -248,94 +287,141 @@
                                 <li>Atualizações contínuas (Ruhnuk, Voss, etc.)</li>
                             </ol>
                         </div>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Datacrons: Bônus Permanentes</h3>
-                            <p>Datacrons são objetos escondidos que concedem bônus permanentes de estatísticas a todos os seus personagens no mesmo Legado. A coleta completa oferece um aumento notável nas estatísticas. Guias visuais são indispensáveis para encontrá-los.</p>
-                            <ul id="datacron-list" class="list-disc list-inside ml-4 space-y-2 grid md:grid-cols-2 lg:grid-cols-3 gap-x-4 mt-4"></ul>
-                        </div>
-                    </section>
+                    </div>
                 </div>
 
                 <div id="panel-parte4" class="tab-panel">
-                    <section class="editable-content">
-                        <h2 class="text-4xl font-bold mb-6">Parte IV: Companheiros e Romances</h2>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">O Sistema de Companheiros</h3>
-                            <p>Companheiros são aliados que o acompanham, podendo desempenhar os papéis de DPS, Tanque ou Curador. Sua eficácia é determinada pelo nível de Influência (até 50). O jogo oferece diversas opções de romance, incluindo romances de classe e aqueles que surgem nas expansões, como Lana Beniko e Theron Shan, que são muito populares.</p>
+                     <h2 class="text-4xl font-bold mb-6">Parte IV: Conteúdo de Jogo</h2>
+                     <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                             <h3 class="text-2xl font-bold text-amber-400">Atividades de Grupo e Individuais</h3>
+                             <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </div>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Preferências de Presentes de Companheiro (Amor)</h3>
-                            <div class="overflow-x-auto mt-4">
-                                <table id="companion-gifts-table"></table>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
-                <div id="panel-parte5" class="tab-panel">
-                    <section class="editable-content">
-                        <h2 class="text-4xl font-bold mb-6">Parte V: Conteúdo de Fim de Jogo (Endgame)</h2>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Progressão de Equipamento (Gearing)</h3>
-                            <p>As moedas principais são Comendas de Conquista, Estabilizadores FP-1, Catalisadores OP-1, Aceleradores WZ-1 e Fragmentos de Tecnologia. Itens Táticos e Implantes Lendários são cruciais para a otimização.</p>
-                            <h4 class="text-xl font-bold mt-3 mb-1">Método Hyde e Zeek</h4>
-                            <p>Este é o método mais eficiente para equipar personagens. Em vez de aprimorar cada peça, você aprimora uma única peça, a desconstrói para uma missão especial, e desbloqueia a compra de modificações de alto nível por créditos e Fragmentos de Tecnologia para todos os seus personagens.</p>
-                            <h4 class="text-xl font-bold mt-3 mb-1">Equipamento Rakata</h4>
-                            <p>O melhor equipamento do jogo (iRating 344 Roxo) é obtido em Operações de Modo Mestre. As peças de Rakata de alto nível são não modificáveis, exigindo que você obtenha a peça exata com a combinação de estatísticas que precisa.</p>
-                        </div>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Atividades de Grupo</h3>
-                            <ul class="list-disc list-inside ml-4 space-y-1">
-                                <li><b>Flashpoints:</b> Masmorras para 4 jogadores. O modo Story pode ser feito solo com um "Droide de Suporte de Combate GSI".</li>
+                        <div class="accordion-content">
+                            <ul class="list-disc list-inside ml-4 space-y-2 pt-6">
+                                <li><b>Flashpoints:</b> Masmorras para 4 jogadores com vários modos de dificuldade. O modo Story pode ser feito solo com um "Droide de Suporte de Combate GSI".</li>
                                 <li><b>Operations:</b> Raids de grande escala para 8 ou 16 jogadores, o auge do conteúdo PvE.</li>
-                                <li><b>Jogador vs. Jogador (PvP):</b> Inclui Warzones (8v8) e Arenas (4v4).</li>
-                                <li><b>Fortalezas e Conquista:</b> Sistema de moradia e evento semanal de objetivos.</li>
+                                <li><b>Jogador vs. Jogador (PvP):</b> Inclui Warzones (8v8), Arenas (4v4) e o combate espacial Galactic Starfighter (GSF).</li>
+                                <li><b>Fortalezas e Conquista:</b> Sistema de moradia e evento semanal de objetivos que recompensa a participação em diversas atividades.</li>
                             </ul>
                         </div>
-                    </section>
+                    </div>
+                     <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                             <h3 class="text-2xl font-bold text-amber-400">Guia de Eventos Recorrentes</h3>
+                             <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="accordion-content">
+                             <p class="pt-6">SWTOR emprega um robusto sistema de eventos recorrentes para manter o universo dinâmico.</p>
+                            <div class="overflow-x-auto mt-4">
+                                <table id="events-table"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="panel-parte5" class="tab-panel">
+                    <h2 class="text-4xl font-bold mb-6">Parte V: Guias e Otimização</h2>
+                     <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                             <h3 class="text-2xl font-bold text-amber-400">Guia de Equipamentos (Gearing)</h3>
+                             <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="pt-6">
+                                <p>As moedas principais são Comendas de Conquista, Estabilizadores FP-1, Catalisadores OP-1, Aceleradores WZ-1 e Fragmentos de Tecnologia. Itens Táticos e Implantes Lendários são cruciais para a otimização.</p>
+                                <h4 class="text-xl font-bold mt-3 mb-1">Método Hyde e Zeek</h4>
+                                <p>Este é o método mais eficiente para equipar personagens. Em vez de aprimorar cada peça, você aprimora uma única peça, a desconstrói para uma missão especial, e desbloqueia a compra de modificações de alto nível por créditos e Fragmentos de Tecnologia para todos os seus personagens.</p>
+                                <h4 class="text-xl font-bold mt-3 mb-1">Equipamento Rakata</h4>
+                                <p>O melhor equipamento do jogo (iRating 344 Roxo) é obtido em Operações de Modo Mestre. As peças de Rakata de alto nível são não modificáveis, exigindo que você obtenha a peça exata com a combinação de estatísticas que precisa.</p>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                             <h3 class="text-2xl font-bold text-amber-400">Guia de Otimização de Combate</h3>
+                             <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="pt-6">
+                                <p>O combate de alto nível em SWTOR não é uma rotação fixa, mas um <strong>sistema de prioridades dinâmico</strong>. O objetivo é tomar a melhor decisão a cada GCD. Para otimização de DPS em PvE, as metas de estatísticas são cruciais:</p>
+                                <ul class="list-disc list-inside ml-4 space-y-1 mt-2">
+                                    <li><strong>Precisão (Accuracy):</strong> 110% (rating de 2.694).</li>
+                                    <li><strong>Celeridade (Alacrity):</strong> ~7.15% (rating de ~2.054) para um GCD de 1.4s.</li>
+                                    <li><strong>Crítico (Critical):</strong> Todo o resto.</li>
+                                </ul>
+                                 <h4 class="text-xl font-bold mt-4 mb-2">Tabela de Estilos de Combate</h4>
+                                <div class="overflow-x-auto mt-2">
+                                    <table id="combat-styles-table"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                             <h3 class="text-2xl font-bold text-amber-400">Guia de Datacrons</h3>
+                             <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="pt-6">
+                                <p>Datacrons são objetos escondidos que concedem bônus permanentes de estatísticas a todos os seus personagens no mesmo Legado.</p>
+                                <p class="mt-4"><strong>Bônus Total de Legado (todos os Datacrons):</strong></p>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li><strong class="text-amber-400">Maestria:</strong> +194</li>
+                                    <li><strong class="text-amber-400">Vigor:</strong> +61</li>
+                                    <li><strong class="text-amber-400">Presença:</strong> +48</li>
+                                </ul>
+                                <p class="mt-2">Este bônus é mais impactante em níveis baixos, mas permanece útil no endgame.</p>
+                                <h4 class="text-xl font-bold mt-6 mb-2">Guia de Caça e Recursos</h4>
+                                <p>A caça aos Datacrons é um minijogo de exploração e quebra-cabeças.</p>
+                                <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                    <li><strong>Dica de Mestre:</strong> Use uma classe com teleporte (Sage/Sorcerer) ou rolamento (Gunslinger/Sniper) para facilitar a recuperação de quedas.</li>
+                                    <li><strong>Recurso Essencial:</strong> Para um guia completo, passo a passo, o site <a href="https://swtorista.com/datacrons" target="_blank" class="text-accent-blue hover:text-primary-gold underline">Swtorista.com Datacrons Guide</a> é o recurso definitivo.</li>
+                                </ul>
+                                <h4 class="text-xl font-bold mt-4 mb-2">Resumo por Planeta</h4>
+                                <ul id="datacron-list" class="list-disc list-inside ml-4 space-y-2 grid md:grid-cols-2 lg:grid-cols-3 gap-x-4 mt-4"></ul>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                             <h3 class="text-2xl font-bold text-amber-400">Guia de Crafting (Crew Skills)</h3>
+                             <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="accordion-content">
+                             <div class="pt-6">
+                                <h4 class="text-xl font-bold mb-2">Profissões e Produtos Notáveis</h4>
+                                <ul class="list-disc list-inside ml-4 space-y-1">
+                                    <li><b>Biochem:</b> Essencial para consumíveis reutilizáveis (stims, adrenals, medpacs).</li>
+                                    <li><b>Artifice:</b> Cria cristais de cor, dyes e enhancements.</li>
+                                    <li><b>Cybertech:</b> Cria earpieces, armorings e mods.</li>
+                                    <li><b>Armormech, Armstech, Synthweaving:</b> Criam Augments, a camada final de otimização.</li>
+                                </ul>
+                                 <h4 class="text-xl font-bold mt-4 mb-2">Tabela de Sinergia</h4>
+                                <div class="overflow-x-auto mt-2">
+                                    <table id="crafting-synergy-table"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="panel-parte6" class="tab-panel">
-                    <section class="editable-content">
-                        <h2 class="text-4xl font-bold mb-6">Parte VI: Habilidades de Criação (Crafting)</h2>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Profissões e Produtos Notáveis</h3>
-                            <ul class="list-disc list-inside ml-4 space-y-1">
-                                <li><b>Biochem:</b> Essencial para consumíveis reutilizáveis (stims, adrenals, medpacs).</li>
-                                <li><b>Artifice:</b> Cria cristais de cor, dyes e enhancements. Itens cosméticos são muito lucrativos.</li>
-                                <li><b>Cybertech:</b> Cria earpieces, armorings e mods, componentes cruciais para equipamentos.</li>
-                                <li><b>Armormech, Armstech, Synthweaving:</b> Criam Augments, a camada final de otimização.</li>
-                            </ul>
+                    <h2 class="text-4xl font-bold mb-6">Parte VI: Comunidade e Recursos</h2>
+                     <div class="accordion-item mb-4">
+                        <div class="accordion-trigger flex justify-between items-center">
+                             <h3 class="text-2xl font-bold text-amber-400">Recursos Essenciais da Comunidade</h3>
+                             <svg class="accordion-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </div>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Tabela de Sinergia de Crew Skills</h3>
-                            <div class="overflow-x-auto mt-4">
-                                <table id="crafting-synergy-table"></table>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
-                <div id="panel-parte7" class="tab-panel">
-                    <section class="editable-content">
-                        <h2 class="text-4xl font-bold mb-6">Parte VII: Recursos e Eventos</h2>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Recursos da Comunidade</h3>
-                            <ul class="list-disc list-inside ml-4 space-y-1">
+                        <div class="accordion-content">
+                            <ul class="list-disc list-inside ml-4 space-y-1 pt-6">
                                 <li><b>Swtorista.com:</b> Um recurso abrangente para iniciantes e veteranos.</li>
                                 <li><b>VULKK.com:</b> Guias de classes, builds e endgame.</li>
                                 <li><b>Illeva Guides:</b> Guias detalhados de datacrons e achievements.</li>
                                 <li><b>Reddit (r/swtor) e Discord:</b> Para discussões e grupos.</li>
                             </ul>
                         </div>
-                        <div class="holocron-card">
-                            <h3 class="text-2xl font-bold mt-4 mb-2 text-amber-400">Guia de Eventos Recorrentes</h3>
-                            <p>SWTOR emprega um robusto sistema de eventos recorrentes para manter o universo dinâmico.</p>
-                            <div class="overflow-x-auto mt-4">
-                                <table id="events-table"></table>
-                            </div>
-                        </div>
-                    </section>
+                    </div>
                 </div>
 
             </div>
@@ -398,7 +484,14 @@
             const menuButton = document.getElementById('menu-button');
             const sidenavLinksContainer = document.getElementById('sidenav-links');
             const panels = document.querySelectorAll('.tab-panel');
-            const panelData = [ { id: 'parte1', title: 'Visão Geral' }, { id: 'parte2', title: 'Personagens' }, { id: 'parte3', title: 'História & Lore' }, { id: 'parte4', title: 'Companheiros' }, { id: 'parte5', title: 'Endgame' }, { id: 'parte6', title: 'Crafting' }, { id: 'parte7', title: 'Recursos' } ];
+            const panelData = [ 
+                { id: 'parte1', title: 'Visão Geral' }, 
+                { id: 'parte2', title: 'Personagens e Companheiros' }, 
+                { id: 'parte3', title: 'História & Lore' }, 
+                { id: 'parte4', title: 'Conteúdo de Jogo' }, 
+                { id: 'parte5', title: 'Guias e Otimização' }, 
+                { id: 'parte6', title: 'Comunidade e Recursos' }
+            ];
 
             panelData.forEach(data => {
                 const li = document.createElement('li');
@@ -408,25 +501,14 @@
                 link.dataset.tab = `panel-${data.id}`;
                 li.appendChild(link);
                 sidenavLinksContainer.appendChild(li);
-                
-                const panel = document.getElementById(`panel-${data.id}`);
-                if(panel) {
-                    const editableContent = panel.querySelector('.editable-content');
-                    if(editableContent) {
-                         editableContent.insertAdjacentHTML('afterbegin', '<div class="edit-controls"><button class="edit-btn" title="Editar Seção"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z" /></svg></button></div>');
-                    }
-                }
             });
             
             function switchTab(tabId) {
                 const allLinks = sidenavLinksContainer.querySelectorAll('.sidenav-link');
                 allLinks.forEach(l => l.classList.remove('active'));
-
                 panels.forEach(panel => panel.classList.remove('active'));
-                
                 const targetPanel = document.getElementById(tabId);
                 const targetLink = document.querySelector(`.sidenav-link[data-tab="${tabId}"]`);
-                
                 if(targetPanel) targetPanel.classList.add('active');
                 if(targetLink) targetLink.classList.add('active');
             }
@@ -467,34 +549,18 @@
             
             switchTab('panel-parte1');
 
-            // --- LÓGICA CMS ---
-            let originalContent = '';
-            document.getElementById('panels-container').addEventListener('click', function(e) {
-                const editBtn = e.target.closest('.edit-btn');
-                if (editBtn) {
-                    const contentDiv = editBtn.closest('.editable-content');
-                    originalContent = contentDiv.innerHTML;
-                    contentDiv.setAttribute('contenteditable', 'true');
-                    contentDiv.focus();
-                    editBtn.style.display = 'none';
-                    const controls = editBtn.parentElement;
-                    controls.insertAdjacentHTML('beforeend', `<button class="save-btn" title="Salvar"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></button><button class="cancel-btn" title="Cancelar"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>`);
-                }
-                const saveBtn = e.target.closest('.save-btn');
-                if (saveBtn) {
-                    const contentDiv = saveBtn.closest('.editable-content');
-                    contentDiv.setAttribute('contenteditable', 'false');
-                    const controls = saveBtn.parentElement;
-                    controls.querySelector('.save-btn').remove();
-                    controls.querySelector('.cancel-btn').remove();
-                    controls.querySelector('.edit-btn').style.display = 'flex';
-                }
-                const cancelBtn = e.target.closest('.cancel-btn');
-                if (cancelBtn) {
-                    const contentDiv = cancelBtn.closest('.editable-content');
-                    contentDiv.setAttribute('contenteditable', 'false');
-                    contentDiv.innerHTML = originalContent;
-                }
+            // Accordion Logic
+            document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+                trigger.addEventListener('click', () => {
+                    const content = trigger.nextElementSibling;
+                    const item = trigger.parentElement;
+                    item.classList.toggle('open');
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
             });
         });
     </script>
